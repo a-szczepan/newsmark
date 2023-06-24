@@ -26,8 +26,17 @@ const User = sequelize.define('User', {
 	},
 }, {
 	timestamps: true,
-	// Sequelize, // We need to pass the connection instance
-	// modelName: 'User', // We need to choose the model name
 });
+
+User.associate = models => {
+	User.hasMany(models.Bookmark, {
+		foreignKey: 'userId',
+		onDelete: 'CASCADE',
+	});
+	User.hasMany(models.Annotation, {
+		foreignKey: 'userId',
+		onDelete: 'CASCADE',
+	});
+};
 
 module.exports = User;

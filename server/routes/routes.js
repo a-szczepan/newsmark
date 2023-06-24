@@ -7,7 +7,7 @@ exports.getPaths = () => {
 	router.post('/api/register', user.register);
 	router.post('/api/login', user.login);
 	router.post('/api/logout', user.logout);
-	router.get('/api/user', user.getUser);
+	router.get('/api/user/:id', user.getUser);
 
 	return router;
 };
