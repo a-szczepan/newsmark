@@ -1,14 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600;700;900&display=swap');
+
+
+/* @font-face {
+    font-family: 'Noto Serif JP';
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600;700;900&display=swap')
+} */
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 * {
     margin: 0;
+    padding: 0;
 }
 
 body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    font-family: 'Noto Serif JP', serif!important;
 }
 
 img, svg {

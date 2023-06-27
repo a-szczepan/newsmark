@@ -1,14 +1,15 @@
 import classnames from 'classnames';
 import React, { PropsWithChildren } from 'react';
+import styles from './Typography.module.scss';
 
 export const TextVariantMap = {
-  H1: 'h1',
-  H2: 'h2',
-  H3: 'h3',
-  H4: 'h4',
-  Body: 'p',
-  TextUI: 'span',
-  Caption: 'span'
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  body: 'p',
+  textUI: 'span',
+  caption: 'span'
 };
 
 export type TextVariant = keyof typeof TextVariantMap;
@@ -22,5 +23,5 @@ export const Typography: React.FC<TypographyProps> = ({
   children
 }): JSX.Element => {
   const Tag = TextVariantMap[variant];
-  return <Tag className={classnames(variant.toLowerCase())}>{children}</Tag>;
+  return <Tag className={classnames(styles.variant)}>{children}</Tag>;
 };

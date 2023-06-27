@@ -24,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Typo: Story = {
   args: {
-    variant: 'H1'
+    variant: 'h1'
   },
   render: (args) => <Typography {...args}>{faker.lorem.lines(1)}</Typography>
 };
