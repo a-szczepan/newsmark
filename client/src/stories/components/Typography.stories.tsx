@@ -1,8 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
-  Typography,
-  TextVariant
+  TextVariant,
+  TextVariantMap,
+  Typography
 } from '../../components/Typography/Typography';
 import { marginDecorator } from '../decorators';
 import { faker } from '@faker-js/faker';
@@ -14,12 +15,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen'
   },
-  argTypes: {
-    variant: {
-      options: Object.keys(TextVariant),
-      mapping: TextVariant
-    }
-  },
   decorators: [marginDecorator]
 } satisfies Meta<typeof Typography>;
 
@@ -29,7 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Typo: Story = {
   args: {
-    variant: TextVariant.Caption
+    variant: 'H1'
   },
   render: (args) => <Typography {...args}>{faker.lorem.lines(1)}</Typography>
 };
@@ -38,10 +33,10 @@ export const TypographyVariants: Story = {
   render: () => {
     return (
       <>
-        {Object.keys(TextVariant).map((variant) => (
+        {Object.keys(TextVariantMap).map((variant) => (
           <div key={variant} style={{ display: 'flex', gap: '1rem' }}>
-            <Typography variant={TextVariant[variant]}>{variant}</Typography>
-            <Typography variant={TextVariant[variant]}>
+            <Typography variant={variant as TextVariant}>{variant}</Typography>
+            <Typography variant={variant as TextVariant}>
               {faker.lorem.lines(1)}
             </Typography>
           </div>
