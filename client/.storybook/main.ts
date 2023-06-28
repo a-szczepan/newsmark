@@ -6,7 +6,16 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     '@storybook/preset-scss',
-    '@storybook/addon-a11y'
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    {
+      name: '@storybook/addon-styling',
+      options: {
+        sass: {
+          implementation: require('sass'),
+        },
+      },
+    },
   ],
   framework: {
     name: '@storybook/react-webpack5',
@@ -14,6 +23,6 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: 'tag'
-  }
+  },
 };
 export default config;
