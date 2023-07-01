@@ -45,3 +45,8 @@ export const TypographyVariants: Story = {
     );
   }
 };
+
+export const Article: Story = {
+  render: () => <><Typography variant='h1'>{faker.lorem.lines(1)}</Typography>
+  <Typography variant='body'>{faker.lorem.paragraphs({ min: 1, max: 3 })}</Typography></>
+};
