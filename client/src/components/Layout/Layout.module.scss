@@ -1,0 +1,7 @@
+@use '../../styles/global.scss' as global;
+
+.layout {
+    min-height: 100vh;
+    max-width: global.$desktop;
+    margin: auto;
+}
