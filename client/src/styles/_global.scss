@@ -1,0 +1,9 @@
+$tablet: 768px;
+$desktop: 1200px;
+
+@mixin headerHeight {
+    height: 49px;
+    @media (min-height($tablet)) {
+        height: 88px;
+    }
+}
