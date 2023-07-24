@@ -2,6 +2,18 @@ import classnames from 'classnames';
 import React, { PropsWithChildren } from 'react';
 import styles from './Typography.module.scss';
 
+export enum Tags {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  label
+};
+
 export const TextVariantMap = {
   h1: 'h1',
   h2: 'h2',
@@ -18,13 +30,15 @@ export const TextVariantMap = {
 export type TextVariant = keyof typeof TextVariantMap;
 
 type TypographyProps = PropsWithChildren<{
-  variant?: TextVariant;
+  styleVariant?: TextVariant;
+  tag?: Tags;
 }>;
 
 export const Typography: React.FC<TypographyProps> = ({
-  variant = 'p',
+  styleVariant = 'p',
+  tag,
   children
 }): JSX.Element => {
-  const Tag = TextVariantMap[variant];
-  return <Tag className={classnames(styles[variant])}>{children}</Tag>;
+  const Tag = tag ? tag : TextVariantMap[styleVariant];
+  return <Tag className={classnames(styles[styleVariant])}>{children}</Tag>;
 };
