@@ -1,38 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@200;300;400;500;600;700;900&display=swap');
 
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-size: 75%;
-    line-height: 1.5;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
-    font-family: 'Noto Serif', serif;
-    color: var(--color-dark4);
+  font-size: 75%;
+  line-height: 1.5;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Noto Serif', serif;
+  color: var(--color-dark4);
 }
 
-h1, h2, h3, h4, h5, h6, p {
-    max-width: 75ch;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  max-width: 75ch;
 }
 
-img, svg {
-    display: block;
-    max-width: 100%;
+img,
+svg {
+  display: block;
+  max-width: 100%;
 }
 
-input, button, textarea, select {
-    font: inherit;
+input,
+button,
+textarea,
+select {
+  font: inherit;
 }
 
 @media only screen and (min-width: 768px) {
-   body {
+  body {
     font-size: 100%;
-   }
+  }
 }

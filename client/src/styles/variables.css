@@ -1,10 +1,10 @@
 :root {
-    --color-dark4: #292929;
-    --color-dark3: #616161;
-    --color-dark2: #919191;
-    --color-dark1: #C2C2C2;
-    --color-white: #FFFFFF;
-    --color-light1: #F5F5F5;
-    --color-light2: #ECECEC;
-    --color-light3: #E4E4E4;
+  --color-dark4: #292929;
+  --color-dark3: #616161;
+  --color-dark2: #919191;
+  --color-dark1: #c2c2c2;
+  --color-white: #ffffff;
+  --color-light1: #f5f5f5;
+  --color-light2: #ececec;
+  --color-light3: #e4e4e4;
 }

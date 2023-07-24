@@ -1,8 +1,8 @@
 @use '../../styles/global.scss' as global;
 
 .layout {
-    min-height: 100vh;
-    max-width: global.$maxScreenWidth;
-    margin: auto;
-    padding: 0 global.$desktopPadding 0 global.$desktopPadding;
+  min-height: 100vh;
+  max-width: global.$maxScreenWidth;
+  margin: auto;
+  padding: 0 global.$desktopPadding 0 global.$desktopPadding;
 }

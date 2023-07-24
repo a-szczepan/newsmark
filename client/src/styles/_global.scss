@@ -6,17 +6,16 @@ $maxScreenWidth: 1440px;
 $mobilePadding: 20px;
 $desktopPadding: 80px;
 
-
 @mixin headerHeight {
-    height: 49px;
-    @media screen and (min-width: $tablet) {
-        height: 88px;
-    }
+  height: 49px;
+  @media screen and (min-width: $tablet) {
+    height: 88px;
+  }
 }
 
 @mixin padding {
-    padding: 0 $mobilePadding 0 $mobilePadding;
-    @media screen and (min-width: $tablet) {
-        padding: 0 $desktopPadding 0 $desktopPadding;
-    }
+  padding: 0 $mobilePadding 0 $mobilePadding;
+  @media screen and (min-width: $tablet) {
+    padding: 0 $desktopPadding 0 $desktopPadding;
+  }
 }

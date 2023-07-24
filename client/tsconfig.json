@@ -1,5 +1,5 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
     "target": "es5",
     "module": "es6",
     "jsx": "react-jsx",
@@ -17,9 +17,9 @@
     "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
-    "": ["src/"]
+      "": ["src/"]
     }
-    },
-    "include": ["src", "declarations.d.ts"],
-    "exclude": ["node_modules"],
+  },
+  "include": ["src", "declarations.d.ts"],
+  "exclude": ["node_modules"]
 }

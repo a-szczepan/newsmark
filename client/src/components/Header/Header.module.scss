@@ -1,21 +1,21 @@
 @use '../../styles/global' as global;
 
 .header {
-    @include global.headerHeight;
-    @include global.padding;
-    width: 100%;
-    max-width: global.$maxScreenWidth;
-    position: absolute;
-    inset: 0;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  @include global.headerHeight;
+  @include global.padding;
+  width: 100%;
+  max-width: global.$maxScreenWidth;
+  position: absolute;
+  inset: 0;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
-    width: 135px;
-    @media screen and (min-width: global.$tablet) {
-        width: 245px;
-    }
+  width: 135px;
+  @media screen and (min-width: global.$tablet) {
+    width: 245px;
+  }
 }

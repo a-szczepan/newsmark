@@ -9,7 +9,7 @@ import App from './App';
 import { Layout } from './components/Layout/Layout';
 
 ReactDOM.render(
-  <Layout> 
+  <Layout>
     <RouterProvider router={router} />
     <App />
   </Layout>,
