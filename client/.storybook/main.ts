@@ -9,6 +9,7 @@ const config: StorybookConfig = {
     '@storybook/preset-scss',
     '@storybook/addon-docs',
     '@storybook/addon-a11y',
+    '@storybook/addon-designs',
     {
       name: 'storybook-css-modules',
       options: {
