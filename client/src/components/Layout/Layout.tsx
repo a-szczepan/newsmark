@@ -8,5 +8,5 @@ type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = ({children}): JSX.Element => {
     return <div className={classnames(styles.layout)}>{children}</div>;
-  };
+};
   

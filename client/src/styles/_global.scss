@@ -1,9 +1,22 @@
 $tablet: 768px;
 $desktop: 1200px;
 
+$maxScreenWidth: 1440px;
+
+$mobilePadding: 20px;
+$desktopPadding: 80px;
+
+
 @mixin headerHeight {
     height: 49px;
-    @media (min-height($tablet)) {
+    @media screen and (min-width: $tablet) {
         height: 88px;
+    }
+}
+
+@mixin padding {
+    padding: 0 $mobilePadding 0 $mobilePadding;
+    @media screen and (min-width: $tablet) {
+        padding: 0 $desktopPadding 0 $desktopPadding;
     }
 }
