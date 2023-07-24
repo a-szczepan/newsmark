@@ -13,7 +13,11 @@ const meta = {
   component: Typography,
   tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    design: {
+      type: "figma",
+      url: "https://www.figma.com/file/QsqqfX07v3j9m5FUppaZQd/Newsmark?type=design&node-id=0-1&mode=design&t=himZfszZiqISndhd-0",
+    },
   },
   decorators: [marginDecorator]
 } satisfies Meta<typeof Typography>;

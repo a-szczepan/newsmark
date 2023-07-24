@@ -9,7 +9,8 @@ export const TextVariantMap = {
   h4: 'h4',
   h5: 'h5',
   body: 'p',
-  textUI: 'span',
+  button: 'span',
+  label: 'label',
   caption: 'span',
   footnote: 'span'
 };
