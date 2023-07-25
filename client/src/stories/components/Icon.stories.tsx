@@ -14,6 +14,19 @@ const meta = {
       type: "figma",
       url: "https://www.figma.com/file/QsqqfX07v3j9m5FUppaZQd/Newsmark?type=design&node-id=74-12&mode=design&t=NokjCowPSigtFsTc-0",
     },
+    docs: {
+      description: {
+        icon: 'Another description on the story, overriding the comments'
+      },
+    },
+  },
+  argTypes: {
+    icon: {
+      control: {
+        type: 'select',
+        labels: getEnumEntries(IconType),
+      },
+    }
   },
   decorators: [paddingDecorator]
 } satisfies Meta<typeof Icon>;
