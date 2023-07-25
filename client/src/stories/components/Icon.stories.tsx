@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { marginDecorator } from '../decorators';
+import { paddingDecorator } from '../decorators';
 import { Icon, IconType, IconSize } from '../../components/Icon/Icon';
 import { getEnumEntries } from '../utils';
 
@@ -10,18 +10,12 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
-    docs: {
-      story: {
-        inline: false,
-        iframeHeight: "auto",
-      },
-    },
     design: {
       type: "figma",
       url: "https://www.figma.com/file/QsqqfX07v3j9m5FUppaZQd/Newsmark?type=design&node-id=74-12&mode=design&t=NokjCowPSigtFsTc-0",
     },
   },
-  decorators: [marginDecorator]
+  decorators: [paddingDecorator]
 } satisfies Meta<typeof Icon>;
 
 export default meta;

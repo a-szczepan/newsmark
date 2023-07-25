@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const marginDecorator = (Story) => (
-  <div style={{ margin: '3em' }}>
+export const paddingDecorator = (Story) => (
+  <div style={{ padding: '1rem' }}>
     <Story />
   </div>
 );

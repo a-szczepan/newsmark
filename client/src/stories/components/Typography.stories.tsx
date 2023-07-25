@@ -6,7 +6,7 @@ import {
   TextVariantMap,
   Typography
 } from '../../components/Typography/Typography';
-import { marginDecorator } from '../decorators';
+import { paddingDecorator } from '../decorators';
 import { faker } from '@faker-js/faker';
 
 //TODO: fix enum  selection
@@ -22,7 +22,7 @@ const meta = {
       url: "https://www.figma.com/file/QsqqfX07v3j9m5FUppaZQd/Newsmark?type=design&node-id=0-1&mode=design&t=himZfszZiqISndhd-0",
     },
   },
-  decorators: [marginDecorator]
+  decorators: [paddingDecorator]
 } satisfies Meta<typeof Typography>;
 
 export default meta;
