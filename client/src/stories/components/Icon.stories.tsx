@@ -33,7 +33,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof Icon>;
 
 export const Default: Story = {
   args: {
@@ -44,7 +44,7 @@ export const Default: Story = {
 };
 
 export const AllIcons: Story = {
-    render: (args) => {
+    render: () => {
       return (
         <>
         <div style={{display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "20px"}} >
@@ -55,4 +55,4 @@ export const AllIcons: Story = {
         </>
       );
     }
-  };
+};
