@@ -59,11 +59,10 @@ const IconTypeMap = {
 
 type IconProps = {
     icon: IconType,
-    size: IconSize,
+    size?: IconSize,
     color?: 'dark' | 'light'
 };
   
-export const Icon: React.FC<IconProps> = ({icon,size, color = 'dark'}): JSX.Element => {
-    console.log(icon,IconTypeMap[icon], IconTypeMap)
+export const Icon: React.FC<IconProps> = ({icon,size=IconSize.medium, color = 'dark'}): JSX.Element => {
     return <ReactSVG src={IconTypeMap[IconType[icon]]} className={classnames(styles[IconSize[size]], styles[color])}/>;
 };
