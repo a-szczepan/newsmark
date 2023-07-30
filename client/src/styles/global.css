@@ -36,6 +36,10 @@ svg {
   max-width: 100%;
 }
 
+button {
+  all: unset;
+}
+
 input,
 button,
 textarea,
@@ -43,7 +47,9 @@ select {
   font: inherit;
 }
 
-@media only screen and (min-width: 768px) {
+
+
+@media only screen and (min-width: 1200px) {
   body {
     font-size: 100%;
   }

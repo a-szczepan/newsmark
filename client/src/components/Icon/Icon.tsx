@@ -18,51 +18,65 @@ import search from '../../assets/icons/search.svg';
 import user from '../../assets/icons/user.svg';
 
 export enum IconSize {
-    small = 16,
-    medium = 24,
-    large = 32
+  small = 16,
+  medium = 24,
+  large = 32
 }
 
 export enum IconType {
-    annotation,
-    bookmark,
-    chevronDown,
-    chevronUp,
-    close,
-    edit,
-    eye,
-    google,
-    menu,
-    microsoft,
-    plus,
-    remove,
-    search,
-    user
+  annotation,
+  bookmark,
+  chevronDown,
+  chevronUp,
+  close,
+  edit,
+  eye,
+  google,
+  menu,
+  microsoft,
+  plus,
+  remove,
+  search,
+  user
 }
 
 const IconTypeMap = {
-    annotation,
-    bookmark,
-    chevronDown,
-    chevronUp,
-    close,
-    edit,
-    eye,
-    google,
-    menu,
-    microsoft,
-    plus,
-    remove,
-    search,
-    user
-}
+  annotation,
+  bookmark,
+  chevronDown,
+  chevronUp,
+  close,
+  edit,
+  eye,
+  google,
+  menu,
+  microsoft,
+  plus,
+  remove,
+  search,
+  user
+};
 
 type IconProps = {
-    icon: IconType,
-    size?: IconSize,
-    color?: 'dark' | 'light'
+  classes?: string[];
+  icon: IconType;
+  size?: IconSize;
+  color?: 'dark' | 'light';
 };
-  
-export const Icon: React.FC<IconProps> = ({icon,size=IconSize.medium, color = 'dark'}): JSX.Element => {
-    return <ReactSVG src={IconTypeMap[IconType[icon]]} className={classnames(styles[IconSize[size]], styles[color])}/>;
+
+export const Icon: React.FC<IconProps> = ({
+  classes = [],
+  icon,
+  size = IconSize.medium,
+  color = 'dark'
+}): JSX.Element => {
+  return (
+    <ReactSVG
+      src={IconTypeMap[IconType[icon]]}
+      className={classnames(styles[IconSize[size]], styles[color], ...classes)}
+      beforeInjection={(svg) => {
+        svg.setAttribute('aria-label', IconType[icon]);
+      }}
+    />
+  );
 };
