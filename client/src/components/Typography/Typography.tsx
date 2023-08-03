@@ -12,7 +12,7 @@ export enum Tags {
   p,
   span,
   label
-};
+}
 
 export const TextVariantMap = {
   h1: 'h1',
@@ -30,15 +30,21 @@ export const TextVariantMap = {
 export type TextVariant = keyof typeof TextVariantMap;
 
 type TypographyProps = PropsWithChildren<{
+  id?: string;
   styleVariant?: TextVariant;
   tag?: Tags;
 }>;
 
 export const Typography: React.FC<TypographyProps> = ({
+  id,
   styleVariant = 'p',
   tag,
   children
 }): JSX.Element => {
   const Tag = tag ? Tags[tag] : TextVariantMap[styleVariant];
-  return <Tag className={classnames(styles[styleVariant])}>{children}</Tag>;
+  return (
+    <Tag id={id} className={classnames(styles[styleVariant])}>
+      {children}
+    </Tag>
+  );
 };
