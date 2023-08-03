@@ -36,7 +36,8 @@ svg {
   max-width: 100%;
 }
 
-button {
+button,
+input {
   all: unset;
 }
 

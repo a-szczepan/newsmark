@@ -1,4 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
+const { getLocalIdentName } = require("css-loader-shorter-classnames");
+const getLocalIdent = getLocalIdentName();
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -11,17 +13,7 @@ const config: StorybookConfig = {
     '@storybook/addon-a11y',
     '@storybook/addon-designs',
     "storybook-addon-pseudo-states",
-    {
-      name: 'storybook-css-modules',
-      options: {
-        cssModulesLoaderOptions: {
-          importLoaders: 1,
-          modules: {
-            localIdentName: '[name]__[local]--[hash:base64:5]'
-          }
-        }
-      }
-    },
+    'storybook-css-modules',
     {
       name: '@storybook/addon-styling',
       options: {
@@ -29,7 +21,18 @@ const config: StorybookConfig = {
           implementation: require('sass')
         }
       }
-    }
+    },
+    {
+      name: 'storybook-css-modules',
+      options: {
+        cssModulesLoaderOptions: {
+          importLoaders: 1,
+          modules: {
+            getLocalIdent
+          }
+        }
+      }
+    },
   ],
   framework: {
     name: '@storybook/react-webpack5',

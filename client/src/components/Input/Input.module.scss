@@ -1,0 +1,89 @@
+@use '../../styles/global' as global;
+
+@mixin state( $labelColor, $valueColor, $borderColor, $backgroundColor) {
+    & input {
+        border: 1px solid $borderColor;
+        background-color: $backgroundColor;
+        color: $valueColor;
+    }
+        
+    & label {
+        color: $labelColor;
+    }
+ 
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    min-width: 197px;
+    width: fit-content;
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.inputField {
+    border: 1px solid black;
+    max-height: 46px;
+    padding: 0 16px;
+    @media screen and (min-width: global.$tablet) {
+        padding: 4px 16px;
+    }
+
+    &:hover {
+        border-width: 2px;
+    }
+
+    &:active {
+        border-width: 2px;
+        background-color: var(--color-light1);
+    }
+
+    &:focus {
+        border-width: 2px;
+        background-color: var(--color-light2);
+    }
+}
+
+.error {
+    @include state( var(--color-dark3), var(--color-vermilion), var(--color-vermilion), transparent );
+    & span {
+        color: var(--color-vermilion);
+    }
+}
+
+.disabled {
+    @include state( var(--color-dark1), var(--color-light3), var(--color-dark2), var(--color-dark1));
+}
+
+input[disabled] {
+    pointer-events:none
+}
+
+.inputField::placeholder {
+    color: var(--color-dark2);
+}
+
+.searchInput {
+    flex-direction: row;
+
+    @media screen and (min-width: global.$desktop) {
+        div > svg {
+            height: 32px;
+            width: 32px;
+        }
+    }
+
+    & .searchButton {
+        padding: 4px;
+    }
+
+    &.disabled > .searchButton {
+        border: 1px solid var(--color-dark2);
+    }
+
+    &.disabled > .inputField::placeholder {
+        color: var(--color-dark2);
+    }
+}
+
