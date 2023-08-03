@@ -48,12 +48,9 @@ button, a  {
 
 .solid, 
 .lined {
-    min-width: 100px;
+    min-width: 96px;
     width: auto;
-    padding: 0.5rem;
-    @media screen and (min-width: global.$desktop) {
-        padding: 1rem;
-    }
+    padding: 8px;
 }
 
 .solid {

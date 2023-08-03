@@ -6,6 +6,7 @@ import { Icon, IconSize, IconType } from '../Icon/Icon';
 
 type SharedButtonProps = {
   id?: string;
+  classes?: string[];
   type?: 'submit' | 'button';
   action: React.MouseEventHandler | string;
   disabled?: boolean;
@@ -39,6 +40,7 @@ type IconButtonProps = SharedButtonProps & {
 
 export const Button: React.FC<ButtonProps> = ({
   id,
+  classes = [],
   variant,
   type = 'button',
   action,
@@ -50,7 +52,6 @@ export const Button: React.FC<ButtonProps> = ({
   children
 }): JSX.Element => {
   const Tag = typeof action === 'string' ? 'a' : 'button';
-
   const ButtonIcon = () => {
     return (
       <Icon
@@ -65,7 +66,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <Tag
       id={id}
-      className={classnames(styles[ButtonType[variant]], {
+      className={classnames(styles[ButtonType[variant]], ...classes, {
         [styles.small]: small,
         [styles.disabled]: disabled
       })}
@@ -94,6 +95,7 @@ export const Button: React.FC<ButtonProps> = ({
 
 export const IconButton: React.FC<IconButtonProps> = ({
   id,
+  classes = [],
   icon,
   action,
   lightVariant = false,
@@ -105,7 +107,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   return (
     <Tag
       id={id}
-      className={classnames(styles.iconButton, {
+      className={classnames(styles.iconButton, ...classes, {
         [styles.iconButtonLight]: lightVariant,
         [styles.disabled]: disabled,
         [styles.round]: round
