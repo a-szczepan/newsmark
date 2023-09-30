@@ -7,11 +7,6 @@ const User = sequelize.define('User', {
 		autoIncrement: true,
 		primaryKey: true,
 	},
-	username: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		unique: true,
-	},
 	email: {
 		type: DataTypes.STRING,
 		allowNull: false,
@@ -22,8 +17,12 @@ const User = sequelize.define('User', {
 	},
 	password: {
 		type: DataTypes.STRING,
-		allowNull: false,
+		allowNull: true,
 	},
+	googleId: {
+		type: DataTypes.STRING,
+		allowNull: true
+	}
 }, {
 	timestamps: true,
 });

@@ -1,5 +1,6 @@
 require('dotenv').config();
 const cors = require('cors');
+const mysql = require('mysql2')
 const express = require('express');
 const {getPaths} = require('./routes/routes');
 
@@ -10,7 +11,7 @@ app.use(cors());
 app.use(getPaths());
 
 const run = async () => {
-	app.listen(process.env.DEV_PORT, () => console.log(`Server running on port ${process.env.DEV_PORT}`));
+	app.listen(5000, () => console.log(`Server running on port ${process.env.DEV_PORT}`));
 };
 
 run();
