@@ -1,8 +1,8 @@
 /*DEV NOTE: PlanetScale doesn't support FOREIGN KEY constraints. */
 
 module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define(
-    "user",
+  const Session = sequelize.define(
+    "session",
     {
       id: {
         type: Sequelize.INTEGER,
@@ -10,11 +10,11 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         autoIncrement: true,
       },
-      sessionId: {
+      userId: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
-      email: {
+      userEmail: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
@@ -22,17 +22,15 @@ module.exports = (sequelize, Sequelize) => {
           isEmail: true,
         },
       },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      valid: {
+        type: Sequelize.BOOLEAN,
       },
-      googleId: {
+      userAgent: {
         type: Sequelize.STRING,
-        allowNull: true,
       },
     },
     { timestamps: true }
   );
 
-  return User;
+  return Session;
 };
