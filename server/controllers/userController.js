@@ -1,105 +1,171 @@
-const {Op} = require('sequelize');
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
+const db = require("../database/db");
+const User = require("../models/userModel")(db.sequelize, db.Sequelize);
+const bcrypt = require("bcrypt");
+const axios = require("axios");
+const qs = require("qs");
 
-exports.registerWithPassword = async (req, res) => {
-	const { email, password} = req.body;
+const getGoogleOAuthTokens = async ({ code }, redirectURI) => {
+  const url = "https://oauth2.googleapis.com/token";
+  const values = {
+    code,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_KEY,
+    redirect_uri: redirectURI,
+    grant_type: "authorization_code",
+  };
 
-	try {
-		const existingUser = await User.findOne({ where: { email } });
-
-		if (existingUser) {
-			return res.status(409).json({message: 'Username or email is already registered'});
-		}
-
-		const hashedPassword = await bcrypt.hash(password, 10);
-		const newUser = await User.create({ email, password: hashedPassword});
-
-		return res.status(201).json({message: 'User registered successfully', user: newUser});
-	} catch (error) {
-		console.error('Error registering user:', error);
-		return res.status(500).json({message: 'Registration failed.'});
-	}
+  try {
+    const res = await axios.post(url, qs.stringify(values), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Google auth failed", error);
+  }
 };
 
-exports.createUserWithGoogle = async (email, googleId, res) => {
-	
-	try {
-		const existingUser = await User.findOne({ where: { email } });
+const getGoogleUser = async (code, redirectURI) => {
+  const { id_token, access_token } = await getGoogleOAuthTokens(
+    { code },
+    redirectURI
+  );
 
-		if (existingUser) {
-			return res.status(409).json({message: 'Username or email is already registered'});
-		}
-
-		const newUser = await User.create({ email, googleId});
-
-		return res.status(201).json({message: 'User registered successfully', user: newUser});
-	} catch (error) {
-		console.error('Error registering user:', error);
-		return res.status(500).json({message: 'Registration failed.'});
-	}
+  try {
+    const res = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${id_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Cannot get Google User: ", error);
+  }
 };
 
+const createUserWithGoogle = async (email, googleId) => {
+  try {
+    const existingUser = await User.findOne({ where: { email } });
 
+    if (existingUser)
+      return { message: "Username or email is already registered" };
 
-exports.login = async (req, res) => {
-	const {username, password} = req.body;
-
-	try {
-		const user = await User.findOne({where: {username}});
-
-		if (!user) {
-			return res.status(404).json({message: 'User not found'});
-		}
-
-		const passwordMatch = await bcrypt.compare(password, user.password);
-
-		if (!passwordMatch) {
-			return res.status(401).json({message: 'Invalid username or password'});
-		}
-
-		return res.status(200).json({message: 'Login successful', user});
-	} catch (error) {
-		console.error('Error logging in:', error);
-		return res.status(500).json({message: 'Login failed. Please try again later.'});
-	}
+    const newUser = await User.create({ email, googleId });
+    return newUser;
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return res.status(500).json({ message: "Registration failed." });
+  }
 };
 
-exports.logout = (req, res) => {
-	req.session.destroy(error => {
-		if (error) {
-			console.error('Error logging out:', error);
-			return res.status(500).json({message: 'Logout failed. Please try again later.'});
-		}
-
-		return res.status(200).json({message: 'Logout successful'});
-	});
+const getUserByGoogleId = async (googleId) => {
+  try {
+    const user = await User.findOne({ where: { googleId } });
+    return user ? user : null;
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+  }
 };
 
-exports.getUserById = async (req, res) => {
-	const userId = req.params.id;
+exports.registerWithPassword = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const existingUser = await User.findOne({ where: { email } });
 
-	try {
-		const user = await User.findByPk(userId);
+    if (existingUser)
+      return res
+        .status(409)
+        .json({ message: "Username or email is already registered" });
 
-		if (!user) {
-			return res.status(404).json({message: 'User not found'});
-		}
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ email, password: hashedPassword });
 
-		return res.status(200).json({user});
-	} catch (error) {
-		console.error('Error retrieving user:', error);
-		return res.status(500).json({message: 'Failed to retrieve user. Please try again later.'});
-	}
+    res.locals.user = {
+      id: user.id,
+      email: user.email,
+    };
+
+    return next();
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return res.status(500).json({ message: "Registration failed." });
+  }
 };
 
-exports.getUserByGoogleId = async (googleId) => {
-	try {
-		const user = await User.findOne({where: {googleId}});
-		return user ? user : null;
-	} catch (error) {
-		console.error('Error retrieving user:', error);
-		return res.status(500).json({message: 'Failed to retrieve user. Please try again later.'});
-	}
+exports.loginWithPassword = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch)
+      return res.status(401).json({ message: "Invalid username or password" });
+
+    res.locals.user = {
+      id: user.id,
+      email: user.email,
+    };
+
+    return next();
+  } catch (error) {
+    console.error("Error logging in:", error);
+    return res
+      .status(500)
+      .json({ message: "Login failed. Please try again later." });
+  }
 };
 
+exports.registerWithGoogle = async (req, res, next) => {
+  const code = req.query.code;
+  try {
+    const { id, email } = await getGoogleUser(
+      code,
+      process.env.REGISTER_GOOGLE_OAUTH_REDIRECT_URL
+    );
+
+    const user = await createUserWithGoogle(email, id);
+
+    res.locals.user = {
+      id: user.id,
+      email: user.email,
+    };
+
+    return next();
+  } catch (error) {
+    console.error("Error registering user:", error);
+    return res.status(500).json({ message: "Registration failed." });
+  }
+};
+
+exports.loginWithGoogle = async (req, res, next) => {
+  const code = req.query.code;
+  try {
+    const { id } = await getGoogleUser(
+      code,
+      process.env.LOGIN_GOOGLE_OAUTH_REDIRECT_URL
+    );
+
+    const user = await getUserByGoogleId(id);
+
+    if (user == null)
+      return res.status(404).json({ message: "User not found" });
+
+    res.locals.user = {
+      id: user.id,
+      email: user.email,
+    };
+
+    return next();
+  } catch (error) {
+    console.error("Error logging in:", error);
+    return res.status(500).json({ message: "Login failed." });
+  }
+};

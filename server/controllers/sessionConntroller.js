@@ -1,65 +1,115 @@
-const axios = require('axios');
-const qs = require('qs');
-const jwt = require('jsonwebtoken')
-const {createUserWithGoogle, getUserByGoogleId} = require('./userController');
+const jwt = require("jsonwebtoken");
+const { get } = require("lodash");
+const { verifyJwt, signJwt } = require("../utils/jwt.utils.js");
+const db = require("../database/db");
+const Session = require("../models/sessionModel")(db.sequelize, db.Sequelize);
 
-const getGoogleOAuthTokens = async ({code}) => {
-    const url = 'https://oauth2.googleapis.com/token'
-    const values = {
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_KEY,
-        redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URL,
-        grant_type: 'authorization_code'
-    }
+const accessTokenCookieOptions = {
+  maxAge: 900000,
+  httpOnly: false,
+  domain: "localhost",
+  path: "/",
+  sameSite: "lax",
+  secure: false,
+};
 
-    try {
-        const res = await axios.post(url, qs.stringify(values), {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-        })
-        return res.data
-    } catch (error) {
-        console.log(error, 'failed google auth')
-    }
- }
+const refreshTokenCookieOptions = {
+  ...accessTokenCookieOptions,
+  maxAge: 3.154e10, 
+};
 
- const getGoogleUser = async({id_token,access_token}) => {
-    try {
-        const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${id_token}`,
-          },
-        })
-        return res.data
-    } catch (e) {
-        console.log("Cannot get Google User: ", e)
-    }
- }
+const createSession = async (data) => {
+  try {
+    const newSession = await Session.create({ ...data, valid: true });
+    return newSession.toJSON();
+  } catch (e) {
+    console.log(e);
+  }
+};
 
- exports.googleOAuthHandler = async (req, res) => {
-    const code = req.query.code // as string
-    
-    try {
-        const { id_token, access_token } = await getGoogleOAuthTokens({code})
-        //const googleUser = jwt.decode(id_token)
-        const {id, email} = await getGoogleUser({id_token,access_token})
-        const user = await getUserByGoogleId(id)
-            
-        if(!user) {
-            createUserWithGoogle(email, id, res)
-         } else {
-                // ? utworzenie sesji, na koniec wywalić poza ifa
-                console.log("Recieved user", user)
-        }
-        
-    } catch(e) {
-        console.log(e)
-    }
-    
-    
-    // return res.status(200).json({session});
- }
+const findSession = async (query) => await Session.findOne(query);
+const updateSession = async (update, query) =>
+  await Session.update(update, query);
 
+exports.reIssueAccessToken = async ({ refreshToken }) => {
+  const { decoded } = verifyJwt(refreshToken);
+
+  if (!decoded) return false;
+
+  const session = await Session.findByPk(decoded.session);
+
+  if (!session || !session.valid) return false;
+
+  const accessToken = signJwt(
+    { email: session.userEmail, session: session.id },
+    { expiresIn: process.env.ACCESS_TOKEN_TTL } 
+  );
+
+  return accessToken;
+};
+
+exports.createNewSession = async (req, res) => {
+  console.log("createsession");
+  const { id, email } = res.locals.user;
+  console.log(id, email);
+
+  const session = await createSession({
+    userId: id,
+    userEmail: email,
+    userAgent: req.get("user-agent") || "",
+  });
+
+  const accessToken = signJwt(
+    { email, session: session.id },
+    { expiresIn: process.env.ACCESS_TOKEN_TTL } 
+  );
+
+  const refreshToken = signJwt(
+    { email, session: session.id },
+    { expiresIn: process.env.REFRESH_TOKEN_TTL } 
+  );
+
+  res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+  res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+
+  return res.status(200).send(session);
+};
+
+exports.getSessionHandler = async (req, res) => {
+  const session = await findSession({
+    where: { userEmail: res.locals.user.email },
+  });
+  const refreshToken = signJwt(
+    { email: session.userEmail, session: session.id },
+    { expiresIn: process.env.REFRESH_TOKEN_TTL } 
+  );
+  const accessToken = signJwt(
+    { email: session.userEmail, session: session.id },
+    { expiresIn: process.env.ACCESS_TOKEN_TTL } 
+  );
+  res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+  res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+  return res.status(200).send(session);
+};
+
+exports.invalidateSession = async (req, res) => {
+  const { email } = req.body;
+  await updateSession({ valid: false }, { where: { userEmail: email } });
+
+  res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
+  res.cookie("refreshToken", null, { maxAge: 0, httpOnly: true });
+
+  return res.status(200).send("Logged out");
+};
+
+//unused yet
+exports.deleteSession = async (req, res) => {
+  const { email } = req.body;
+
+  await updateSession({ id: sessionId }, { valid: false });
+
+  return res.send({
+    accessToken: null,
+    refreshToken: null,
+  });
+};

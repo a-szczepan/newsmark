@@ -1,21 +1,36 @@
-const {DataTypes} = require('sequelize');
-const sequelize = require('../database/db');
-const User = require('./userModel');
+/*DEV NOTE: PlanetScale doesn't support FOREIGN KEY constraints. */
 
-const Session = sequelize.define('Session', {
-    id: {
-		type: DataTypes.INTEGER,
-		autoIncrement: true,
-		primaryKey: true,
-	},
-    valid: {
-      type: DataTypes.BOOLEAN,
+module.exports = (sequelize, Sequelize) => {
+  const Session = sequelize.define(
+    "session",
+    {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      userEmail: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
+      valid: {
+        type: Sequelize.BOOLEAN,
+      },
+      userAgent: {
+        type: Sequelize.STRING,
+      },
     },
-    userAgent: {
-      type: DataTypes.STRING,
-    },
-  }, {
-    timestamps: true,
-  });
+    { timestamps: true }
+  );
 
-  Session.hasOne(User); 
+  return Session;
+};

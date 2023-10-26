@@ -1,41 +1,38 @@
-const {DataTypes} = require('sequelize');
-const sequelize = require('../database/db');
+/*DEV NOTE: PlanetScale doesn't support FOREIGN KEY constraints. */
 
-const User = sequelize.define('User', {
-	id: {
-		type: DataTypes.INTEGER,
-		autoIncrement: true,
-		primaryKey: true,
-	},
-	email: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		unique: true,
-		validate: {
-			isEmail: true,
-		},
-	},
-	password: {
-		type: DataTypes.STRING,
-		allowNull: true,
-	},
-	googleId: {
-		type: DataTypes.STRING,
-		allowNull: true
-	}
-}, {
-	timestamps: true,
-});
+module.exports = (sequelize, Sequelize) => {
+  const User = sequelize.define(
+    "user",
+    {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+      },
+      sessionId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      googleId: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+    },
+    { timestamps: true }
+  );
 
-User.associate = models => {
-	User.hasMany(models.Bookmark, {
-		foreignKey: 'userId',
-		onDelete: 'CASCADE',
-	});
-	User.hasMany(models.Annotation, {
-		foreignKey: 'userId',
-		onDelete: 'CASCADE',
-	});
+  return User;
 };
-
-module.exports = User;
