@@ -66,10 +66,15 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <Tag
       id={id}
-      className={classnames(styles[ButtonType[variant]], ...classes, {
-        [styles.small]: small,
-        [styles.disabled]: disabled
-      })}
+      className={classnames(
+        styles.button,
+        styles[ButtonType[variant]],
+        ...classes,
+        {
+          [styles.small]: small,
+          [styles.disabled]: disabled
+        }
+      )}
       {...(typeof action === 'string'
         ? { href: action }
         : { onClick: action } && { type: type })}
