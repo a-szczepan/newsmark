@@ -41,7 +41,6 @@ export const Typography: React.FC<TypographyProps> = ({
   tag,
   children
 }): JSX.Element => {
-  console.log(tag);
   const Tag = tag ? Tags[tag] : TextVariantMap[styleVariant];
   return (
     <Tag id={id} className={classnames(styles[styleVariant])}>
