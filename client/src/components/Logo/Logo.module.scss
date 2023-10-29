@@ -1,0 +1,22 @@
+@use '../../styles/global' as global;
+
+.logo {
+  width: fit-content;
+  height: fit-content;
+  svg {
+    width: 135px;
+    height: 33px;
+  }
+  @media screen and (min-width: global.$tablet) {
+    svg {
+      width: 189px;
+      height: 47px;
+    }
+  }
+  @media screen and (min-width: global.$desktop) {
+    svg {
+      width: 245px;
+      height: 61px;
+    }
+  }
+}
