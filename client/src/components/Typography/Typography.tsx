@@ -3,15 +3,15 @@ import React, { PropsWithChildren } from 'react';
 import styles from './Typography.module.scss';
 
 export enum Tags {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  span,
-  label
+  h1 = 'h1',
+  h2 = 'h2',
+  h3 = 'h3',
+  h4 = 'h4',
+  h5 = 'h5',
+  h6 = 'h6',
+  p = 'p',
+  span = 'span',
+  label = 'label'
 }
 
 export const TextVariantMap = {
@@ -41,6 +41,7 @@ export const Typography: React.FC<TypographyProps> = ({
   tag,
   children
 }): JSX.Element => {
+  console.log(tag);
   const Tag = tag ? Tags[tag] : TextVariantMap[styleVariant];
   return (
     <Tag id={id} className={classnames(styles[styleVariant])}>
