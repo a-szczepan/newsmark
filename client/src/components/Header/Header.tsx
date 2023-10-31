@@ -25,9 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <nav className={styles.header}>
-      <a>
-        <ReactSVG src={Logo} className={styles.logo}></ReactSVG>
-      </a>
+      <Logo></Logo>
       {isHomePage ? homePageActions : null}
     </nav>
   );
