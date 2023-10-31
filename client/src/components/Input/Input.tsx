@@ -6,10 +6,10 @@ import { ButtonType, Button } from '../Button/Button';
 import { IconSize, IconType } from '../Icon/Icon';
 
 export enum InputType {
-  text,
-  textarea,
-  password,
-  email
+  text = 'text',
+  textarea = 'textarea',
+  password = 'password',
+  email = 'email'
 }
 
 type SharedInputProps = {
@@ -57,6 +57,7 @@ export const Input: React.FC<InputProps> = ({
         name={name}
         className={classnames(styles[InputType[type]], styles.inputField)}
         placeholder={placeholder}
+        type={InputType[type]}
         aria-label={`${name}`}
         {...(disabled && { disabled: true })}
         // {...(onChange && { onChange: onChange })}
