@@ -12,13 +12,14 @@ export enum InputType {
   email = 'email'
 }
 
-type SharedInputProps = {
+type SharedInputProps = React.HTMLProps<HTMLInputElement> & {
   id?: string;
   placeholder?: string;
   onChange?: React.ChangeEvent;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: string;
+  value?: string;
 };
 
 type InputProps = SharedInputProps & {
@@ -38,6 +39,7 @@ export const Input: React.FC<InputProps> = ({
   name,
   placeholder,
   onChange,
+  value,
   error = false,
   errorMessage,
   disabled = false
@@ -58,12 +60,13 @@ export const Input: React.FC<InputProps> = ({
         className={classnames(styles[InputType[type]], styles.inputField)}
         placeholder={placeholder}
         type={InputType[type]}
-        aria-label={`${name}`}
+        aria-label={name}
         {...(disabled && { disabled: true })}
-        // {...(onChange && { onChange: onChange })}
+        {...(value && { value: value })}
+        {...(onChange && { onChange: onChange })}
       />
       {error && errorMessage && (
-        <Typography styleVariant="caption" id={`${type}-error-msg`} >
+        <Typography styleVariant="caption" id={`${type}-error-msg`}>
           {errorMessage}
         </Typography>
       )}
@@ -76,7 +79,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   type = 'search',
   placeholder,
   onChange,
-  disabled = false
+  disabled = false,
+  ...HTMLprops
 }) => {
   return (
     <div
@@ -92,6 +96,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         {...(disabled && { disabled: true })}
         aria-label="search"
         // {...(onChange && { onChange: onChange })}
+        {...HTMLprops}
       ></input>
       <Button
         variant={ButtonType.solid}

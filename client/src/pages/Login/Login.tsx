@@ -28,8 +28,8 @@ const Login: React.FC<PropsWithChildren> = (props: any) => {
     updatedAt: string;
   };
 
-  const testFun = async () => {
-    console.log('test');
+  const testFun = async (values) => {
+    console.log('test', values);
     const user = {
       email: 'Makayla.Smith9@hotmail.com',
       password: 'Testpassword123'
