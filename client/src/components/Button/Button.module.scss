@@ -19,7 +19,7 @@
 
   #{$selector} {
     background-color: $background;
-    border: $border $borderWidth $borderColor;
+    outline: $border $borderWidth $borderColor;
     border-radius: $borderRadius;
     color: $textColor;
 
@@ -94,9 +94,23 @@
 }
 
 .lined {
-  border: 1px solid var(--color-dark4);
-  @include state('hover', var(--color-light1));
-  @include state('active', var(--color-light2));
+  outline: 1px solid var(--color-dark4);
+  @include state(
+    'hover',
+    var(--color-light1),
+    0px,
+    solid,
+    1px,
+    var(--color-dark4)
+  );
+  @include state(
+    'active',
+    var(--color-light2),
+    0px,
+    solid,
+    1px,
+    var(--color-dark4)
+  );
   @include state(
     'focus',
     var(--color-light2),
