@@ -14,7 +14,6 @@ export enum InputType {
 
 type SharedInputProps = {
   id?: string;
-  value: string;
   placeholder?: string;
   onChange?: React.ChangeEvent;
   disabled?: boolean;
@@ -35,7 +34,6 @@ type SearchInputProps = SharedInputProps & {
 export const Input: React.FC<InputProps> = ({
   id,
   type = InputType.text,
-  value = '',
   label,
   name,
   placeholder,
@@ -58,7 +56,6 @@ export const Input: React.FC<InputProps> = ({
         id={id}
         name={name}
         className={classnames(styles[InputType[type]], styles.inputField)}
-        value={value}
         placeholder={placeholder}
         aria-label={`${name}`}
         {...(disabled && { disabled: true })}
@@ -76,7 +73,6 @@ export const Input: React.FC<InputProps> = ({
 export const SearchInput: React.FC<SearchInputProps> = ({
   id,
   type = 'search',
-  value = '',
   placeholder,
   onChange,
   disabled = false
@@ -91,7 +87,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         id={id}
         className={classnames(styles[InputType[type]], styles.inputField)}
         type={type}
-        value={value}
         placeholder={placeholder}
         {...(disabled && { disabled: true })}
         aria-label="search"

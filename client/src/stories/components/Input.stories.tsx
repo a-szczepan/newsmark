@@ -70,7 +70,6 @@ const getProps = (type: InputType, index) => {
   return {
     type: type,
     name: `${InputType[type]}-name`,
-    value: 'Text',
     label: 'Label',
     placeholder: `${InputType[type]}`
   };
@@ -107,7 +106,7 @@ export const AllInputVariants: InputStory = {
                     <Container key={`${type}-${state}`}>
                       <span style={spanStyle}>{state}</span>
                       {type === 'search' ? (
-                        <SearchInput id={faker.string.uuid()} value="Text" />
+                        <SearchInput id={faker.string.uuid()} />
                       ) : (
                         <Input id={faker.string.uuid()} {...props} />
                       )}
@@ -126,7 +125,7 @@ export const AllInputVariants: InputStory = {
                   <Container>
                     <span style={spanStyle}>disabled</span>
                     {type === 'search' ? (
-                      <SearchInput value="Text" disabled={true} />
+                      <SearchInput  disabled={true} />
                     ) : (
                       <Input {...props} disabled={true} />
                     )}
