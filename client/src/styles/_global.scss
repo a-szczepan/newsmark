@@ -12,6 +12,13 @@ $desktopPadding: 80px;
     height: 88px;
   }
 }
+//maybe unnecessary - CHECK AND REMOVE
+@mixin headerPadding {
+  padding-top: 49px;
+  @media screen and (min-width: $tablet) {
+    padding-top: 88px;
+  }
+}
 
 @mixin padding {
   padding: 0 $mobilePadding 0 $mobilePadding;

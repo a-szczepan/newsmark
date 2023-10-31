@@ -1,0 +1,5 @@
+@use '../../styles/global' as global;
+
+.homePage {
+  @include global.headerPadding;
+}
