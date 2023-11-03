@@ -40,7 +40,7 @@ type ButtonStory = StoryObj<typeof Button>;
 export const ButtonDefault: ButtonStory = {
   args: {
     variant: ButtonType.solid,
-    action: () => {}
+    buttonAction: () => {}
   },
   render: (args) => <Button {...args}>Button</Button>
 };
@@ -98,7 +98,7 @@ export const AllVariants: ButtonStory = {
               id={`${state}-${variant}`}
               variant={ButtonType[variant]}
               {...(i === states.length - 1 && { disabled: true })}
-              action={
+              buttonAction={
                 variant === 'link' || variant == 'lightLink' ? '/' : () => {}
               }
               {...(i === states.length - 1 && { disabled: true })}
@@ -114,7 +114,7 @@ export const AllVariants: ButtonStory = {
           <IconButton
             id={`${state}-iconButton`}
             icon={IconType.bookmark}
-            action={() => {}}
+            buttonAction={() => {}}
             {...(i === states.length - 1 && { disabled: true })}
           />
         ))}
@@ -131,7 +131,7 @@ export const AllVariants: ButtonStory = {
             id={`${state}-iconButtonLight`}
             icon={IconType.bookmark}
             lightVariant={true}
-            action={() => {}}
+            buttonAction={() => {}}
             {...(i === states.length - 1 && { disabled: true })}
           />
         ))}

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, ReactEventHandler } from 'react';
 import styles from './Button.module.scss';
 import { Tags, Typography } from '../Typography/Typography';
 import { Icon, IconSize, IconType } from '../Icon/Icon';
@@ -8,7 +8,7 @@ type SharedButtonProps = {
   id?: string;
   classes?: string[];
   type?: 'submit' | 'button';
-  action: React.MouseEventHandler | string;
+  buttonAction: ((event: React.MouseEvent<MouseEvent>) => void) | string;
   disabled?: boolean;
 };
 
@@ -43,7 +43,7 @@ export const Button: React.FC<ButtonProps> = ({
   classes = [],
   variant,
   type = 'button',
-  action,
+  buttonAction,
   small = false,
   disabled = false,
   icon,
@@ -51,7 +51,8 @@ export const Button: React.FC<ButtonProps> = ({
   iconStyle,
   children
 }): JSX.Element => {
-  const Tag = typeof action === 'string' ? 'a' : 'button';
+  const Tag = typeof buttonAction === 'string' ? 'a' : 'button';
+
   const ButtonIcon = () => {
     return (
       <Icon
@@ -75,9 +76,10 @@ export const Button: React.FC<ButtonProps> = ({
           [styles.disabled]: disabled
         }
       )}
-      {...(typeof action === 'string'
-        ? { href: action }
-        : { onClick: action } && { type: type })}
+      {...(typeof buttonAction !== 'string'
+        ? { onClick: (e) => buttonAction(e) }
+        : { href: buttonAction })}
+      {...(Tag === 'button' && { type: type })}
       {...(disabled && { disabled } && { 'aria-disabled': true })}
     >
       {icon && iconVariant === 'start' && <ButtonIcon />}
@@ -102,13 +104,14 @@ export const IconButton: React.FC<IconButtonProps> = ({
   id,
   classes = [],
   icon,
-  action,
+  buttonAction,
   lightVariant = false,
   type = 'button',
   round = false,
   disabled = false
 }): JSX.Element => {
-  const Tag = typeof action === 'string' ? 'a' : 'button';
+  const Tag = typeof buttonAction === 'string' ? 'a' : 'button';
+
   return (
     <Tag
       id={id}
@@ -117,9 +120,9 @@ export const IconButton: React.FC<IconButtonProps> = ({
         [styles.disabled]: disabled,
         [styles.round]: round
       })}
-      {...(typeof action === 'string'
-        ? { href: action }
-        : { onClick: action } && { type: type })}
+      {...(typeof buttonAction !== 'string'
+        ? { onClick: (e) => buttonAction(e) }
+        : { href: buttonAction })}
       {...(disabled && { disabled } && { 'aria-disabled': true })}
     >
       <Icon icon={icon} />
