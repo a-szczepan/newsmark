@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getGoogleOAuthURL } from '../../utils/auth';
 import { useLoginWithPasswordMutation } from '../../store/api/userApi';
