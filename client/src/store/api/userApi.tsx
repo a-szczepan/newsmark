@@ -1,7 +1,15 @@
-import { api } from './apiService'
+import { api } from './apiService';
 
 const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
+    getUser: builder.query({
+      query: () => {
+        return {
+          url: '/me',
+          method: 'GET'
+        };
+      }
+    }),
     loginWithPassword: builder.mutation({
       query: (user) => {
         return {
@@ -19,7 +27,11 @@ const userApi = api.injectEndpoints({
       })
     })
   }),
-  overrideExisting: false,
-})
+  overrideExisting: false
+});
 
-export const { useLoginWithPasswordMutation, useLogoutMutation } = userApi
+export const {
+  useGetUserQuery,
+  useLoginWithPasswordMutation,
+  useLogoutMutation
+} = userApi;

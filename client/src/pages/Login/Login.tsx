@@ -1,53 +1,27 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getGoogleOAuthURL } from '../../utils/auth';
-import {
-  useLoginWithGoogeQuery,
-  useLoginWithPasswordMutation
-} from '../../store/api/userApi';
-import { RootState } from 'src/store/store';
-import { useSelector, useDispatch } from 'react-redux';
-import { userLoggedIn } from '../../store/slices/userSlice';
+import { useLoginWithPasswordMutation } from '../../store/api/userApi';
 import styles from './Login.module.scss';
 import { AuthForm } from '../../components/AuthForm/AuthForm';
 import { UserFormData } from '../../types/user';
 import { GOOGLE_LOGIN_URL } from '../../../config';
 
 const Login: React.FC<PropsWithChildren> = (props: any) => {
-  const [userData, setUserData] = useState<UserFormData | null>(null);
-  const [login, { data, isSuccess }] = useLoginWithPasswordMutation();
-  // const { data } = useLoginWithGoogeQuery({});
-  const dispatch = useDispatch();
+  const [login, { isSuccess }] = useLoginWithPasswordMutation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) navigate('/articles');
+  }, [isSuccess]);
 
   const onSubmitWithPassword = async (
     userData: UserFormData,
     setLoginError: any
   ) => {
-    // console.log(userData)
-    // await login(userData);
-    // if (isSuccess) {
-    //   console.log(data);
-    //   // dispatch(
-    //   //   userLoggedIn({
-    //   //     sessionId: data.id,
-    //   //     email: data.email
-    //   //   })
-    //   // );
-    //   navigate('/');
-    // }
-    await login(userData).then((result: any) => {
-      if (isSuccess) {
-        console.log(result);
-        dispatch(
-          userLoggedIn({
-            sessionId: result.data.userId,
-            email: result.data.userEmail
-          })
-        );
-        navigate('/');
-      }
-    });
+    await login(userData)
+      .unwrap()
+      .catch((error) => setLoginError(error.data.message));
   };
 
   const onSubmitWithGoogle = () => {
