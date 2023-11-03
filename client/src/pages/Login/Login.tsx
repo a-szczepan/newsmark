@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getGoogleOAuthURL } from '../../utils/auth';
 import { useLoginWithPasswordMutation } from '../../store/api/userApi';
@@ -7,7 +7,7 @@ import { AuthForm } from '../../components/AuthForm/AuthForm';
 import { UserFormData } from '../../types/user';
 import { GOOGLE_LOGIN_URL } from '../../../config';
 
-const Login: React.FC<PropsWithChildren> = (props: any) => {
+const Login: React.FC = () => {
   const [login, { isSuccess }] = useLoginWithPasswordMutation();
   const navigate = useNavigate();
 
