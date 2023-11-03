@@ -131,12 +131,27 @@ exports.registerWithGoogle = async (req, res, next) => {
       process.env.REGISTER_GOOGLE_OAUTH_REDIRECT_URL
     );
 
+    const existingUser = await User.findOne({ where: { googleId: id } });
+
+    if (existingUser) {
+      res.locals.user = {
+        id: existingUser.id,
+        email: existingUser.email,
+      };
+
+      res.locals.provider = "google";
+
+      return next();
+    }
+
     const user = await createUserWithGoogle(email, id);
 
     res.locals.user = {
       id: user.id,
       email: user.email,
     };
+
+    res.locals.provider = "google";
 
     return next();
   } catch (error) {

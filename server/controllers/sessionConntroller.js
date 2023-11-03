@@ -49,15 +49,21 @@ exports.reIssueAccessToken = async ({ refreshToken }) => {
 };
 
 exports.createNewSession = async (req, res) => {
-  console.log("createsession");
   const { id, email } = res.locals.user;
-  console.log(id, email);
 
-  const session = await createSession({
-    userId: id,
-    userEmail: email,
-    userAgent: req.get("user-agent") || "",
+  console.log(res.locals);
+
+  let session = await findSession({
+    where: { userEmail: res.locals.user.email },
   });
+
+  if (!session) {
+    session = await createSession({
+      userId: id,
+      userEmail: email,
+      userAgent: req.get("user-agent") || "",
+    });
+  }
 
   const accessToken = signJwt(
     { email, session: session.id },
@@ -71,8 +77,10 @@ exports.createNewSession = async (req, res) => {
 
   res.cookie("accessToken", accessToken, accessTokenCookieOptions);
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-  res.send(session);
-  return res;
+
+  return res.locals.provider === "google"
+    ? res.redirect(308, "http://localhost:8080/articles")
+    : res.status(200).send({ message: "success" });
 };
 
 exports.getSessionHandler = async (req, res) => {
@@ -90,7 +98,7 @@ exports.getSessionHandler = async (req, res) => {
 
   res.cookie("accessToken", accessToken, accessTokenCookieOptions);
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-  
+
   return res.locals.provider === "google"
     ? res.redirect(308, "http://localhost:8080/articles")
     : res.status(200).send({ message: "success" });
