@@ -12,7 +12,7 @@ exports.getPaths = () => {
     session.createNewSession
   );
   router.post("/api/login", user.loginWithPassword, session.getSessionHandler);
-
+  router.get("/api/me", requireUser, user.getCurrentUser);
   router.get(
     "/api/users/oauth/google",
     user.registerWithGoogle,
@@ -23,7 +23,6 @@ exports.getPaths = () => {
     user.loginWithGoogle,
     session.getSessionHandler
   );
-
   router.post("/api/logout", requireUser, session.invalidateSession);
 
   return router;

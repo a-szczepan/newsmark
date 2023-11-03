@@ -12,12 +12,12 @@
 }
 
 body {
-  font-size: 75%;
   line-height: 1.75;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   font-family: 'Source Serif 4', serif;
   color: var(--color-dark4);
+  background-color: white;
 }
 
 h1,
@@ -46,12 +46,4 @@ button,
 textarea,
 select {
   font: inherit;
-}
-
-
-
-@media only screen and (min-width: 1200px) {
-  body {
-    font-size: 100%;
-  }
 }

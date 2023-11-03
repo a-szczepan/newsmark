@@ -1,15 +1,45 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getGoogleOAuthURL } from '../../utils/auth';
+import { useLoginWithPasswordMutation } from '../../store/api/userApi';
+import styles from './Login.module.scss';
+import { AuthForm } from '../../components/AuthForm/AuthForm';
+import { UserFormData } from '../../types/user';
+import { GOOGLE_LOGIN_URL } from '../../../config';
 
 const Login: React.FC<PropsWithChildren> = (props: any) => {
-  const oauthGoogleClientId =
-    '864694712401-kc0gt2jefs65rmvjn001v1rfma9cfbke.apps.googleusercontent.com';
-  const oauthGoogleRedirect = 'http://localhost:5000/api/sessions/oauth/google';
-  const serverEndpoint = 'http://localhost:5000';
+  const [login, { isSuccess }] = useLoginWithPasswordMutation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) navigate('/articles');
+  }, [isSuccess]);
+
+  const onSubmitWithPassword = async (
+    userData: UserFormData,
+    setLoginError: any
+  ) => {
+    await login(userData)
+      .unwrap()
+      .catch((error) => setLoginError(error.data.message));
+  };
+
+  const onSubmitWithGoogle = () => {
+    location.assign(getGoogleOAuthURL(GOOGLE_LOGIN_URL));
+  };
 
   return (
-    <div style={{ marginTop: '100px' }}>
-      <a href={getGoogleOAuthURL()}>Login</a>
+    <div className={styles.underlay}>
+      <div className={styles.loginPage}>
+        <AuthForm
+          submitActionWithGoogleAuth={onSubmitWithGoogle}
+          submitActionWithPassword={onSubmitWithPassword}
+          formText={{
+            header: 'Sign in',
+            caption: 'Get access to your articles'
+          }}
+        />
+      </div>
     </div>
   );
 };

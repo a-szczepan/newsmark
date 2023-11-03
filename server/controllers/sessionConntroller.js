@@ -15,7 +15,7 @@ const accessTokenCookieOptions = {
 
 const refreshTokenCookieOptions = {
   ...accessTokenCookieOptions,
-  maxAge: 3.154e10, 
+  maxAge: 3.154e10,
 };
 
 const createSession = async (data) => {
@@ -42,7 +42,7 @@ exports.reIssueAccessToken = async ({ refreshToken }) => {
 
   const accessToken = signJwt(
     { email: session.userEmail, session: session.id },
-    { expiresIn: process.env.ACCESS_TOKEN_TTL } 
+    { expiresIn: process.env.ACCESS_TOKEN_TTL }
   );
 
   return accessToken;
@@ -61,18 +61,18 @@ exports.createNewSession = async (req, res) => {
 
   const accessToken = signJwt(
     { email, session: session.id },
-    { expiresIn: process.env.ACCESS_TOKEN_TTL } 
+    { expiresIn: process.env.ACCESS_TOKEN_TTL }
   );
 
   const refreshToken = signJwt(
     { email, session: session.id },
-    { expiresIn: process.env.REFRESH_TOKEN_TTL } 
+    { expiresIn: process.env.REFRESH_TOKEN_TTL }
   );
 
   res.cookie("accessToken", accessToken, accessTokenCookieOptions);
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-
-  return res.status(200).send(session);
+  res.send(session);
+  return res;
 };
 
 exports.getSessionHandler = async (req, res) => {
@@ -81,15 +81,19 @@ exports.getSessionHandler = async (req, res) => {
   });
   const refreshToken = signJwt(
     { email: session.userEmail, session: session.id },
-    { expiresIn: process.env.REFRESH_TOKEN_TTL } 
+    { expiresIn: process.env.REFRESH_TOKEN_TTL }
   );
   const accessToken = signJwt(
     { email: session.userEmail, session: session.id },
-    { expiresIn: process.env.ACCESS_TOKEN_TTL } 
+    { expiresIn: process.env.ACCESS_TOKEN_TTL }
   );
+
   res.cookie("accessToken", accessToken, accessTokenCookieOptions);
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
-  return res.status(200).send(session);
+  
+  return res.locals.provider === "google"
+    ? res.redirect(308, "http://localhost:8080/articles")
+    : res.status(200).send({ message: "success" });
 };
 
 exports.invalidateSession = async (req, res) => {

@@ -163,9 +163,15 @@ exports.loginWithGoogle = async (req, res, next) => {
       email: user.email,
     };
 
+    res.locals.provider = "google";
+
     return next();
   } catch (error) {
     console.error("Error logging in:", error);
     return res.status(500).json({ message: "Login failed." });
   }
+};
+
+exports.getCurrentUser = (req, res) => {
+  return res.status(200).send(res.locals.user);
 };

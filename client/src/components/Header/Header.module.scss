@@ -12,10 +12,3 @@
   align-items: center;
   justify-content: space-between;
 }
-
-.logo {
-  width: 135px;
-  @media screen and (min-width: global.$tablet) {
-    width: 245px;
-  }
-}

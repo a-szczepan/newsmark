@@ -6,20 +6,20 @@ import { ButtonType, Button } from '../Button/Button';
 import { IconSize, IconType } from '../Icon/Icon';
 
 export enum InputType {
-  text,
-  textarea,
-  password,
-  email
+  text = 'text',
+  textarea = 'textarea',
+  password = 'password',
+  email = 'email'
 }
 
-type SharedInputProps = {
+type SharedInputProps = React.HTMLProps<HTMLInputElement> & {
   id?: string;
-  value: string;
   placeholder?: string;
   onChange?: React.ChangeEvent;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: string;
+  value?: string;
 };
 
 type InputProps = SharedInputProps & {
@@ -35,11 +35,11 @@ type SearchInputProps = SharedInputProps & {
 export const Input: React.FC<InputProps> = ({
   id,
   type = InputType.text,
-  value = '',
   label,
   name,
   placeholder,
   onChange,
+  value,
   error = false,
   errorMessage,
   disabled = false
@@ -58,14 +58,15 @@ export const Input: React.FC<InputProps> = ({
         id={id}
         name={name}
         className={classnames(styles[InputType[type]], styles.inputField)}
-        value={value}
         placeholder={placeholder}
-        aria-label={`${name}`}
+        type={InputType[type]}
+        aria-label={name}
         {...(disabled && { disabled: true })}
-        // {...(onChange && { onChange: onChange })}
+        {...(value && { value: value })}
+        {...(onChange && { onChange: onChange })}
       />
       {error && errorMessage && (
-        <Typography styleVariant="caption" id={`${type}-error-msg`} >
+        <Typography styleVariant="caption" id={`${type}-error-msg`}>
           {errorMessage}
         </Typography>
       )}
@@ -76,10 +77,10 @@ export const Input: React.FC<InputProps> = ({
 export const SearchInput: React.FC<SearchInputProps> = ({
   id,
   type = 'search',
-  value = '',
   placeholder,
   onChange,
-  disabled = false
+  disabled = false,
+  ...HTMLprops
 }) => {
   return (
     <div
@@ -91,17 +92,17 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         id={id}
         className={classnames(styles[InputType[type]], styles.inputField)}
         type={type}
-        value={value}
         placeholder={placeholder}
         {...(disabled && { disabled: true })}
         aria-label="search"
         // {...(onChange && { onChange: onChange })}
+        {...HTMLprops}
       ></input>
       <Button
         variant={ButtonType.solid}
         icon={IconType.search}
         iconStyle={{ size: IconSize.large, color: 'light' }}
-        action={() => {}}
+        buttonAction={() => {}}
         classes={[styles.searchButton]}
         {...(disabled && { disabled: true })}
       ></Button>

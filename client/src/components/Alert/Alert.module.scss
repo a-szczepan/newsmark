@@ -1,0 +1,27 @@
+.alert {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 16px;
+  gap: 8px;
+
+  & p {
+    max-width: 100%;
+  }
+
+  & svg {
+    min-width: 24px;
+  }
+}
+
+.red {
+  background-color: var(--color-rea-rose);
+}
+
+.yellow {
+  background-color: var(--color-vanilla);
+}
+
+.blue {
+  background-color: var(--color-columbia-blue);
+}

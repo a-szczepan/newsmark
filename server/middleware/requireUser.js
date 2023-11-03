@@ -1,4 +1,11 @@
-exports.requireUser = (req, res, next) => {
-  if (!req.body.email) return res.status(403).send("Invalid session");
+function requireUser(req, res, next) {
+  const user = res?.locals?.user;
+
+  if (!user) {
+    return res.sendStatus(403);
+  }
+
   return next();
-};
+}
+
+module.exports = { requireUser };
