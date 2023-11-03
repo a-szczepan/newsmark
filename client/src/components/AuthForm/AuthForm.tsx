@@ -86,9 +86,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         enableReinitialize
         initialValues={{ email: '', password: '' }}
         validationSchema={FormValidationSchema}
-        onSubmit={async (values) => {
-          // console.log(e);
-          await submitActionWithPassword(values, setLoginError);
+        onSubmit={(values) => {
+          submitActionWithPassword(values, setLoginError);
         }}
       >
         {({ errors }) => (
@@ -112,10 +111,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               component={PasswordInput}
               error={errors.password}
             />
-            <Button action={() => {}} variant={ButtonType.solid} type="submit">
+            <Button
+              buttonAction={() => {}}
+              variant={ButtonType.solid}
+              type="submit"
+            >
               Continue
             </Button>
-            <h1>{loginError}</h1>
           </Form>
         )}
       </Formik>
@@ -123,7 +125,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       <div className={styles.oauthContainer}>
         <hr />
         <Button
-          action={() => {}}
+          buttonAction={submitActionWithGoogleAuth}
           variant={ButtonType.lined}
           icon={IconType.google}
           classes={[styles.googleAuthButton]}
