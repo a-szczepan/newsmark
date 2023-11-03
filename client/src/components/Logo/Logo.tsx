@@ -2,11 +2,12 @@ import React from 'react';
 import styles from './Logo.module.scss';
 import { ReactSVG } from 'react-svg';
 import LogoImg from '../../assets/images/Newsmark.svg';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Logo: React.FC = () => {
+  const navigate = useNavigate();
   return (
-    <a href='/' onClick={() => redirect('/')}>
+    <a href='/' onClick={() => navigate('/')}>
       <ReactSVG src={LogoImg} className={styles.logo} />
     </a>
   );
