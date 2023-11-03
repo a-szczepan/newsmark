@@ -34,7 +34,7 @@ type IconButtonStory = StoryObj<typeof IconButton>;
 export const IconButtonDefault: IconButtonStory = {
   args: {
     icon: IconType.bookmark,
-    action: () => {}
+    buttonAction: () => {}
   },
   render: (args) => <IconButton {...args} />
 };

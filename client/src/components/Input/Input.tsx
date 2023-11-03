@@ -102,7 +102,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         variant={ButtonType.solid}
         icon={IconType.search}
         iconStyle={{ size: IconSize.large, color: 'light' }}
-        action={() => {}}
+        buttonAction={() => {}}
         classes={[styles.searchButton]}
         {...(disabled && { disabled: true })}
       ></Button>
