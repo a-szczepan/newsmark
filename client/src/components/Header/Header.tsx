@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, useState } from 'react';
-import { ReactSVG } from 'react-svg';
-import Logo from '../../assets/images/Newsmark.svg';
+import { Logo } from '../Logo/Logo';
 import styles from './Header.module.scss';
 
 type HeaderProps = {
@@ -25,8 +24,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <nav className={styles.header}>
-      <Logo></Logo>
-      {isHomePage ? homePageActions : null}
+      <Logo />
+      {/* {isHomePage ? homePageActions : null} */}
     </nav>
   );
 };
