@@ -4,5 +4,9 @@
   min-height: 100vh;
   max-width: global.$maxScreenWidth;
   margin: auto;
-  padding: 0 global.$desktopPadding 0 global.$desktopPadding;
+  padding: 0 global.$mobilePadding 0 global.$mobilePadding;
+
+  @media screen and (min-width: global.$tablet) {
+    padding: 0 global.$desktopPadding 0 global.$desktopPadding;
+  }
 }
