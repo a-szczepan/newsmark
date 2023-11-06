@@ -14,6 +14,7 @@ const config: StorybookConfig = {
     '@storybook/addon-designs',
     "storybook-addon-pseudo-states",
     'storybook-css-modules',
+    'storybook-addon-react-router-v6',
     {
       name: '@storybook/addon-styling',
       options: {
