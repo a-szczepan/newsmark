@@ -31,19 +31,21 @@ export type TextVariant = keyof typeof TextVariantMap;
 
 type TypographyProps = PropsWithChildren<{
   id?: string;
+  classes?: string[];
   styleVariant?: TextVariant;
   tag?: Tags;
 }>;
 
 export const Typography: React.FC<TypographyProps> = ({
   id,
+  classes = [],
   styleVariant = 'p',
   tag,
   children
 }): JSX.Element => {
   const Tag = tag ? Tags[tag] : TextVariantMap[styleVariant];
   return (
-    <Tag id={id} className={classnames(styles[styleVariant])}>
+    <Tag id={id} className={classnames(styles[styleVariant], ...classes)}>
       {children}
     </Tag>
   );

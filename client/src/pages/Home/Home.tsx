@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { Typography } from '../../components/Typography/Typography';
+import React from 'react';
+import { Tags, Typography } from '../../components/Typography/Typography';
 import styles from './Home.module.scss';
 import { Header } from '../../components/Header/Header';
 import { TypeAnimation } from 'react-type-animation';
@@ -15,17 +15,10 @@ const HeroSection: React.FC = () => {
         <div className={styles.heroText}>
           <Typography styleVariant="h1">
             <TypeAnimation
-              sequence={[
-                'Annotate',
-                1000,
-                'Save',
-                1000,
-                'Discover',
-                1000
-              ]}
+              sequence={['Annotate', 1000, 'Save', 1000, 'Discover', 1000]}
               wrapper="span"
               speed={1}
-              className={styles.bold}
+              className={classnames(styles.typingAnimation, styles.bold)}
               repeat={Infinity}
             />
             with Ease
@@ -53,13 +46,60 @@ const HeroSection: React.FC = () => {
   );
 };
 
+const InfoSection: React.FC = () => {
+  const infoPoints = [
+    {
+      heading: 'Browse Articles',
+      text: "Upon logging in, you'll be presented with a curated selection of articles from the New York Times. Browse the latest news, or use the search functionality to find specific articles"
+    },
+    {
+      heading: 'Pick an Article',
+      text: 'Click on an article that catches your attention to open it in the reading view. Take your time to read the article and absorb the information'
+    },
+    {
+      heading: 'Bookmark an Article',
+      text: 'While reading an article, click on the bookmark icon to save the article to your collection. You can browse all your saved articles in the user section'
+    },
+    {
+      heading: 'Add Annotation',
+      text: 'To add an annotation or note, highlight a section of the text that you want to annotate. Write your thoughts  or key takeaways. Your annotation will be associated with the highlighted section of the article'
+    }
+  ];
+  return (
+    <div className={styles.underlay}>
+      <section className={styles.infoSection}>
+        <ol>
+          {infoPoints.map((element, index) => (
+            <li>
+              <div className={styles.liHeading}>
+                <Typography styleVariant="h2" classes={[styles.counter]}>
+                  {index+1}
+                </Typography>
+                <Typography styleVariant="h2">{element.heading}</Typography>
+              </div>
+              <Typography
+                classes={[styles.description]}
+                styleVariant="h4"
+                tag={Tags.p}
+              >
+                {element.text}
+              </Typography>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
+  );
+};
+
 const Home: React.FC = () => {
   return (
-    <>
+    <div className={styles.landingPage}>
       {/* <Header /> */}
       <div style={{ height: '88px' }}>header</div>
       <HeroSection />
-    </>
+      <InfoSection />
+    </div>
   );
 };
 

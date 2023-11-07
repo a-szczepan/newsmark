@@ -1,7 +1,7 @@
 @use '../../styles/global' as global;
 
 .heroSection {
-
+  margin: 0 0 56px 0;
   & .wrapper {
     display: flex;
     flex-direction: column;
@@ -32,7 +32,15 @@
     width: 100%;
   }
 
+  & .typingAnimation {
+    display: block;
+  }
+
   @media screen and (min-width: global.$tablet) {
+    margin: 16px 0 56px 0;
+    & .typingAnimation {
+      display: inline-block;
+    }
 
     & .wrapper {
       width: fit-content;
@@ -48,6 +56,8 @@
   }
 
   @media screen and (min-width: global.$desktop) {
+    margin: 32px 0 120px 0;
+
     & .heroImages {
       margin-top: -20vw;
     }
@@ -55,6 +65,85 @@
     & img {
       max-height: 556px;
       width: 100%;
+    }
+  }
+}
+
+.underlay {
+  position: absolute;
+  inset: auto 0;
+  background-color: var(--color-black);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.infoSection {
+  color: var(--color-white);
+  width: 100%;
+  max-width: global.$maxScreenWidth;
+  @include global.padding;
+  margin: 48px 0;
+
+  ol {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  li {
+    max-width: 520px;
+  }
+
+  & .liHeading {
+    width: fit-content;
+    justify-self: center;
+    display: grid;
+    grid-template-columns: 1fr 11fr;
+    gap: 8px;
+    justify-items: center;
+
+    @media screen and (min-width: 386px) {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  & .counter {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--color-white);
+    border-radius: 50px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  & .description {
+    padding-top: 16px;
+    text-align: center;
+  }
+
+  @media screen and (min-width: global.$desktop) {
+    margin: 80px 0;
+
+    ol {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      align-items: flex-start;
+    }
+
+    li:nth-child(even) {
+      justify-self: flex-end;
+    }
+
+    & .counter {
+      width: 72px;
+      height: 72px;
     }
   }
 }
