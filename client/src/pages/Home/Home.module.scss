@@ -1,5 +1,60 @@
 @use '../../styles/global' as global;
 
-.homePage {
-  @include global.headerPadding;
+.heroSection {
+
+  & .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 48px;
+  }
+
+  & .heroText {
+    max-width: 54ch;
+    text-align: center;
+  }
+
+  & .bold {
+    font-weight: 600;
+  }
+
+  & button {
+    margin-top: 24px;
+  }
+
+  & .heroImages {
+    display: flex;
+    justify-content: center;
+  }
+
+  & img {
+    max-height: 376px;
+    width: 100%;
+  }
+
+  @media screen and (min-width: global.$tablet) {
+
+    & .wrapper {
+      width: fit-content;
+      margin: auto;
+    }
+
+    & .heroImages {
+      display: flex;
+      justify-content: space-between;
+      height: fit-content;
+      margin-top: -12vw;
+    }
+  }
+
+  @media screen and (min-width: global.$desktop) {
+    & .heroImages {
+      margin-top: -20vw;
+    }
+
+    & img {
+      max-height: 556px;
+      width: 100%;
+    }
+  }
 }
