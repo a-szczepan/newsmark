@@ -1,23 +1,34 @@
 import classnames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography } from '../../components/Typography/Typography';
 import styles from './Home.module.scss';
 import { Header } from '../../components/Header/Header';
-
+import { TypeAnimation } from 'react-type-animation';
 import { Button, ButtonType } from '../../components/Button/Button';
 import hero1 from '../../assets/images/Hero1.svg';
 import hero2 from '../../assets/images/Hero2.svg';
 
 const HeroSection: React.FC = () => {
-  const verbs: string[] = ['Annotate', 'Discover', 'Save'];
-  const [text, setText] = useState<string>(verbs[0]);
-
   return (
     <section className={styles.heroSection}>
       <div className={styles.wrapper}>
         <div className={styles.heroText}>
           <Typography styleVariant="h1">
-            <span className={styles.bold}>{text}</span> with Ease
+            <TypeAnimation
+              sequence={[
+                'Annotate',
+                1000,
+                'Save',
+                1000,
+                'Discover',
+                1000
+              ]}
+              wrapper="span"
+              speed={1}
+              className={styles.bold}
+              repeat={Infinity}
+            />
+            with Ease
           </Typography>
           <Typography styleVariant="h4">
             The ultimate bookmarking and annotation tool for{' '}
@@ -46,7 +57,7 @@ const Home: React.FC = () => {
   return (
     <>
       {/* <Header /> */}
-      <div style={{height: "88px"}}>header</div>
+      <div style={{ height: '88px' }}>header</div>
       <HeroSection />
     </>
   );
