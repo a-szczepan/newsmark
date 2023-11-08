@@ -2,6 +2,7 @@
 
 .heroSection {
   margin: 0 0 56px 0;
+
   & .wrapper {
     display: flex;
     flex-direction: column;
@@ -70,12 +71,10 @@
 }
 
 .underlay {
-  position: absolute;
-  inset: auto 0;
   background-color: var(--color-black);
   display: flex;
   justify-content: center;
-  min-height: 100vh;
+  width: 100%;
 }
 
 .infoSection {
@@ -83,7 +82,8 @@
   width: 100%;
   max-width: global.$maxScreenWidth;
   @include global.padding;
-  margin: 48px 0;
+  padding-top: 48px;
+  padding-bottom: 48px;
 
   ol {
     display: flex;
@@ -128,7 +128,9 @@
   }
 
   @media screen and (min-width: global.$desktop) {
-    margin: 80px 0;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    @include global.padding;
 
     ol {
       display: grid;
@@ -144,6 +146,91 @@
     & .counter {
       width: 72px;
       height: 72px;
+    }
+  }
+}
+
+.benefitsSection {
+  & ul {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    margin: 80px 0;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  & .card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 24px;
+
+    & .imgWrapper {
+      max-height: 480px;
+      display: flex;
+      justify-content: center;
+      align-self: center;
+      width: fit-content;
+
+      &.benefit1 {
+        background: radial-gradient(
+          54.54% 48.32% at 38.87% 51.46%,
+          var(--color-fairy-tale) 15%,
+          var(--color-white) 75%
+        );
+      }
+
+      &.benefit2 {
+        background: radial-gradient(
+          74.91% 49.9% at 50% 53.54%,
+          var(--color-cream) 6.77%,
+          var(--color-white) 70%
+        );
+      }
+
+      &.benefit3 {
+        background: radial-gradient(
+          56.58% 50.44% at 52.86% 53.02%,
+          var(--color-mauve) 26.56%,
+          var(--color-white) 80%
+        );
+      }
+
+      &.benefit4 {
+        background: radial-gradient(
+          56.45% 53.47% at 35.14% 45.94%,
+          var(--color-uranian-blue) 4.17%,
+          var(--color-white) 66.21%
+        );
+      }
+    }
+
+    & .text {
+      max-width: 500px;
+    }
+  }
+
+  @media screen and (min-width: global.$desktop) {
+    margin: 120px 0;
+
+    & li:nth-of-type(even) {
+      flex-direction: row-reverse;
+    }
+
+    & .card {
+      flex-direction: row;
+      height: 480px;
+
+      & .imgWrapper {
+        flex-basis: 50%;
+      }
+
+      & .text {
+        max-width: 630px;
+        flex-basis: 50%;
+      }
     }
   }
 }

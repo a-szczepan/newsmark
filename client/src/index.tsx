@@ -7,16 +7,13 @@ import { router } from './router/router';
 import '../src/styles/global.css';
 import '../src/styles/_global.scss';
 import '../src/styles/variables.css';
-import { Layout } from './components/Layout/Layout';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 root.render(
-  <Layout>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  </Layout>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );

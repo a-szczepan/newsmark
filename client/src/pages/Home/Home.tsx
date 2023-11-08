@@ -7,6 +7,11 @@ import { TypeAnimation } from 'react-type-animation';
 import { Button, ButtonType } from '../../components/Button/Button';
 import hero1 from '../../assets/images/Hero1.svg';
 import hero2 from '../../assets/images/Hero2.svg';
+import benefit1 from '../../assets/images/Benefit1.svg';
+import benefit2 from '../../assets/images/Benefit2.svg';
+import benefit3 from '../../assets/images/Benefit3.svg';
+import benefit4 from '../../assets/images/Benefit4.svg';
+import { Layout } from '../../components/Layout/Layout';
 
 const HeroSection: React.FC = () => {
   return (
@@ -73,7 +78,7 @@ const InfoSection: React.FC = () => {
             <li>
               <div className={styles.liHeading}>
                 <Typography styleVariant="h2" classes={[styles.counter]}>
-                  {index+1}
+                  {index + 1}
                 </Typography>
                 <Typography styleVariant="h2">{element.heading}</Typography>
               </div>
@@ -92,13 +97,67 @@ const InfoSection: React.FC = () => {
   );
 };
 
+const BenefitsSection: React.FC = () => {
+  const benefitsList = [
+    {
+      img: benefit1,
+      heading: '🖊️ Annotate and Highlight like a Pro',
+      text: "Dive deeper into the stories that matter to you! Newsmark's powerful annotation tools let you highlight crucial details, jot down insights, and leave comments on articles for future reference."
+    },
+    {
+      img: benefit2,
+      heading: '📚 Seamlessly Save and Bookmark',
+      text: 'Never lose a captivating article again! With Newsmark, you can effortlessly save your favorite articles from the New York Times and build your personal library of knowledge.'
+    },
+    {
+      img: benefit3,
+      heading: '🔎 Discover Beyond Boundaries',
+      text: 'Dive into a world of knowledge! Newsmark connects you with the vast library of the New York Times API, uncovering fascinating articles across diverse topics. Expand your horizons and explore new frontiers.'
+    },
+    {
+      img: benefit4,
+      heading: '🗂️ Stay Organized and In Control',
+      text: 'Say goodbye to information overload! Organize your saved articles making it a breeze to find the content you need, precisely when you need it.'
+    }
+  ];
+  return (
+    <section className={styles.benefitsSection}>
+      <ul>
+        {benefitsList.map((benefit, index) => (
+          <li className={styles.card}>
+            <div
+              className={classnames(
+                styles.imgWrapper,
+                styles[`benefit${index + 1}`]
+              )}
+            >
+              <img src={benefit.img} />
+            </div>
+            <div className={styles.text}>
+              <Typography styleVariant="h2">{benefit.heading}</Typography>
+              <Typography styleVariant="h4" tag={Tags.p}>
+                {benefit.text}
+              </Typography>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
 const Home: React.FC = () => {
   return (
     <div className={styles.landingPage}>
       {/* <Header /> */}
-      <div style={{ height: '88px' }}>header</div>
-      <HeroSection />
+      <Layout>
+        <HeroSection />
+      </Layout>
       <InfoSection />
+      <Layout>
+        <BenefitsSection />
+      </Layout>
+
     </div>
   );
 };

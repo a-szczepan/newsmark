@@ -14,8 +14,10 @@ $desktopPadding: 80px;
 }
 
 @mixin padding {
-  padding: 0 $mobilePadding 0 $mobilePadding;
+  padding-left: $mobilePadding;
+  padding-right: $mobilePadding;
   @media screen and (min-width: $tablet) {
-    padding: 0 $desktopPadding 0 $desktopPadding;
+    padding-left: $desktopPadding;
+    padding-right: $desktopPadding;
   }
 }
