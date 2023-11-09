@@ -12,6 +12,7 @@ import benefit2 from '../../assets/images/Benefit2.svg';
 import benefit3 from '../../assets/images/Benefit3.svg';
 import benefit4 from '../../assets/images/Benefit4.svg';
 import { Layout } from '../../components/Layout/Layout';
+import { Footer } from '../../components/Footer/Footer';
 
 const HeroSection: React.FC = () => {
   return (
@@ -157,6 +158,7 @@ const Home: React.FC = () => {
       <Layout>
         <BenefitsSection />
       </Layout>
+      <Footer />
     </div>
   );
 };

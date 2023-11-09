@@ -1,0 +1,14 @@
+@use '../../styles/global' as global;
+
+.footer {
+  @include global.padding;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background-color: var(--color-black);
+  color: var(--color-light1);
+  height: 80px;
+
+}
