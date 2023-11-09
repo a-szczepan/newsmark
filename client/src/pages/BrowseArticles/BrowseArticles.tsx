@@ -3,6 +3,7 @@ import styles from './BrowseArticles.modules.scss';
 import { useGetUserQuery } from '../../store/api/userApi';
 import { useDispatch } from 'react-redux';
 import { userLoggedIn } from '../../store/slices/userSlice';
+import { Header } from '../../components/Header/Header';
 
 const BrowseArticles: React.FC<PropsWithChildren> = (props: any) => {
   const { data, error, isLoading, isSuccess } = useGetUserQuery({});
@@ -20,6 +21,7 @@ const BrowseArticles: React.FC<PropsWithChildren> = (props: any) => {
 
   return (
     <div>
+      <Header />
       <div>Browse articles</div>
       <h1></h1>
     </div>

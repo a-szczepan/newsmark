@@ -51,3 +51,8 @@ select {
 ol {
   list-style: none;
 }
+
+a:-webkit-any-link {
+  color: currentColor;
+  text-decoration: none !important;
+}

@@ -35,7 +35,7 @@ const HeroSection: React.FC = () => {
             research, save key articles, and add your own insights.
           </Typography>
         </div>
-        <Button variant={ButtonType.solid} buttonAction={() => {}}>
+        <Button variant={ButtonType.solid} buttonAction={'/register'}>
           Create free account
         </Button>
       </div>
@@ -72,10 +72,10 @@ const InfoSection: React.FC = () => {
   ];
   return (
     <div className={styles.underlay}>
-      <section className={styles.infoSection}>
+      <section id="info" className={styles.infoSection}>
         <ol>
           {infoPoints.map((element, index) => (
-            <li>
+            <li key={index}>
               <div className={styles.liHeading}>
                 <Typography styleVariant="h2" classes={[styles.counter]}>
                   {index + 1}
@@ -121,10 +121,10 @@ const BenefitsSection: React.FC = () => {
     }
   ];
   return (
-    <section className={styles.benefitsSection}>
+    <section id="benefits" className={styles.benefitsSection}>
       <ul>
         {benefitsList.map((benefit, index) => (
-          <li className={styles.card}>
+          <li key={index} className={styles.card}>
             <div
               className={classnames(
                 styles.imgWrapper,
@@ -148,8 +148,8 @@ const BenefitsSection: React.FC = () => {
 
 const Home: React.FC = () => {
   return (
-    <div className={styles.landingPage}>
-      {/* <Header /> */}
+    <div>
+      <Header isHomePage={true} />
       <Layout>
         <HeroSection />
       </Layout>
@@ -157,7 +157,6 @@ const Home: React.FC = () => {
       <Layout>
         <BenefitsSection />
       </Layout>
-
     </div>
   );
 };

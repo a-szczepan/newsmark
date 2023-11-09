@@ -91,6 +91,10 @@
     var(--color-white)
   );
   @include iconSVG('light');
+
+  &:-webkit-any-link {
+    color: var(--color-light1);
+  }
 }
 
 .lined {
@@ -263,6 +267,15 @@
     var(--color-dark2)
   );
 }
+
+// .round {
+//   border-radius: 50px;
+//   background-color: var(--color-black);
+//   & svg {
+//     color: var(--color-light1);
+//   }
+  
+// }
 
 .iconButtonLight {
   @include iconSVG('light');

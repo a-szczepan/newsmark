@@ -4,11 +4,55 @@
   @include global.headerHeight;
   @include global.padding;
   width: 100%;
-  max-width: global.$maxScreenWidth;
-  position: absolute;
-  inset: 0;
-  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  background-color: white;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+}
+
+.buttonGroup {
+  display: flex;
+  height: fit-content;
+  gap: 24px;
+}
+
+.drawerContent {
+  & a span {
+    font-size: 1.173rem !important;
+  }
+}
+
+.userButton {
+  background-color: var(--color-black);
+  border-radius: 50px;
+  height: 32px;
+  width: 32px !important;
+
+  &:hover {
+    border-radius: 50px !important;
+  }
+
+  &:focus,
+  &:active {
+    border-radius: 50px !important;
+    background-color: var(--color-dark2) !important;
+  }
+
+  & svg {
+    margin: auto;
+    height: 16px !important;
+    width: 16px !important;
+  }
+
+  @media screen and (min-width: global.$tablet) {
+    height: 48px;
+    width: 48px !important;
+
+    & svg {
+      height: 40px !important;
+      width: 40px !important;
+    }
+  }
 }

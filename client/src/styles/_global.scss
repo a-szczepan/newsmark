@@ -6,10 +6,13 @@ $maxScreenWidth: 1440px;
 $mobilePadding: 20px;
 $desktopPadding: 80px;
 
+$mobileHeaderHeight: 49px;
+$desktopHeaderHeight: 88px;
+
 @mixin headerHeight {
-  height: 49px;
+  height: $mobileHeaderHeight;
   @media screen and (min-width: $tablet) {
-    height: 88px;
+    height: $desktopHeaderHeight;
   }
 }
 
@@ -19,5 +22,13 @@ $desktopPadding: 80px;
   @media screen and (min-width: $tablet) {
     padding-left: $desktopPadding;
     padding-right: $desktopPadding;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: $mobileHeaderHeight;
+  @media screen and (min-width: $desktop) {
+    scroll-padding-top: $desktopHeaderHeight;
   }
 }
