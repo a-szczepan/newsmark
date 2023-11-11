@@ -20,6 +20,7 @@ type SharedInputProps = React.HTMLProps<HTMLInputElement> & {
   error?: boolean;
   errorMessage?: string;
   value?: string;
+  classes?: string[];
 };
 
 type InputProps = SharedInputProps & {
@@ -42,11 +43,12 @@ export const Input: React.FC<InputProps> = ({
   value,
   error = false,
   errorMessage,
-  disabled = false
+  disabled = false,
+  classes = []
 }) => {
   return (
     <div
-      className={classnames(styles.input, {
+      className={classnames(styles.input, ...classes, {
         [styles.error]: error,
         [styles.disabled]: disabled
       })}
@@ -80,11 +82,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   placeholder,
   onChange,
   disabled = false,
+  classes = [],
   ...HTMLprops
 }) => {
   return (
     <div
-      className={classnames(styles.input, styles.searchInput, {
+      className={classnames(styles.input, ...classes, styles.searchInput, {
         [styles.disabled]: disabled
       })}
     >
