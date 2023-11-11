@@ -106,7 +106,12 @@ export const AllInputVariants: InputStory = {
                     <Container key={`${type}-${state}`}>
                       <span style={spanStyle}>{state}</span>
                       {type === 'search' ? (
-                        <SearchInput id={faker.string.uuid()} />
+                        <SearchInput
+                          id={faker.string.uuid()}
+                          onSubmitAction={() => {
+                            console.log('clicked');
+                          }}
+                        />
                       ) : (
                         <Input id={faker.string.uuid()} {...props} />
                       )}
@@ -125,7 +130,12 @@ export const AllInputVariants: InputStory = {
                   <Container>
                     <span style={spanStyle}>disabled</span>
                     {type === 'search' ? (
-                      <SearchInput  disabled={true} />
+                      <SearchInput
+                        disabled={true}
+                        onSubmitAction={() => {
+                          console.log('clicked');
+                        }}
+                      />
                     ) : (
                       <Input {...props} disabled={true} />
                     )}

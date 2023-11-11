@@ -24,7 +24,8 @@ type Story = StoryObj<typeof SearchInput>;
 
 export const SearchInputDefault: Story = {
   args: {
-    placeholder: 'Search...'
+    placeholder: 'Search...',
+    onSubmitAction: ()=>{console.log("search")}
   },
   render: (args) => <SearchInput {...args}>input</SearchInput>
 };

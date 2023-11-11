@@ -31,6 +31,7 @@ type InputProps = SharedInputProps & {
 
 type SearchInputProps = SharedInputProps & {
   type?: 'search';
+  onSubmitAction: any;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -81,15 +82,20 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   type = 'search',
   placeholder,
   onChange,
+  onSubmitAction,
   disabled = false,
   classes = [],
   ...HTMLprops
 }) => {
   return (
-    <div
+    <form
       className={classnames(styles.input, ...classes, styles.searchInput, {
         [styles.disabled]: disabled
       })}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmitAction(e.target[0].value);
+      }}
     >
       <input
         id={id}
@@ -98,7 +104,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         placeholder={placeholder}
         {...(disabled && { disabled: true })}
         aria-label="search"
-        // {...(onChange && { onChange: onChange })}
         {...HTMLprops}
       ></input>
       <Button
@@ -107,8 +112,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         iconStyle={{ size: IconSize.large, color: 'light' }}
         buttonAction={() => {}}
         classes={[styles.searchButton]}
+        type="submit"
         {...(disabled && { disabled: true })}
       ></Button>
-    </div>
+    </form>
   );
 };

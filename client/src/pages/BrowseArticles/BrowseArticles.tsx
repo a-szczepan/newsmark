@@ -4,7 +4,10 @@ import { useGetUserQuery } from '../../store/api/userApi';
 import { useDispatch } from 'react-redux';
 import { userLoggedIn } from '../../store/slices/userSlice';
 import { Header } from '../../components/Header/Header';
-import { useGetMainPageArticlesQuery } from '../../store/api/browserApi';
+import {
+  useGetMainPageArticlesQuery,
+  useLazySearchArticlesQuery
+} from '../../store/api/browserApi';
 import { SearchInput } from '../../components/Input/Input';
 import { BrowserPageArticle } from '../../types/articles';
 import { Tags, Typography } from '../../components/Typography/Typography';
@@ -18,6 +21,8 @@ const BrowseArticles: React.FC = () => {
   const { data: user, isSuccess: gotUser } = useGetUserQuery({});
   const { data: browserArticles, isSuccess: gotBrowseArticles } =
     useGetMainPageArticlesQuery({});
+  const [search, { data: searchedArticles, isSuccess: gotSearchedArticles }] =
+    useLazySearchArticlesQuery({});
   const [articles, setArticles] = useState<BrowserPageArticle[]>();
 
   useEffect(() => {
@@ -33,6 +38,15 @@ const BrowseArticles: React.FC = () => {
   useEffect(() => {
     if (gotBrowseArticles) setArticles(browserArticles);
   }, [browserArticles]);
+
+  useEffect(() => {
+    console.log(searchedArticles)
+    if (gotSearchedArticles) setArticles(searchedArticles);
+  }, [searchedArticles]);
+
+  const searchArticle = (inputValue: string) => {
+    search(inputValue);
+  };
 
   const ArticleCard: React.FC<BrowserPageArticle> = ({
     title,
@@ -58,7 +72,10 @@ const BrowseArticles: React.FC = () => {
       <Header />
       <Layout>
         <div className={styles.browseArticles}>
-          <SearchInput classes={[styles.search]}/>
+          <SearchInput
+            classes={[styles.search]}
+            onSubmitAction={searchArticle}
+          />
           <hr className={styles.divider} />
           {articles && (
             <section className={styles.articlesContainer}>

@@ -1,3 +1,10 @@
+export interface BrowserPageArticle {
+  title: string,
+  abstract : string,
+  url: string,
+  image: string
+}
+
 export interface TopStoriesAPI {
   status: string;
   copyright: string;
@@ -29,6 +36,35 @@ export interface Article {
   short_url: string;
 }
 
+export interface ArticleSearchAPI {
+  status: string;
+  copyright: string;
+  response: Response;
+}
+
+export interface Document {
+  abstract: string;
+  web_url: string;
+  snippet: string;
+  lead_paragraph: string;
+  print_section: string;
+  print_page: string;
+  source: string;
+  multimedia: any[]; 
+  headline: Headline;
+  keywords: Keyword[];
+  pub_date: string;
+  document_type: string;
+  news_desk: string;
+  section_name: string;
+  subsection_name: string;
+  byline: Byline;
+  type_of_material: string;
+  _id: string;
+  word_count: number;
+  uri: string;
+};
+
 interface Multimedia {
   url: string;
   format: string;
@@ -41,9 +77,41 @@ interface Multimedia {
   short_url: string;
 }
 
-export interface BrowserPageArticle {
-    title: string,
-    abstract : string,
-    url: string,
-    image: string
-}
+interface Response {
+  docs: Document[];
+};
+
+interface Keyword {
+  name: string;
+  value: string;
+  rank: number;
+  major: string;
+};
+
+interface BylinePerson {
+  firstname: string;
+  middlename: string | null;
+  lastname: string;
+  qualifier: string | null;
+  title: string | null;
+  role: string;
+  organization: string;
+  rank: number;
+};
+
+interface Byline {
+  original: string;
+  person: BylinePerson[];
+  organization: string | null;
+};
+
+interface Headline {
+  main: string;
+  kicker: string | null;
+  content_kicker: string | null;
+  print_headline: string;
+  name: string | null;
+  seo: string | null;
+  sub: string | null;
+};
+

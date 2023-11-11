@@ -1,4 +1,4 @@
-import { TopStoriesAPI, BrowserPageArticle, Article } from '../types/articles';
+import { Document, BrowserPageArticle, Article } from '../types/articles';
 
 export const parseMainPage = (data) => {
   const browserPageArticles = data.results.reduce(
@@ -14,6 +14,28 @@ export const parseMainPage = (data) => {
     },
     []
   );
+  return browserPageArticles;
+};
 
+export const parseSearchedArticles = (data) => {
+  const browserPageArticles = data.response.docs.reduce(
+    (acc: BrowserPageArticle[], doc: Document) => {
+      const { headline, abstract, web_url, multimedia } = doc;
+      const image =
+        multimedia.length > 0
+          ? `https://static01.nyt.com/${multimedia[0].url}`
+          : '';
+
+      acc.push({
+        title: headline.main,
+        abstract,
+        url: web_url,
+        image
+      });
+
+      return acc;
+    },
+    []
+  );
   return browserPageArticles;
 };
