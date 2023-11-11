@@ -5,6 +5,7 @@ import Home from '../pages/Home/Home';
 import Login from '../pages/Login/Login';
 import Register from '../pages/Register/Register';
 import BrowseArticles from '../pages/BrowseArticles/BrowseArticles';
+import { ArticlePage } from '../pages/ArticlePage/ArticlePage';
 
 export const router: Router = createBrowserRouter([
   {
@@ -23,5 +24,9 @@ export const router: Router = createBrowserRouter([
   {
     path: 'articles',
     element: <BrowseArticles />
+  },
+  {
+    path: 'article/:articleId',
+    element: <ArticlePage />
   }
 ]);
