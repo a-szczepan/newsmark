@@ -6,7 +6,9 @@ const userApi = api.injectEndpoints({
       query: () => {
         return {
           url: '/me',
-          method: 'GET'
+          method: 'GET',
+          credentials: 'include',
+          mode: 'cors'
         };
       }
     }),
@@ -15,7 +17,9 @@ const userApi = api.injectEndpoints({
         return {
           url: '/login',
           method: 'POST',
-          body: user
+          body: user,
+          credentials: 'include',
+          mode: 'cors'
         };
       }
     }),
@@ -24,7 +28,9 @@ const userApi = api.injectEndpoints({
         return {
           url: '/register',
           method: 'POST',
-          body: user
+          body: user,
+          credentials: 'include',
+          mode: 'cors'
         };
       }
     }),
@@ -32,7 +38,9 @@ const userApi = api.injectEndpoints({
       query: (user) => ({
         url: '/logout',
         method: 'POST',
-        body: user
+        body: user,
+        credentials: 'include',
+        mode: 'cors'
       })
     })
   }),

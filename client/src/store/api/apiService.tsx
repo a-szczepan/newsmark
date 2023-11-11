@@ -4,9 +4,7 @@ const URL = 'http://localhost:5000/api';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: URL,
-    credentials: 'include',
-    mode: 'cors'
+    baseUrl: URL
   }),
   endpoints: () => ({})
 });
