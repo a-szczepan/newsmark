@@ -1,6 +1,7 @@
 const express = require("express");
 const user = require("../controllers/userController");
 const session = require("../controllers/sessionConntroller");
+const article = require("../controllers/articleController");
 const { requireUser } = require("../middleware/requireUser");
 
 exports.getPaths = () => {
@@ -24,6 +25,8 @@ exports.getPaths = () => {
     session.getSessionHandler
   );
   router.post("/api/logout", requireUser, session.invalidateSession);
+
+  router.get("/api/article", article.getArticle);
 
   return router;
 };

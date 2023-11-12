@@ -26,7 +26,7 @@ export const router: Router = createBrowserRouter([
     element: <BrowseArticles />
   },
   {
-    path: 'article/:articleId',
+    path: 'article',
     element: <ArticlePage />
   }
 ]);

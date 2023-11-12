@@ -13,11 +13,13 @@ import { BrowserPageArticle } from '../../types/articles';
 import { Tags, Typography } from '../../components/Typography/Typography';
 import { Layout } from '../../components/Layout/Layout';
 import { Footer } from '../../components/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
 
 //DEV NOTE: Create divider component - one for whole app
 
 const BrowseArticles: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { data: user, isSuccess: gotUser } = useGetUserQuery({});
   const { data: browserArticles, isSuccess: gotBrowseArticles } =
     useGetMainPageArticlesQuery({});
@@ -40,7 +42,7 @@ const BrowseArticles: React.FC = () => {
   }, [browserArticles]);
 
   useEffect(() => {
-    console.log(searchedArticles)
+    console.log(searchedArticles);
     if (gotSearchedArticles) setArticles(searchedArticles);
   }, [searchedArticles]);
 
@@ -56,13 +58,15 @@ const BrowseArticles: React.FC = () => {
   }): JSX.Element => {
     return (
       <article className={styles.articleCard}>
-        <a href={url}>
+        <div
+          onClick={() => navigate(`/article?url=${url.replace(/[/]/g, '%')}`)}
+        >
           {image.length > 0 && <img src={image} alt={title} />}
           <Typography styleVariant="h5" tag={Tags.h1}>
             {title}
           </Typography>
           <Typography styleVariant="body">{abstract}</Typography>
-        </a>
+        </div>
       </article>
     );
   };
