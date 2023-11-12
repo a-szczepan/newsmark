@@ -28,7 +28,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       paragraphs: {
         type: Sequelize.JSON,
-      }
+      },
+      html: {
+        type: Sequelize.TEXT("long"),
+      },
     },
     { timestamps: true }
   );
