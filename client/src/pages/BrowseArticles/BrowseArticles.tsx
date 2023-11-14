@@ -59,6 +59,7 @@ const BrowseArticles: React.FC = () => {
     return (
       <article className={styles.articleCard}>
         <div
+        className={styles.wrapper}
           onClick={() => navigate(`/article?url=${url.replace(/[/]/g, '%')}`)}
         >
           {image.length > 0 && <img src={image} alt={title} />}

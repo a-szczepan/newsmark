@@ -76,6 +76,10 @@
     @include horizontalDivider;
   }
 
+  & .wrapper {
+    width: 100%;
+  }
+
   & img {
     width: 100%;
     max-height: 240px;
