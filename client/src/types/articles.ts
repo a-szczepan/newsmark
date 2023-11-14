@@ -1,8 +1,8 @@
 export interface BrowserPageArticle {
-  title: string,
-  abstract : string,
-  url: string,
-  image: string
+  title: string;
+  abstract: string;
+  url: string;
+  image: string;
 }
 
 export interface TopStoriesAPI {
@@ -12,6 +12,29 @@ export interface TopStoriesAPI {
   last_updated: string;
   num_results: number;
   results: Article[];
+}
+
+export interface ArticleAPI {
+  id: number;
+  url: string;
+  title: string;
+  header: string;
+  summary: string;
+  imageURL: string;
+  figcaption: string;
+  paragraphs: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ArticlePageDoc {
+  url: string;
+  title: string;
+  header: string;
+  summary: string;
+  imageURL: string;
+  figcaption: string;
+  paragraphs: string[];
 }
 
 export interface Article {
@@ -50,7 +73,7 @@ export interface Document {
   print_section: string;
   print_page: string;
   source: string;
-  multimedia: any[]; 
+  multimedia: any[];
   headline: Headline;
   keywords: Keyword[];
   pub_date: string;
@@ -63,7 +86,7 @@ export interface Document {
   _id: string;
   word_count: number;
   uri: string;
-};
+}
 
 interface Multimedia {
   url: string;
@@ -79,14 +102,14 @@ interface Multimedia {
 
 interface Response {
   docs: Document[];
-};
+}
 
 interface Keyword {
   name: string;
   value: string;
   rank: number;
   major: string;
-};
+}
 
 interface BylinePerson {
   firstname: string;
@@ -97,13 +120,13 @@ interface BylinePerson {
   role: string;
   organization: string;
   rank: number;
-};
+}
 
 interface Byline {
   original: string;
   person: BylinePerson[];
   organization: string | null;
-};
+}
 
 interface Headline {
   main: string;
@@ -113,5 +136,4 @@ interface Headline {
   name: string | null;
   seo: string | null;
   sub: string | null;
-};
-
+}

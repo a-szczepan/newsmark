@@ -10,6 +10,7 @@ exports.getArticle = async (req, res) => {
 
   const article = await findArticle({
     where: { url },
+    raw: true,
   });
 
   if (article) {

@@ -1,0 +1,55 @@
+@use '../../styles/global' as global;
+
+.articlePage {
+  margin-top: 24px;
+
+  & article {
+    min-height: 100vh;
+  }
+
+  & p {
+    margin-bottom: 1rem;
+  }
+
+  & figure {
+    margin: 24px 0;
+
+    & img {
+      object-fit: cover;
+      width: 100%;
+    }
+
+    & figcaption {
+      margin-top: 8px;
+    }
+  }
+
+  & .mobilePanel {
+    height: 45px;
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    background-color: var(--color-black);
+  }
+
+  @media screen and (min-width: 470px) {
+    & figure {
+      & img {
+        max-height: 430px;
+      }
+    }
+  }
+
+  @media screen and (min-width: global.$tablet) {
+    background-color: saddlebrown;
+    .articlePage {
+      & article {
+        min-height: auto;
+      }
+    }
+  }
+}
+
+.optionsSection {
+}

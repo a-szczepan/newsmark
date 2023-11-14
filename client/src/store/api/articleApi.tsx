@@ -1,3 +1,4 @@
+import { ArticleAPI, ArticlePageDoc } from '../../types/articles';
 import { api } from './apiService';
 
 const articleApi = api.injectEndpoints({
@@ -10,6 +11,27 @@ const articleApi = api.injectEndpoints({
           credentials: 'include',
           mode: 'cors'
         };
+      },
+      transformResponse: (response: ArticleAPI): ArticlePageDoc => {
+        const article = (({
+          url,
+          title,
+          header,
+          summary,
+          imageURL,
+          figcaption,
+          paragraphs
+        }) => ({
+          url,
+          title,
+          header,
+          summary,
+          imageURL,
+          figcaption,
+          paragraphs
+        }))(response);
+
+        return article;
       }
     })
   })
