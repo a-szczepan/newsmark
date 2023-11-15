@@ -16,6 +16,7 @@ const MobilePanel: React.FC = () => {
   const [bookmarkOpt, setBookmarkOpt] = useState(false);
   const [annotationOpt, setAnnotationOpt] = useState(false);
   const [viewOpt, setViewOpt] = useState(false);
+  const [isAnnotationEditMode, setIsAnnotationEditMode] = useState(false);
 
   //UPDATE clicked state when tab is changed
   return (
@@ -27,7 +28,7 @@ const MobilePanel: React.FC = () => {
           </Typography>
           <hr />
           <div className={styles.annotationWrapper}>
-          <Annotation editMode />
+          <Annotation editMode={true} setEditMode={setIsAnnotationEditMode}/>
           </div>
         </MobileModal>
       )}

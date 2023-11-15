@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { Button, ButtonType } from '../Button/Button';
+import { Button, ButtonType, IconButton } from '../Button/Button';
 import { IconType } from '../Icon/Icon';
 import { Input, InputType, Textarea } from '../Input/Input';
 import styles from './Annotation.module.scss';
 import classnames from 'classnames';
+import { Accordion } from '../Accordion/Accordion';
 
 type AnnotationProps = {
-  editMode?: boolean;
+  editMode: boolean;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ColorPicker: React.FC = () => {
@@ -26,7 +28,10 @@ const ColorPicker: React.FC = () => {
   );
 };
 
-export const Annotation: React.FC<AnnotationProps> = ({ editMode = false }) => {
+export const Annotation: React.FC<AnnotationProps> = ({
+  editMode,
+  setEditMode
+}) => {
   const [addNote, setAddNote] = useState(false);
 
   return (
@@ -54,8 +59,21 @@ export const Annotation: React.FC<AnnotationProps> = ({ editMode = false }) => {
           </Button>
         </div>
       ) : (
-        <>
-        </>
+        <div className={styles.accordionWrapper}>
+          <Accordion header={'title'}>
+            <Textarea name="selected" readOnly />
+            <Textarea name="note" label="Note" rows={5} readOnly />
+            <div className={styles.iconButtonsGroup}>
+              <IconButton
+                icon={IconType.edit}
+                buttonAction={() => {
+                  setEditMode(true);
+                }}
+              />
+              <IconButton icon={IconType.remove} buttonAction={() => {}} />
+            </div>
+          </Accordion>
+        </div>
       )}
     </>
   );
