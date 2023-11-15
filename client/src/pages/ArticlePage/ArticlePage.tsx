@@ -7,6 +7,77 @@ import { useWidthChecker } from '../../hooks/useWidthChecker';
 import styles from './ArticlePage.module.scss';
 import { Tags, Typography } from '../../components/Typography/Typography';
 import { ArticlePageDoc } from '../../types/articles';
+import { Button, ButtonType, IconButton } from '../../components/Button/Button';
+import { IconType } from '../../components/Icon/Icon';
+import { MobileModal } from './MobileModal';
+import { Annotation } from '../../components/Annotation/Annotation';
+
+const MobilePanel: React.FC = () => {
+  const [bookmarkOpt, setBookmarkOpt] = useState(false);
+  const [annotationOpt, setAnnotationOpt] = useState(false);
+  const [viewOpt, setViewOpt] = useState(false);
+
+  //UPDATE clicked state when tab is changed
+  return (
+    <>
+      {annotationOpt && (
+        <MobileModal isOpened={annotationOpt} setIsOpened={setAnnotationOpt}>
+          <Typography styleVariant="h3" tag={Tags.h1}>
+            Add annotation
+          </Typography>
+          <hr />
+          <div className={styles.annotationWrapper}>
+          <Annotation editMode />
+          </div>
+        </MobileModal>
+      )}
+      <div className={styles.mobilePanel}>
+        <IconButton
+          icon={IconType.bookmark}
+          buttonAction={() => {
+            setBookmarkOpt(!bookmarkOpt);
+          }}
+          lightVariant
+          classes={
+            bookmarkOpt
+              ? [styles.bookmarkClicked, styles.actionBtn]
+              : [styles.actionBtn]
+          }
+        >
+          Bookmark
+        </IconButton>
+        <IconButton
+          icon={IconType.annotation}
+          buttonAction={() => {
+            setAnnotationOpt(!annotationOpt);
+          }}
+          lightVariant
+          classes={
+            annotationOpt
+              ? [styles.annotationClicked, styles.actionBtn]
+              : [styles.actionBtn]
+          }
+        >
+          Annotation
+        </IconButton>
+        <IconButton
+          icon={IconType.eye}
+          buttonAction={() => {
+            setViewOpt(!viewOpt);
+          }}
+          lightVariant
+          classes={
+            viewOpt
+              ? [styles.viewClicked, styles.actionBtn]
+              : [styles.actionBtn]
+          }
+        >
+          View
+        </IconButton>
+      </div>
+    </>
+  );
+};
 
 export const ArticlePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,15 +89,12 @@ export const ArticlePage: React.FC = () => {
   const [articleData, setArticleData] = useState<ArticlePageDoc>();
 
   useEffect(() => {
-    console.log(article);
     if (gotArticle) {
       setArticleData(article);
     }
   }, [article]);
 
   const optionsSection = <div className={styles.optionsSection}>option</div>;
-
-  const mobilePanel = <div className={styles.mobilePanel}>mobile</div>;
 
   const articleSection = (
     <article>
@@ -68,7 +136,7 @@ export const ArticlePage: React.FC = () => {
           {articleData && articleSection}
           {!isMobile && optionsSection}
         </Layout>
-        {isMobile && mobilePanel}
+        {isMobile && <MobilePanel />}
       </div>
     </>
   );

@@ -25,12 +25,39 @@
   }
 
   & .mobilePanel {
-    height: 45px;
+    height: 48px;
+    padding: 2px 0;
     width: 100%;
     position: sticky;
     bottom: 0;
     z-index: 100;
     background-color: var(--color-black);
+    font-size: 0.6rem;
+    color: var(--color-light1);
+    font-weight: 300;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+
+    .actionBtn {
+      width: 62px;
+      text-align: center;
+    }
+
+    & .bookmarkClicked,
+    .annotationClicked {
+      & svg {
+        fill: var(--color-light1);
+      }
+    }
+    & .viewClicked {
+      & svg {
+        fill: var(--color-light1);
+        & circle {
+          fill: var(--color-black);
+        }
+      }
+    }
   }
 
   @media screen and (min-width: 470px) {
@@ -38,6 +65,9 @@
       & img {
         max-height: 430px;
       }
+    }
+    & .mobilePanel {
+      gap: 56px;
     }
   }
 
@@ -51,5 +81,13 @@
   }
 }
 
-.optionsSection {
+.annotationWrapper {
+  height: calc(100% - 48px);
+  overflow: scroll;
+  padding: 1px;
+}
+
+hr {
+  border-top: 1px;
+  border-color: var(--color-dark1);
 }
