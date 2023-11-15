@@ -1,7 +1,8 @@
 @use '../../styles/global' as global;
 
 @mixin state($labelColor, $valueColor, $borderColor, $backgroundColor) {
-  & input {
+  & input,
+  textarea {
     outline: 1px solid $borderColor;
     background-color: $backgroundColor;
     color: $valueColor;
@@ -12,12 +13,22 @@
   }
 }
 
-input {
+input,
+textarea {
   font-size: 0.844rem !important;
 }
 
+textarea {
+  height: auto;
+  max-height: none !important;
+  background-color: transparent;
+  border: 0;
+  resize: vertical;
+}
+
 @media screen and (min-width: global.$desktop) {
-  input {
+  input,
+  textarea {
     font-size: 1.125rem !important;
   }
 }
@@ -74,7 +85,8 @@ input {
   );
 }
 
-input[disabled] {
+input[disabled],
+textarea[disabled] {
   pointer-events: none;
 }
 

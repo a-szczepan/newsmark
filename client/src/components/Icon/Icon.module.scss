@@ -1,32 +1,35 @@
 .small {
-    svg {
-        height: 16px;
-        width: 16px;
-    }
+  svg {
+    margin: auto;
+    height: 16px;
+    width: 16px;
+  }
 }
 
 .medium {
-    svg {
-        height: 24px;
-        width: 24px;
-    }
+  & svg {
+    margin: auto;
+    height: 24px;
+    width: 24px;
+  }
 }
 
 .large {
-    svg {
-        height: 32px;
-        width: 32px;
-    }
+  svg {
+    margin: auto;
+    height: 32px;
+    width: 32px;
+  }
 }
 
 .dark {
-    svg {
-        color: var(--color-dark4);
-    }
+  svg {
+    color: var(--color-dark4);
+  }
 }
 
 .light {
-    svg {
-        color: var(--color-light1);
-    }
+  svg {
+    color: var(--color-light1);
+  }
 }

@@ -34,6 +34,10 @@ type SearchInputProps = SharedInputProps & {
   onSubmitAction: any;
 };
 
+type TextAreaProps = SharedInputProps & {
+  rows?: number;
+};
+
 export const Input: React.FC<InputProps> = ({
   id,
   type = InputType.text,
@@ -70,6 +74,45 @@ export const Input: React.FC<InputProps> = ({
       />
       {error && errorMessage && (
         <Typography styleVariant="caption" id={`${type}-error-msg`}>
+          {errorMessage}
+        </Typography>
+      )}
+    </div>
+  );
+};
+
+export const Textarea: React.FC<TextAreaProps> = ({
+  id,
+  label,
+  name,
+  value,
+  error = false,
+  errorMessage,
+  disabled = false,
+  rows = 2,
+  classes = []
+}) => {
+  return (
+    <div
+      className={classnames(styles.input, ...classes, {
+        [styles.error]: error,
+        [styles.disabled]: disabled
+      })}
+    >
+      <label htmlFor={name} {...(disabled && { 'aria-disabled': true })}>
+        <Typography styleVariant="label">{label}</Typography>
+      </label>
+      <textarea
+        id={id}
+        name={name}
+        className={classnames(styles.inputField)}
+        aria-label={name}
+        {...(disabled && { disabled: true })}
+        {...(value && { value: value })}
+        rows={rows}
+      />
+      {error && errorMessage && (
+        <Typography styleVariant="caption" id={`textarea-error-msg`}>
           {errorMessage}
         </Typography>
       )}

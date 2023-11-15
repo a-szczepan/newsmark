@@ -32,11 +32,12 @@ type ButtonProps = SharedButtonProps &
     small?: boolean;
   }>;
 
-type IconButtonProps = SharedButtonProps & {
-  icon: IconType;
-  lightVariant?: boolean;
-  round?: boolean;
-};
+type IconButtonProps = SharedButtonProps &
+  PropsWithChildren<{
+    icon: IconType;
+    lightVariant?: boolean;
+    round?: boolean;
+  }>;
 
 export const Button: React.FC<ButtonProps> = ({
   id,
@@ -108,13 +109,15 @@ export const IconButton: React.FC<IconButtonProps> = ({
   lightVariant = false,
   type = 'button',
   round = false,
-  disabled = false
+  disabled = false,
+  children
 }): JSX.Element => {
   const Tag = typeof buttonAction === 'string' ? 'a' : 'button';
 
   return (
     <Tag
       id={id}
+      type={type}
       className={classnames(styles.iconButton, ...classes, {
         [styles.iconButtonLight]: lightVariant,
         [styles.disabled]: disabled,
@@ -126,6 +129,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       {...(disabled && { disabled } && { 'aria-disabled': true })}
     >
       <Icon icon={icon} />
+      {children}
     </Tag>
   );
 };
