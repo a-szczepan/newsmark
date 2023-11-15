@@ -55,12 +55,12 @@ export const Button: React.FC<ButtonProps> = ({
   const Tag = typeof buttonAction === 'string' ? 'a' : 'button';
 
   const ButtonIcon = () => {
+    if (!icon) return null;
+
     return (
       <Icon
         icon={icon!}
-        {...(iconStyle && { color: iconStyle.color } && {
-            size: iconStyle.size
-          })}
+        {...(iconStyle && { color: iconStyle.color, size: iconStyle.size })}
       />
     );
   };

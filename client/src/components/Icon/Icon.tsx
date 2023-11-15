@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import styles from './Icon.module.scss';
 import { ReactSVG } from 'react-svg';
 import annotation from '../../assets/icons/annotation.svg';
@@ -25,21 +25,21 @@ export enum IconSize {
 }
 
 export enum IconType {
-  annotation,
-  bookmark,
-  chevronDown,
-  chevronUp,
-  close,
-  edit,
-  eye,
-  github,
-  google,
-  menu,
-  microsoft,
-  plus,
-  remove,
-  search,
-  user
+  annotation = 'annotation',
+  bookmark = 'bookmark',
+  chevronDown = 'chevronDown',
+  chevronUp = 'chevronUp',
+  close = 'close',
+  edit = 'edit',
+  eye = 'eye',
+  github = 'github',
+  google = 'google',
+  menu = 'menu',
+  microsoft = 'microsoft',
+  plus = 'plus',
+  remove = 'remove',
+  search = 'search',
+  user = 'user'
 }
 
 const IconTypeMap = {
@@ -75,7 +75,7 @@ export const Icon: React.FC<IconProps> = ({
 }): JSX.Element => {
   return (
     <ReactSVG
-      src={IconTypeMap[IconType[icon]]}
+      src={IconTypeMap[icon]}
       className={classnames(styles[IconSize[size]], styles[color], ...classes)}
       beforeInjection={(svg) => {
         svg.setAttribute('aria-label', IconType[icon]);
