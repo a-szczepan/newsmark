@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, ButtonType, IconButton } from '../Button/Button';
 import { IconType } from '../Icon/Icon';
 import { Input, InputType, Textarea } from '../Input/Input';
@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { Accordion } from '../Accordion/Accordion';
 
 type AnnotationProps = {
+  viewMode?: boolean;
   editMode: boolean;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -29,35 +30,50 @@ const ColorPicker: React.FC = () => {
 };
 
 export const Annotation: React.FC<AnnotationProps> = ({
+  viewMode,
   editMode,
   setEditMode
 }) => {
   const [addNote, setAddNote] = useState(false);
 
+  const editModeAnnotation = (
+    <div className={styles.annotation}>
+      <Input type={InputType.text} label="Title" name="title" />
+      <Textarea label="Selected text" name="title" rows={5} />
+      <ColorPicker />
+      {addNote ? (
+        <Textarea label="Note" />
+      ) : (
+        <Button
+          variant={ButtonType.link}
+          buttonAction={() => setAddNote(!addNote)}
+          icon={IconType.plus}
+          iconVariant="start"
+          classes={[styles.addButton]}
+        >
+          Add note
+        </Button>
+      )}
+      <Button variant={ButtonType.solid} buttonAction={() => {}}>
+        Save
+      </Button>
+    </div>
+  );
+
   return (
     <>
       {editMode ? (
-        <div className={styles.annotation}>
-          <Input type={InputType.text} label="Title" name="title" />
-          <Textarea label="Selected text" name="title" rows={5} />
-          <ColorPicker />
-          {addNote ? (
-            <Textarea label="Note" />
+        <>
+          {viewMode ? (
+            <div className={styles.accordionWrapper}>
+              <Accordion header={'title'} opened>
+                {editModeAnnotation}
+              </Accordion>
+            </div>
           ) : (
-            <Button
-              variant={ButtonType.link}
-              buttonAction={() => setAddNote(!addNote)}
-              icon={IconType.plus}
-              iconVariant="start"
-              classes={[styles.addButton]}
-            >
-              Add note
-            </Button>
+            editModeAnnotation
           )}
-          <Button variant={ButtonType.solid} buttonAction={() => {}}>
-            Save
-          </Button>
-        </div>
+        </>
       ) : (
         <div className={styles.accordionWrapper}>
           <Accordion header={'title'}>

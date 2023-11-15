@@ -6,10 +6,15 @@ import { IconType } from '../Icon/Icon';
 
 type AccordionProps = PropsWithChildren<{
   header: string;
+  opened?: boolean;
 }>;
 
-export const Accordion: React.FC<AccordionProps> = ({ header, children }) => {
-  const [isOpened, setIsOpened] = useState(false);
+export const Accordion: React.FC<AccordionProps> = ({
+  header,
+  opened = false,
+  children
+}) => {
+  const [isOpened, setIsOpened] = useState(opened);
   return (
     <div className={styles.accordion}>
       <div className={styles.accordionHeader}>

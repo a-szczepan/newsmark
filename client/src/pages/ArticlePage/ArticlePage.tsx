@@ -7,7 +7,7 @@ import { useWidthChecker } from '../../hooks/useWidthChecker';
 import styles from './ArticlePage.module.scss';
 import { Tags, Typography } from '../../components/Typography/Typography';
 import { ArticlePageDoc } from '../../types/articles';
-import { Button, ButtonType, IconButton } from '../../components/Button/Button';
+import {  IconButton } from '../../components/Button/Button';
 import { IconType } from '../../components/Icon/Icon';
 import { MobileModal } from './MobileModal';
 import { Annotation } from '../../components/Annotation/Annotation';
@@ -17,6 +17,7 @@ const MobilePanel: React.FC = () => {
   const [annotationOpt, setAnnotationOpt] = useState(false);
   const [viewOpt, setViewOpt] = useState(false);
   const [isAnnotationEditMode, setIsAnnotationEditMode] = useState(false);
+
 
   //UPDATE clicked state when tab is changed
   return (
@@ -28,7 +29,18 @@ const MobilePanel: React.FC = () => {
           </Typography>
           <hr />
           <div className={styles.annotationWrapper}>
-          <Annotation editMode={true} setEditMode={setIsAnnotationEditMode}/>
+          <Annotation editMode={isAnnotationEditMode} setEditMode={setIsAnnotationEditMode}/>
+          </div>
+        </MobileModal>
+      )}
+      {viewOpt && (
+        <MobileModal isOpened={viewOpt} setIsOpened={setViewOpt}>
+          <Typography styleVariant="h3" tag={Tags.h1}>
+            Annotations
+          </Typography>
+          <hr />
+          <div className={styles.annotationWrapper}>
+          <Annotation editMode={isAnnotationEditMode} setEditMode={setIsAnnotationEditMode} viewMode={true}/>
           </div>
         </MobileModal>
       )}
@@ -51,6 +63,7 @@ const MobilePanel: React.FC = () => {
           icon={IconType.annotation}
           buttonAction={() => {
             setAnnotationOpt(!annotationOpt);
+            setIsAnnotationEditMode(true)
           }}
           lightVariant
           classes={
@@ -65,6 +78,7 @@ const MobilePanel: React.FC = () => {
           icon={IconType.eye}
           buttonAction={() => {
             setViewOpt(!viewOpt);
+            setIsAnnotationEditMode(false)
           }}
           lightVariant
           classes={
