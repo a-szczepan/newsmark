@@ -21,6 +21,7 @@ type SharedInputProps = React.HTMLProps<HTMLInputElement> & {
   errorMessage?: string;
   value?: string;
   classes?: string[];
+  readOnly?: boolean;
 };
 
 type InputProps = SharedInputProps & {
@@ -90,6 +91,7 @@ export const Textarea: React.FC<TextAreaProps> = ({
   errorMessage,
   disabled = false,
   rows = 2,
+  readOnly,
   classes = []
 }) => {
   return (
@@ -110,6 +112,7 @@ export const Textarea: React.FC<TextAreaProps> = ({
         {...(disabled && { disabled: true })}
         {...(value && { value: value })}
         rows={rows}
+        {...(readOnly && { readOnly: readOnly })}
       />
       {error && errorMessage && (
         <Typography styleVariant="caption" id={`textarea-error-msg`}>
