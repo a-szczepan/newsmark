@@ -18,7 +18,6 @@ const MobilePanel: React.FC = () => {
   const [viewOpt, setViewOpt] = useState(false);
   const [isAnnotationEditMode, setIsAnnotationEditMode] = useState(false);
 
-  //UPDATE clicked state when tab is changed
   return (
     <>
       {annotationOpt && (
@@ -55,6 +54,8 @@ const MobilePanel: React.FC = () => {
           icon={IconType.bookmark}
           buttonAction={() => {
             setBookmarkOpt(!bookmarkOpt);
+            setAnnotationOpt(false);
+            setViewOpt(false);
           }}
           lightVariant
           classes={
