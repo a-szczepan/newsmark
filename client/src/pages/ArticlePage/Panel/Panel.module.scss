@@ -1,6 +1,36 @@
 @use '../../../styles/global' as global;
 
+@mixin clickedIconButton(
+  $color: var(--color-light1),
+  $fillColor: var(--color-light1),
+  $circleColor: var(--color-black)
+) {
+  & .bookmarkClicked,
+  & .annotationClicked {
+    & svg {
+      fill: $fillColor;
+      color: $color;
+    }
+  }
+
+  & .viewClicked {
+    & svg {
+      fill: $fillColor;
+
+      & circle {
+        fill: $circleColor;
+      }
+    }
+  }
+}
+
 .mobilePanel {
+  @include clickedIconButton(
+    var(--color-light1),
+    var(--color-light1),
+    var(--color-black)
+  );
+
   height: 48px;
   padding: 2px 0;
   width: 100%;
@@ -18,34 +48,29 @@
   .actionBtn {
     width: 62px;
     text-align: center;
+    
+    &:hover,
+    &:focus,
+    &:active {
+      outline: none;
+      background-color: inherit;
+    }
   }
 
-  & .bookmarkClicked,
-  .annotationClicked {
-    & svg {
-      fill: var(--color-light1);
-    }
-  }
-  & .viewClicked {
-    & svg {
-      fill: var(--color-light1);
-      & circle {
-        fill: var(--color-black);
-      }
-    }
-  }
   @media screen and (min-width: 470px) {
     gap: 56px;
-  }
-
-  @media screen and (min-width: global.$tablet) {
   }
 }
 
 .optionsSection {
+  @include clickedIconButton(
+    var(--color-black),
+    var(--color-black),
+    var(--color-light1)
+  );
+
   display: flex;
   flex-direction: column;
-  background-color: seagreen;
   max-width: 240px;
   width: 100%;
 
@@ -53,20 +78,12 @@
     padding: 10px 0;
     width: 100%;
     justify-content: flex-start;
-  }
 
-  & .bookmarkClicked,
-  .annotationClicked {
-    & svg {
-      fill: var(--color-black);
-    }
-  }
-  & .viewClicked {
-    & svg {
-      fill: var(--color-black);
-      & circle {
-        fill: var(--color-light1);
-      }
+    &:hover,
+    &:focus,
+    &:active {
+      outline: none;
+      background-color: inherit;
     }
   }
 
