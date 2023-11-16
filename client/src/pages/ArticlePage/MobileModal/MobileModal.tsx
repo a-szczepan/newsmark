@@ -1,13 +1,19 @@
 import { createPortal } from 'react-dom';
 import classnames from 'classnames';
-import { Dispatch, PropsWithChildren, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useEffect,
+  useState
+} from 'react';
 import styles from './MobileModal.module.scss';
-import { IconButton } from '../../components/Button/Button';
-import { IconType } from '../../components/Icon/Icon';
+import { IconButton } from '../../../components/Button/Button';
+import { IconType } from '../../../components/Icon/Icon';
 
 type MobileModalProps = PropsWithChildren<{
   isOpened: boolean;
-  setIsOpened: Dispatch<SetStateAction<boolean>>
+  setIsOpened: Dispatch<SetStateAction<boolean>>;
   classes?: string[];
 }>;
 
@@ -16,9 +22,6 @@ export const MobileModal: React.FC<MobileModalProps> = ({
   setIsOpened,
   children
 }) => {
-  //   const [isOpened, setIsOpened] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-
   useEffect(() => {
     if (isOpened) document.body.style.overflow = 'hidden';
     return () => {

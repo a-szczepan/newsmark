@@ -7,104 +7,10 @@ import { useWidthChecker } from '../../hooks/useWidthChecker';
 import styles from './ArticlePage.module.scss';
 import { Tags, Typography } from '../../components/Typography/Typography';
 import { ArticlePageDoc } from '../../types/articles';
-import { IconButton } from '../../components/Button/Button';
-import { IconType } from '../../components/Icon/Icon';
-import { MobileModal } from './MobileModal';
-import { Annotation } from '../../components/Annotation/Annotation';
-
-const MobilePanel: React.FC = () => {
-  const [bookmarkOpt, setBookmarkOpt] = useState(false);
-  const [annotationOpt, setAnnotationOpt] = useState(false);
-  const [viewOpt, setViewOpt] = useState(false);
-  const [isAnnotationEditMode, setIsAnnotationEditMode] = useState(false);
-
-  return (
-    <>
-      {annotationOpt && (
-        <MobileModal isOpened={annotationOpt} setIsOpened={setAnnotationOpt}>
-          <Typography styleVariant="h3" tag={Tags.h1}>
-            Add annotation
-          </Typography>
-          <hr />
-          <div className={styles.annotationWrapper}>
-            <Annotation
-              editMode={isAnnotationEditMode}
-              setEditMode={setIsAnnotationEditMode}
-            />
-          </div>
-        </MobileModal>
-      )}
-      {viewOpt && (
-        <MobileModal isOpened={viewOpt} setIsOpened={setViewOpt}>
-          <Typography styleVariant="h3" tag={Tags.h1}>
-            Annotations
-          </Typography>
-          <hr />
-          <div className={styles.annotationWrapper}>
-            <Annotation
-              editMode={isAnnotationEditMode}
-              setEditMode={setIsAnnotationEditMode}
-              viewMode={true}
-            />
-          </div>
-        </MobileModal>
-      )}
-      <div className={styles.mobilePanel}>
-        <IconButton
-          icon={IconType.bookmark}
-          buttonAction={() => {
-            setBookmarkOpt(!bookmarkOpt);
-            setAnnotationOpt(false);
-            setViewOpt(false);
-          }}
-          lightVariant
-          classes={
-            bookmarkOpt
-              ? [styles.bookmarkClicked, styles.actionBtn]
-              : [styles.actionBtn]
-          }
-        >
-          Bookmark
-        </IconButton>
-        <IconButton
-          icon={IconType.annotation}
-          buttonAction={() => {
-            setAnnotationOpt(!annotationOpt);
-            setIsAnnotationEditMode(true);
-            setViewOpt(false);
-          }}
-          lightVariant
-          classes={
-            annotationOpt
-              ? [styles.annotationClicked, styles.actionBtn]
-              : [styles.actionBtn]
-          }
-        >
-          Annotation
-        </IconButton>
-        <IconButton
-          icon={IconType.eye}
-          buttonAction={() => {
-            setViewOpt(!viewOpt);
-            setIsAnnotationEditMode(false);
-            setAnnotationOpt(false);
-          }}
-          lightVariant
-          classes={
-            viewOpt
-              ? [styles.viewClicked, styles.actionBtn]
-              : [styles.actionBtn]
-          }
-        >
-          View
-        </IconButton>
-      </div>
-    </>
-  );
-};
+import { DesktopPanel, MobilePanel } from './Panel/Panel';
 
 export const ArticlePage: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const isMobile = useWidthChecker() <= 768 ? true : false;
   const url = searchParams.get('url');
   const { data: article, isSuccess: gotArticle } = useGetArticleQuery({
@@ -117,8 +23,6 @@ export const ArticlePage: React.FC = () => {
       setArticleData(article);
     }
   }, [article]);
-
-  const optionsSection = <div className={styles.optionsSection}>option</div>;
 
   const articleSection = (
     <article>
@@ -157,8 +61,11 @@ export const ArticlePage: React.FC = () => {
       <Header />
       <div className={styles.articlePage}>
         <Layout>
-          {articleData && articleSection}
-          {!isMobile && optionsSection}
+          <div className={styles.articleSectionWrapper}>
+            {articleData && articleSection}
+            <hr />
+            {!isMobile && <DesktopPanel />}
+          </div>
         </Layout>
         {isMobile && <MobilePanel />}
       </div>

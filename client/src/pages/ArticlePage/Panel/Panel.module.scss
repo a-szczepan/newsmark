@@ -1,0 +1,87 @@
+@use '../../../styles/global' as global;
+
+.mobilePanel {
+  height: 48px;
+  padding: 2px 0;
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background-color: var(--color-black);
+  font-size: 0.6rem;
+  color: var(--color-light1);
+  font-weight: 300;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+
+  .actionBtn {
+    width: 62px;
+    text-align: center;
+  }
+
+  & .bookmarkClicked,
+  .annotationClicked {
+    & svg {
+      fill: var(--color-light1);
+    }
+  }
+  & .viewClicked {
+    & svg {
+      fill: var(--color-light1);
+      & circle {
+        fill: var(--color-black);
+      }
+    }
+  }
+  @media screen and (min-width: 470px) {
+    gap: 56px;
+  }
+
+  @media screen and (min-width: global.$tablet) {
+  }
+}
+
+.optionsSection {
+  display: flex;
+  flex-direction: column;
+  background-color: seagreen;
+  max-width: 240px;
+  width: 100%;
+
+  & .option {
+    padding: 10px 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  & .bookmarkClicked,
+  .annotationClicked {
+    & svg {
+      fill: var(--color-black);
+    }
+  }
+  & .viewClicked {
+    & svg {
+      fill: var(--color-black);
+      & circle {
+        fill: var(--color-light1);
+      }
+    }
+  }
+
+  @media screen and (min-width: global.$desktop) {
+    max-width: 305px;
+    position: relative;
+  }
+}
+
+.annotationWrapper {
+  height: calc(100% - 48px);
+  overflow: scroll;
+  padding: 1px;
+
+  @media screen and (min-width: global.$tablet) {
+    overflow: visible;
+  }
+}

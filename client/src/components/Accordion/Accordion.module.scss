@@ -1,8 +1,15 @@
+@use '../../styles/global' as global;
+
 .accordion {
   & .accordionHeader {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 8px 16px;
+
+    & p {
+      margin: 0;
+    }
   }
 
   & .content {
@@ -13,6 +20,12 @@
 
     & label {
       font-weight: 800;
+    }
+  }
+
+  @media screen and (min-width: global.$tablet) {
+    & .content {
+      padding: 0;
     }
   }
 }
