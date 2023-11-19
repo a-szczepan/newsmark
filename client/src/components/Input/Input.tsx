@@ -28,6 +28,7 @@ type InputProps = SharedInputProps & {
   type: InputType;
   label: string;
   name: string;
+  reference?: React.Ref<HTMLInputElement>;
 };
 
 type SearchInputProps = SharedInputProps & {
@@ -37,6 +38,7 @@ type SearchInputProps = SharedInputProps & {
 
 type TextAreaProps = SharedInputProps & {
   rows?: number;
+  reference?: React.Ref<HTMLTextAreaElement>;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -50,6 +52,7 @@ export const Input: React.FC<InputProps> = ({
   error = false,
   errorMessage,
   disabled = false,
+  reference,
   classes = []
 }) => {
   return (
@@ -72,6 +75,7 @@ export const Input: React.FC<InputProps> = ({
         {...(disabled && { disabled: true })}
         {...(value && { value: value })}
         {...(onChange && { onChange: onChange })}
+        ref={reference}
       />
       {error && errorMessage && (
         <Typography styleVariant="caption" id={`${type}-error-msg`}>
@@ -92,7 +96,8 @@ export const Textarea: React.FC<TextAreaProps> = ({
   disabled = false,
   rows = 2,
   readOnly,
-  classes = []
+  classes = [],
+  reference
 }) => {
   return (
     <div
@@ -113,6 +118,7 @@ export const Textarea: React.FC<TextAreaProps> = ({
         {...(value && { value: value })}
         rows={rows}
         {...(readOnly && { readOnly: readOnly })}
+        ref={reference}
       />
       {error && errorMessage && (
         <Typography styleVariant="caption" id={`textarea-error-msg`}>
