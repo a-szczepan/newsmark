@@ -1,28 +1,45 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, ButtonType, IconButton } from '../Button/Button';
 import { IconType } from '../Icon/Icon';
 import { Input, InputType, Textarea } from '../Input/Input';
 import styles from './Annotation.module.scss';
 import classnames from 'classnames';
 import { Accordion } from '../Accordion/Accordion';
+import { useAddAnnotationMutation } from '../../store/api/articleApi';
+import { useSearchParams } from 'react-router-dom';
 
 type AnnotationProps = {
   viewMode?: boolean;
   editMode: boolean;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedText: string
 };
 
-const ColorPicker: React.FC = () => {
+type ColorPickerProps = {
+  onColorChange: (color: string) => void;
+};
+
+const ColorPicker: React.FC<ColorPickerProps> = ({ onColorChange }) => {
   const [picked, setPicked] = useState('green');
+  const colorPickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    onColorChange(picked);
+  }, [picked, onColorChange]);
+
+  const handleColorClick = (color: string) => {
+    setPicked(color);
+  };
+
   return (
-    <div className={styles.colorPicker}>
+    <div className={styles.colorPicker} ref={colorPickerRef}>
       {['green', 'blue', 'yellow', 'pink', 'purple'].map((color, index) => (
         <div
           className={classnames(styles.color, styles[color], {
             [styles.picked]: picked === color
           })}
           key={index}
-          onClick={() => setPicked(color)}
+          onClick={() => handleColorClick(color)}
         />
       ))}
     </div>
@@ -32,17 +49,53 @@ const ColorPicker: React.FC = () => {
 export const Annotation: React.FC<AnnotationProps> = ({
   viewMode,
   editMode,
+  selectedText,
   setEditMode
 }) => {
   const [addNote, setAddNote] = useState(false);
+  const [addAnnotation] = useAddAnnotationMutation({});
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get('url');
+  const [selectedColor, setSelectedColor] = useState('green');
+
+  const titleRef = useRef<HTMLInputElement>(null);
+  const selectedTextRef = useRef<HTMLTextAreaElement>(null);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
 
   const editModeAnnotation = (
-    <div className={styles.annotation}>
-      <Input type={InputType.text} label="Title" name="title" />
-      <Textarea label="Selected text" name="title" rows={5} />
-      <ColorPicker />
+    <form
+      className={styles.annotation}
+      onSubmit={(e) => {
+        e.preventDefault();
+        const title = titleRef.current?.value || '';
+
+        const note = noteRef.current?.value || '';
+        addAnnotation({
+          title,
+          selectedText: selectedText,
+          color: selectedColor,
+          note,
+          articleUrl: url
+        });
+      }}
+    >
+      <Input
+        type={InputType.text}
+        label="Title"
+        name="title"
+        reference={titleRef}
+      />
+      <Textarea
+        label="Selected text"
+        name="title"
+        rows={5}
+        reference={selectedTextRef}
+        value={selectedText}
+        readOnly
+      />
+      <ColorPicker onColorChange={setSelectedColor} />
       {addNote ? (
-        <Textarea label="Note" />
+        <Textarea label="Note" reference={noteRef} />
       ) : (
         <Button
           variant={ButtonType.link}
@@ -54,10 +107,10 @@ export const Annotation: React.FC<AnnotationProps> = ({
           Add note
         </Button>
       )}
-      <Button variant={ButtonType.solid} buttonAction={() => {}}>
+      <Button type="submit" variant={ButtonType.solid} buttonAction={() => {}}>
         Save
       </Button>
-    </div>
+    </form>
   );
 
   return (

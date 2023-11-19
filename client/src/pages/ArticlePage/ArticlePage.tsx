@@ -8,15 +8,18 @@ import styles from './ArticlePage.module.scss';
 import { Tags, Typography } from '../../components/Typography/Typography';
 import { ArticlePageDoc } from '../../types/articles';
 import { DesktopPanel, MobilePanel } from './Panel/Panel';
+import { useHighlighter } from '../../hooks/useHighlighter';
 
 export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const isMobile = useWidthChecker() <= 768 ? true : false;
   const url = searchParams.get('url');
+  const isMobile = useWidthChecker() <= 768 ? true : false;
   const { data: article, isSuccess: gotArticle } = useGetArticleQuery({
     url
   });
   const [articleData, setArticleData] = useState<ArticlePageDoc>();
+  const highlighted = useHighlighter();
+
 
   useEffect(() => {
     if (gotArticle) {
@@ -64,10 +67,10 @@ export const ArticlePage: React.FC = () => {
           <div className={styles.articleSectionWrapper}>
             {articleData && articleSection}
             <hr />
-            {!isMobile && <DesktopPanel />}
+            {!isMobile && <DesktopPanel selectedText={highlighted}/>}
           </div>
         </Layout>
-        {isMobile && <MobilePanel />}
+        {isMobile && <MobilePanel selectedText={highlighted}/>}
       </div>
     </>
   );

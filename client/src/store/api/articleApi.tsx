@@ -33,8 +33,55 @@ const articleApi = api.injectEndpoints({
 
         return article;
       }
+    }),
+    getArticleNotes: builder.query({
+      query: (query) => {
+        return {
+          url: `http://localhost:5000/api/articlenote?url=${query.url}`,
+          method: 'GET',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
+    }),
+    addAnnotation: builder.mutation({
+      query: (annotation) => {
+        return {
+          url: '/articlenote',
+          method: 'PUT',
+          body: annotation,
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
+    }),
+    bookmark: builder.mutation({
+      query: (query) => {
+        return {
+          url: `/articlenote/bookmark?url=${query.url}`,
+          method: 'PUT',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
+    }),
+    unmark: builder.mutation({
+      query: (query) => {
+        return {
+          url: `/articlenote/unmark?url=${query.url}`,
+          method: 'PUT',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
     })
   })
 });
 
-export const { useGetArticleQuery } = articleApi;
+export const {
+  useGetArticleQuery,
+  useAddAnnotationMutation,
+  useBookmarkMutation,
+  useUnmarkMutation,
+  useGetArticleNotesQuery,
+} = articleApi;

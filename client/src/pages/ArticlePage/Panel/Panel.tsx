@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MobileModal } from '../MobileModal/MobileModal';
 import { Tags, Typography } from '../../../components/Typography/Typography';
 import { Annotation } from '../../../components/Annotation/Annotation';
@@ -9,14 +9,36 @@ import {
   IconButton
 } from '../../../components/Button/Button';
 import { IconType } from '../../../components/Icon/Icon';
+import {
+  useBookmarkMutation,
+  useGetArticleNotesQuery,
+  useUnmarkMutation
+} from '../../../store/api/articleApi';
+import { useSearchParams } from 'react-router-dom';
 
 const usePanelState = () => {
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get('url');
+  const { data: articleNotes, isSuccess: gotNotes } = useGetArticleNotesQuery({
+    url
+  });
   const [bookmarkOpt, setBookmarkOpt] = useState(false);
   const [annotationOpt, setAnnotationOpt] = useState(false);
   const [viewOpt, setViewOpt] = useState(false);
   const [isAnnotationEditMode, setIsAnnotationEditMode] = useState(false);
+  const [bookmark] = useBookmarkMutation({});
+  const [unmark] = useUnmarkMutation({});
+
+  useEffect(() => {
+    if (gotNotes) setBookmarkOpt(articleNotes?.isBookmarked);
+  }, [articleNotes?.isBookmarked]);
 
   const toggleBookmark = () => {
+    if (!bookmarkOpt) {
+      bookmark({ url });
+    } else {
+      unmark({ url });
+    }
     setBookmarkOpt(!bookmarkOpt);
     setAnnotationOpt(false);
     setViewOpt(false);
@@ -48,7 +70,11 @@ const usePanelState = () => {
   };
 };
 
-export const MobilePanel: React.FC = () => {
+type PanelProps = {
+  selectedText: string;
+};
+
+export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
   const {
     bookmarkOpt,
     annotationOpt,
@@ -61,6 +87,7 @@ export const MobilePanel: React.FC = () => {
     toggleAnnotate,
     toggleView
   } = usePanelState();
+
   return (
     <>
       {annotationOpt && (
@@ -73,6 +100,7 @@ export const MobilePanel: React.FC = () => {
             <Annotation
               editMode={isAnnotationEditMode}
               setEditMode={setIsAnnotationEditMode}
+              selectedText={selectedText}
             />
           </div>
         </MobileModal>
@@ -88,6 +116,7 @@ export const MobilePanel: React.FC = () => {
               editMode={isAnnotationEditMode}
               setEditMode={setIsAnnotationEditMode}
               viewMode={true}
+              selectedText={selectedText}
             />
           </div>
         </MobileModal>
@@ -140,7 +169,7 @@ export const MobilePanel: React.FC = () => {
   );
 };
 
-export const DesktopPanel: React.FC = () => {
+export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
   const {
     bookmarkOpt,
     annotationOpt,
@@ -190,6 +219,7 @@ export const DesktopPanel: React.FC = () => {
             <Annotation
               editMode={isAnnotationEditMode}
               setEditMode={setIsAnnotationEditMode}
+              selectedText={selectedText}
             />
           </div>
         </div>
@@ -214,6 +244,7 @@ export const DesktopPanel: React.FC = () => {
             editMode={isAnnotationEditMode}
             setEditMode={setIsAnnotationEditMode}
             viewMode={true}
+            selectedText={selectedText}
           />
         </div>
       )}
