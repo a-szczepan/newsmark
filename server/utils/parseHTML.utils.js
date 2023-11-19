@@ -12,12 +12,12 @@ exports.parseHTML = (document) => {
   );
   const imageURL = imageContainer
     .querySelector("picture source")
-    .getAttribute("srcset");
+    ?.getAttribute("srcset");
   const figcaption = imageContainer.querySelector("figcaption")?.textContent;
 
   const paragraphs = dom.window.document
     .querySelector('section[name="articleBody"]')
-    .querySelectorAll("p");
+    ?.querySelectorAll("p");
 
   const paragraphsArray = Array.from(paragraphs).map(
     (paragraph) => paragraph?.textContent
