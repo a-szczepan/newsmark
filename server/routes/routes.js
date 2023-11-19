@@ -2,6 +2,7 @@ const express = require("express");
 const user = require("../controllers/userController");
 const session = require("../controllers/sessionConntroller");
 const article = require("../controllers/articleController");
+const articlenote = require("../controllers/userArticleNotesController");
 const { requireUser } = require("../middleware/requireUser");
 
 exports.getPaths = () => {
@@ -26,7 +27,30 @@ exports.getPaths = () => {
   );
   router.post("/api/logout", requireUser, session.invalidateSession);
 
-  router.get("/api/article", article.getArticle);
+  router.get("/api/article", requireUser, article.getArticle);
+
+  router.get("/api/articlenote", requireUser, articlenote.getArticleNotes);
+
+  router.get(
+    "/api/articleannotation",
+    requireUser,
+    articlenote.getArticleAnnotations
+  );
+  router.patch(
+    "/api/articleannotation/:id",
+    requireUser,
+    articlenote.updateAnnotation
+  );
+  router.delete(
+    "/api/articleannotation/:id",
+    requireUser,
+    articlenote.deleteAnnotation
+  );
+
+  router.put("/api/articlenote", requireUser, articlenote.addNote);
+
+  router.put("/api/articlenote/bookmark", requireUser, articlenote.bookmark);
+  router.put("/api/articlenote/unmark", requireUser, articlenote.unmark);
 
   return router;
 };
