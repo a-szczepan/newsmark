@@ -44,6 +44,16 @@ const articleApi = api.injectEndpoints({
         };
       }
     }),
+    getAnnotations: builder.query({
+      query: (query) => {
+        return {
+          url: `http://localhost:5000/api/articleannotation?url=${query.url}`,
+          method: 'GET',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
+    }),
     addAnnotation: builder.mutation({
       query: (annotation) => {
         return {
@@ -80,6 +90,7 @@ const articleApi = api.injectEndpoints({
 
 export const {
   useGetArticleQuery,
+  useGetAnnotationsQuery,
   useAddAnnotationMutation,
   useBookmarkMutation,
   useUnmarkMutation,
