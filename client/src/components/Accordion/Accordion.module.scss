@@ -24,6 +24,9 @@
   }
 
   @media screen and (min-width: global.$tablet) {
+    & .accordionHeader {
+      padding: 8px 0;
+    }
     & .content {
       padding: 0;
     }

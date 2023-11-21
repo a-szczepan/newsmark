@@ -48,12 +48,8 @@
   }
 }
 
-.accordionWrapper {
-  width: 100%;
-  height: auto;
-
-  & .iconButtonsGroup {
-    display: flex;
-    gap: 16px;
-  }
+.iconButtonsGroup {
+  padding-top: 8px;
+  display: flex;
+  gap: 16px;
 }

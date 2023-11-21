@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MobileModal } from '../MobileModal/MobileModal';
 import { Tags, Typography } from '../../../components/Typography/Typography';
-import { Annotation } from '../../../components/Annotation/Annotation';
 import styles from './Panel.module.scss';
 import {
   Button,
@@ -11,10 +10,16 @@ import {
 import { IconType } from '../../../components/Icon/Icon';
 import {
   useBookmarkMutation,
+  useLazyGetAnnotationsQuery,
   useGetArticleNotesQuery,
   useUnmarkMutation
 } from '../../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
+import {
+  EditAnnotation,
+  ReadAnnotation
+} from '../../../components/Annotation/Annotation';
+import { Accordion } from '../../../components/Accordion/Accordion';
 
 const usePanelState = () => {
   const [searchParams] = useSearchParams();
@@ -87,6 +92,19 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
     toggleAnnotate,
     toggleView
   } = usePanelState();
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get('url');
+  const [
+    getAnnotations,
+    { data: fetchedAnnotations, isSuccess: gotannotations }
+  ] = useLazyGetAnnotationsQuery({});
+
+  const [annotations, setAnnotations] = useState<any[]>([]);
+
+  useEffect(() => {
+    getAnnotations({ url });
+    if (gotannotations) setAnnotations(fetchedAnnotations);
+  }, [fetchedAnnotations, viewOpt]);
 
   return (
     <>
@@ -97,11 +115,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
           </Typography>
           <hr />
           <div className={styles.annotationWrapper}>
-            <Annotation
-              editMode={isAnnotationEditMode}
-              setEditMode={setIsAnnotationEditMode}
-              selectedText={selectedText}
-            />
+            <EditAnnotation selectedText={selectedText} />
           </div>
         </MobileModal>
       )}
@@ -111,13 +125,39 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
             Annotations
           </Typography>
           <hr />
-          <div className={styles.annotationWrapper}>
-            <Annotation
-              editMode={isAnnotationEditMode}
-              setEditMode={setIsAnnotationEditMode}
-              viewMode={true}
-              selectedText={selectedText}
-            />
+          <div className={styles.annotationList}>
+            {annotations.length > 0 &&
+              annotations.map((a, i) => {
+                return (
+                  <div key={i}>
+                    <Accordion key={i} header={a.title}>
+                      <div className={styles.annotationWrapper}>
+                        {isAnnotationEditMode ? (
+                          <EditAnnotation
+                            data={{
+                              titleValue: a.title,
+                              colorValue: a.color,
+                              noteValue: a.note
+                            }}
+                            selectedText={a.selectedText}
+                          />
+                        ) : (
+                          <ReadAnnotation
+                            data={{
+                              titleValue: a.title,
+                              colorValue: a.color,
+                              noteValue: a.note
+                            }}
+                            selectedText={a.selectedText}
+                            setEditMode={setIsAnnotationEditMode}
+                          />
+                        )}
+                      </div>
+                    </Accordion>
+                    <hr />
+                  </div>
+                );
+              })}
           </div>
         </MobileModal>
       )}
@@ -180,6 +220,19 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
     toggleAnnotate,
     toggleView
   } = usePanelState();
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get('url');
+  const [
+    getAnnotations,
+    { data: fetchedAnnotations, isSuccess: gotannotations }
+  ] = useLazyGetAnnotationsQuery({});
+  const [annotations, setAnnotations] = useState<any[]>([]);
+
+  useEffect(() => {
+    getAnnotations({ url });
+    if (gotannotations) setAnnotations(fetchedAnnotations);
+  }, [fetchedAnnotations, viewOpt]);
+
   return (
     <div className={styles.optionsSection}>
       <Button
@@ -216,11 +269,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
       {annotationOpt && (
         <div className="container">
           <div className={styles.annotationWrapper}>
-            <Annotation
-              editMode={isAnnotationEditMode}
-              setEditMode={setIsAnnotationEditMode}
-              selectedText={selectedText}
-            />
+            <EditAnnotation selectedText={selectedText} />
           </div>
         </div>
       )}
@@ -239,16 +288,42 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
         View
       </Button>
       {viewOpt && (
-        <div className={styles.annotationWrapper}>
-          <Annotation
-            editMode={isAnnotationEditMode}
-            setEditMode={setIsAnnotationEditMode}
-            viewMode={true}
-            selectedText={selectedText}
-          />
+        <div className={styles.annotationList}>
+          {annotations.length > 0 &&
+            annotations.map((a, i) => {
+              return (
+                <div key={i}>
+                  <Accordion header={a.title}>
+                    <div className={styles.annotationWrapper}>
+                      {isAnnotationEditMode ? (
+                        <EditAnnotation
+                          data={{
+                            titleValue: a.title,
+                            colorValue: a.color,
+                            noteValue: a.note
+                          }}
+                          selectedText={a.selectedText}
+                        />
+                      ) : (
+                        <ReadAnnotation
+                          data={{
+                            titleValue: a.title,
+                            colorValue: a.color,
+                            noteValue: a.note
+                          }}
+                          selectedText={a.selectedText}
+                          setEditMode={setIsAnnotationEditMode}
+                        />
+                      )}
+                    </div>
+                  </Accordion>
+                  <hr />
+                </div>
+              );
+            })}
         </div>
       )}
-      <hr />
+      {!viewOpt && <hr />}
     </div>
   );
 };

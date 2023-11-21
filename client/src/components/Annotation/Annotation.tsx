@@ -4,23 +4,36 @@ import { IconType } from '../Icon/Icon';
 import { Input, InputType, Textarea } from '../Input/Input';
 import styles from './Annotation.module.scss';
 import classnames from 'classnames';
-import { Accordion } from '../Accordion/Accordion';
 import { useAddAnnotationMutation } from '../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
 
-type AnnotationProps = {
-  viewMode?: boolean;
-  editMode: boolean;
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedText: string
+type AnnotationNote = {
+  titleValue: string;
+  colorValue: string;
+  noteValue: string;
+};
+
+type EditAnnotationProps = {
+  data?: AnnotationNote;
+  selectedText: string;
+};
+
+type ReadAnnotationProps = {
+  data: AnnotationNote;
+  selectedText: string;
+  setEditMode: any;
 };
 
 type ColorPickerProps = {
+  selectedColor: string;
   onColorChange: (color: string) => void;
 };
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ onColorChange }) => {
-  const [picked, setPicked] = useState('green');
+const ColorPicker: React.FC<ColorPickerProps> = ({
+  selectedColor,
+  onColorChange
+}) => {
+  const [picked, setPicked] = useState(selectedColor);
   const colorPickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,33 +59,32 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorChange }) => {
   );
 };
 
-export const Annotation: React.FC<AnnotationProps> = ({
-  viewMode,
-  editMode,
-  selectedText,
-  setEditMode
+export const EditAnnotation: React.FC<EditAnnotationProps> = ({
+  data,
+  selectedText
 }) => {
-  const [addNote, setAddNote] = useState(false);
+  const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
   const [addAnnotation] = useAddAnnotationMutation({});
-  const [searchParams] = useSearchParams();
-  const url = searchParams.get('url');
-  const [selectedColor, setSelectedColor] = useState('green');
-
   const titleRef = useRef<HTMLInputElement>(null);
   const selectedTextRef = useRef<HTMLTextAreaElement>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedColor, setSelectedColor] = useState(
+    data ? data.colorValue : 'green'
+  );
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get('url');
 
-  const editModeAnnotation = (
+  return (
     <form
       className={styles.annotation}
       onSubmit={(e) => {
         e.preventDefault();
         const title = titleRef.current?.value || '';
-
         const note = noteRef.current?.value || '';
+        const selectedText = selectedTextRef.current?.value || '';
         addAnnotation({
           title,
-          selectedText: selectedText,
+          selectedText,
           color: selectedColor,
           note,
           articleUrl: url
@@ -84,6 +96,7 @@ export const Annotation: React.FC<AnnotationProps> = ({
         label="Title"
         name="title"
         reference={titleRef}
+        {...(data && { value: data.titleValue })}
       />
       <Textarea
         label="Selected text"
@@ -93,9 +106,16 @@ export const Annotation: React.FC<AnnotationProps> = ({
         value={selectedText}
         readOnly
       />
-      <ColorPicker onColorChange={setSelectedColor} />
+      <ColorPicker
+        selectedColor={selectedColor}
+        onColorChange={setSelectedColor}
+      />
       {addNote ? (
-        <Textarea label="Note" reference={noteRef} />
+        <Textarea
+          label="Note"
+          reference={noteRef}
+          {...(data && { value: data.noteValue })}
+        />
       ) : (
         <Button
           variant={ButtonType.link}
@@ -104,7 +124,7 @@ export const Annotation: React.FC<AnnotationProps> = ({
           iconVariant="start"
           classes={[styles.addButton]}
         >
-          Add note
+          Add note{' '}
         </Button>
       )}
       <Button type="submit" variant={ButtonType.solid} buttonAction={() => {}}>
@@ -112,38 +132,32 @@ export const Annotation: React.FC<AnnotationProps> = ({
       </Button>
     </form>
   );
+};
 
+export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
+  data,
+  selectedText,
+  setEditMode
+}) => {
   return (
-    <>
-      {editMode ? (
-        <>
-          {viewMode ? (
-            <div className={styles.accordionWrapper}>
-              <Accordion header={'title'} opened>
-                {editModeAnnotation}
-              </Accordion>
-            </div>
-          ) : (
-            editModeAnnotation
-          )}
-        </>
-      ) : (
-        <div className={styles.accordionWrapper}>
-          <Accordion header={'title'}>
-            <Textarea name="selected" readOnly />
-            <Textarea name="note" label="Note" rows={5} readOnly />
-            <div className={styles.iconButtonsGroup}>
-              <IconButton
-                icon={IconType.edit}
-                buttonAction={() => {
-                  setEditMode(true);
-                }}
-              />
-              <IconButton icon={IconType.remove} buttonAction={() => {}} />
-            </div>
-          </Accordion>
-        </div>
-      )}
-    </>
+    <div>
+      <Textarea name="selected" readOnly value={selectedText} />
+      <Textarea
+        name="note"
+        label="Note"
+        rows={5}
+        readOnly
+        value={data.noteValue}
+      />
+      <div className={styles.iconButtonsGroup}>
+        <IconButton
+          icon={IconType.edit}
+          buttonAction={() => {
+            setEditMode(true);
+          }}
+        />
+        <IconButton icon={IconType.remove} buttonAction={() => {}} />
+      </div>
+    </div>
   );
 };

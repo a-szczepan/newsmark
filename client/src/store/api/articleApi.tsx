@@ -67,8 +67,9 @@ const articleApi = api.injectEndpoints({
     }),
     bookmark: builder.mutation({
       query: (query) => {
+        console.log(query);
         return {
-          url: `/articlenote/bookmark?url=${query.url}`,
+          url: `/articlenote/bookmark?url=${query.url.replaceAll('/', '%2F')}`,
           method: 'PUT',
           credentials: 'include',
           mode: 'cors'
@@ -78,7 +79,7 @@ const articleApi = api.injectEndpoints({
     unmark: builder.mutation({
       query: (query) => {
         return {
-          url: `/articlenote/unmark?url=${query.url}`,
+          url: `/articlenote/unmark?url=${query.url.replaceAll('/', '%2F')}`,
           method: 'PUT',
           credentials: 'include',
           mode: 'cors'
@@ -90,9 +91,9 @@ const articleApi = api.injectEndpoints({
 
 export const {
   useGetArticleQuery,
-  useGetAnnotationsQuery,
+  useLazyGetAnnotationsQuery,
   useAddAnnotationMutation,
   useBookmarkMutation,
   useUnmarkMutation,
-  useGetArticleNotesQuery,
+  useGetArticleNotesQuery
 } = articleApi;

@@ -174,7 +174,7 @@ exports.deleteAnnotation = async (req, res) => {
 };
 
 exports.bookmark = async (req, res) => {
-  const url = req.query.url.replace(/[%]/g, "/");
+  const url = req.query.url.replace(/[%2F]/g, "/");
   const { email } = res.locals.user;
 
   let userNote = await findNote({
@@ -206,7 +206,7 @@ exports.bookmark = async (req, res) => {
 };
 
 exports.unmark = async (req, res) => {
-  const url = req.query.url.replace(/[%]/g, "/");
+  const url = req.query.url.replace(/[%2F]/g, "/");
   const { email } = res.locals.user;
   await updateUserNote(
     { isBookmarked: false },

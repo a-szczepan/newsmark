@@ -111,4 +111,10 @@
 .annotationList {
   overflow: auto;
   height: 100%;
+
+  @media screen and (min-width: global.$tablet) {
+    padding: 0 16px;
+    height: auto;
+  }
 }
+
