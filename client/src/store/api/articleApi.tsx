@@ -1,4 +1,8 @@
-import { ArticleAPI, ArticlePageDoc } from '../../types/articles';
+import {
+  ArticleAPI,
+  ArticleAnnotationsAPI,
+  ArticlePageDoc
+} from '../../types/articles';
 import { api } from './apiService';
 
 const articleApi = api.injectEndpoints({
@@ -65,6 +69,22 @@ const articleApi = api.injectEndpoints({
         };
       }
     }),
+    editAnnotation: builder.mutation({
+      query: ({ annotation, annotationId }) => {
+        return {
+          url: `/articleannotation/${annotationId}`,
+          method: 'PATCH',
+          body: annotation,
+          credentials: 'include',
+          mode: 'cors'
+        };
+      },
+      transformResponse: (
+        data: ArticleAnnotationsAPI[]
+      ): ArticleAnnotationsAPI[] => {
+        return data;
+      }
+    }),
     bookmark: builder.mutation({
       query: (query) => {
         console.log(query);
@@ -93,6 +113,7 @@ export const {
   useGetArticleQuery,
   useLazyGetAnnotationsQuery,
   useAddAnnotationMutation,
+  useEditAnnotationMutation,
   useBookmarkMutation,
   useUnmarkMutation,
   useGetArticleNotesQuery

@@ -42,7 +42,6 @@ const BrowseArticles: React.FC = () => {
   }, [browserArticles]);
 
   useEffect(() => {
-    console.log(searchedArticles);
     if (gotSearchedArticles) setArticles(searchedArticles);
   }, [searchedArticles]);
 

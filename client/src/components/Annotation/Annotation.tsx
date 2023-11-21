@@ -4,7 +4,10 @@ import { IconType } from '../Icon/Icon';
 import { Input, InputType, Textarea } from '../Input/Input';
 import styles from './Annotation.module.scss';
 import classnames from 'classnames';
-import { useAddAnnotationMutation } from '../../store/api/articleApi';
+import {
+  useAddAnnotationMutation,
+  useEditAnnotationMutation
+} from '../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
 
 type AnnotationNote = {
@@ -14,11 +17,14 @@ type AnnotationNote = {
 };
 
 type EditAnnotationProps = {
+  annotationId?: number;
   data?: AnnotationNote;
   selectedText: string;
+  setAnnotations: any;
 };
 
 type ReadAnnotationProps = {
+  annotationId: number;
   data: AnnotationNote;
   selectedText: string;
   setEditMode: any;
@@ -60,11 +66,15 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 };
 
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
+  annotationId,
   data,
-  selectedText
+  selectedText,
+  setAnnotations
 }) => {
   const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
   const [addAnnotation] = useAddAnnotationMutation({});
+  const [editAnnotation, { data: annotations, isSuccess: gotAnnotations }] =
+    useEditAnnotationMutation({});
   const titleRef = useRef<HTMLInputElement>(null);
   const selectedTextRef = useRef<HTMLTextAreaElement>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
@@ -74,21 +84,38 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   const [searchParams] = useSearchParams();
   const url = searchParams.get('url');
 
+  useEffect(() => {
+    if (gotAnnotations) setAnnotations(annotations);
+  }, [annotations]);
+
   return (
     <form
       className={styles.annotation}
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         const title = titleRef.current?.value || '';
         const note = noteRef.current?.value || '';
         const selectedText = selectedTextRef.current?.value || '';
-        addAnnotation({
-          title,
-          selectedText,
-          color: selectedColor,
-          note,
-          articleUrl: url
-        });
+        if (data && annotationId) {
+          await editAnnotation({
+            annotation: {
+              title,
+              selectedText,
+              color: selectedColor,
+              note,
+              articleUrl: url
+            },
+            annotationId
+          });
+        } else {
+          addAnnotation({
+            title,
+            selectedText,
+            color: selectedColor,
+            note,
+            articleUrl: url
+          });
+        }
       }}
     >
       <Input
@@ -135,6 +162,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
 };
 
 export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
+  annotationId,
   data,
   selectedText,
   setEditMode

@@ -88,6 +88,28 @@ export interface Document {
   uri: string;
 }
 
+export interface ArticleAnnotationsAPI {
+  id: number;
+  userEmail: string;
+  articleUrl: string;
+  title: string;
+  selectedText: string;
+  color: string;
+  note: string;
+  createdAt: string; 
+  updatedAt: string;
+}
+
+export interface ArticleAnnotation {
+  id: number;
+  userEmail: string;
+  articleUrl: string;
+  title: string;
+  selectedText: string;
+  color: string;
+  note: string;
+}
+
 interface Multimedia {
   url: string;
   format: string;

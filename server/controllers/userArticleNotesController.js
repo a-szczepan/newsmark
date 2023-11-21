@@ -124,6 +124,8 @@ exports.updateAnnotation = async (req, res) => {
   const annotationId = req.params.id;
   const { email } = res.locals.user;
 
+  console.log("tutaj", annotationId, email)
+
   await updateAnnotation(
     { title, selectedText, color, note },
     { where: { id: annotationId } }

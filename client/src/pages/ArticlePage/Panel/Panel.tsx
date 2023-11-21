@@ -98,12 +98,13 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
     getAnnotations,
     { data: fetchedAnnotations, isSuccess: gotannotations }
   ] = useLazyGetAnnotationsQuery({});
-
   const [annotations, setAnnotations] = useState<any[]>([]);
 
   useEffect(() => {
     getAnnotations({ url });
-    if (gotannotations) setAnnotations(fetchedAnnotations);
+    if (gotannotations) {
+      setAnnotations(fetchedAnnotations);
+    }
   }, [fetchedAnnotations, viewOpt]);
 
   return (
@@ -115,7 +116,10 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
           </Typography>
           <hr />
           <div className={styles.annotationWrapper}>
-            <EditAnnotation selectedText={selectedText} />
+            <EditAnnotation
+              selectedText={selectedText}
+              setAnnotations={setAnnotations}
+            />
           </div>
         </MobileModal>
       )}
@@ -130,7 +134,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
               annotations.map((a, i) => {
                 return (
                   <div key={i}>
-                    <Accordion key={i} header={a.title}>
+                    <Accordion header={a.title}>
                       <div className={styles.annotationWrapper}>
                         {isAnnotationEditMode ? (
                           <EditAnnotation
@@ -140,6 +144,8 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                               noteValue: a.note
                             }}
                             selectedText={a.selectedText}
+                            setAnnotations={setAnnotations}
+                            annotationId={a.id}
                           />
                         ) : (
                           <ReadAnnotation
@@ -150,6 +156,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                             }}
                             selectedText={a.selectedText}
                             setEditMode={setIsAnnotationEditMode}
+                            annotationId={a.id}
                           />
                         )}
                       </div>
@@ -269,7 +276,10 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
       {annotationOpt && (
         <div className="container">
           <div className={styles.annotationWrapper}>
-            <EditAnnotation selectedText={selectedText} />
+            <EditAnnotation
+              selectedText={selectedText}
+              setAnnotations={annotations}
+            />
           </div>
         </div>
       )}
@@ -297,15 +307,18 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
                     <div className={styles.annotationWrapper}>
                       {isAnnotationEditMode ? (
                         <EditAnnotation
+                          annotationId={a.id}
                           data={{
                             titleValue: a.title,
                             colorValue: a.color,
                             noteValue: a.note
                           }}
                           selectedText={a.selectedText}
+                          setAnnotations={setAnnotations}
                         />
                       ) : (
                         <ReadAnnotation
+                          annotationId={a.id}
                           data={{
                             titleValue: a.title,
                             colorValue: a.color,
