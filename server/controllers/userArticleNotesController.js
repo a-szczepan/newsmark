@@ -124,13 +124,10 @@ exports.updateAnnotation = async (req, res) => {
   const annotationId = req.params.id;
   const { email } = res.locals.user;
 
-  console.log("tutaj", annotationId, email)
-
   await updateAnnotation(
     { title, selectedText, color, note },
     { where: { id: annotationId } }
   ).then(async () => {
-    //maybe return only updated (?)
     const annotations = await findAnnotations({
       where: { articleUrl, userEmail: email },
       raw: true,
@@ -168,10 +165,15 @@ exports.deleteAnnotation = async (req, res) => {
         )
     );
 
-    return { success: true, message: "Annotation deleted successfully" };
+    const annotations = await findAnnotations({
+      where: { articleUrl, userEmail: email },
+      raw: true,
+    });
+
+    return res.status(200).send(annotations);
   } catch (error) {
     console.error("Error deleting annotation:", error.message);
-    return { message: "Error deleting annotation" };
+    return res.status(404).send({ message: "Not found" });
   }
 };
 

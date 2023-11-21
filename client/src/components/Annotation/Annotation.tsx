@@ -6,6 +6,7 @@ import styles from './Annotation.module.scss';
 import classnames from 'classnames';
 import {
   useAddAnnotationMutation,
+  useDeleteAnnotationMutation,
   useEditAnnotationMutation
 } from '../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
@@ -28,6 +29,7 @@ type ReadAnnotationProps = {
   data: AnnotationNote;
   selectedText: string;
   setEditMode: any;
+  setAnnotations: any;
 };
 
 type ColorPickerProps = {
@@ -165,8 +167,16 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
   annotationId,
   data,
   selectedText,
-  setEditMode
+  setEditMode,
+  setAnnotations
 }) => {
+  const [deleteAnnotation, { data: annotations, isSuccess: gotAnnotations }] =
+    useDeleteAnnotationMutation({});
+
+  useEffect(() => {
+    if (gotAnnotations) setAnnotations(annotations);
+  }, [annotations]);
+
   return (
     <div>
       <Textarea name="selected" readOnly value={selectedText} />
@@ -184,7 +194,12 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
             setEditMode(annotationId);
           }}
         />
-        <IconButton icon={IconType.remove} buttonAction={() => {}} />
+        <IconButton
+          icon={IconType.remove}
+          buttonAction={() => {
+            deleteAnnotation(annotationId);
+          }}
+        />
       </div>
     </div>
   );

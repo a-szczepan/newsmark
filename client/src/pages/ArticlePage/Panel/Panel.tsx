@@ -158,6 +158,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                             }}
                             selectedText={a.selectedText}
                             setEditMode={setEditModeAnnotationId}
+                            setAnnotations={setAnnotations}
                             annotationId={a.id}
                           />
                         )}
@@ -328,6 +329,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
                           }}
                           selectedText={a.selectedText}
                           setEditMode={setEditModeAnnotationId}
+                          setAnnotations={setAnnotations}
                         />
                       )}
                     </div>

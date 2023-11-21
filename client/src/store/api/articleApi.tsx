@@ -85,6 +85,21 @@ const articleApi = api.injectEndpoints({
         return data;
       }
     }),
+    deleteAnnotation: builder.mutation({
+      query: (annotationId) => {
+        return {
+          url: `/articleannotation/${annotationId}`,
+          method: 'DELETE',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      },
+      transformResponse: (
+        data: ArticleAnnotationsAPI[]
+      ): ArticleAnnotationsAPI[] => {
+        return data;
+      }
+    }),
     bookmark: builder.mutation({
       query: (query) => {
         console.log(query);
@@ -114,6 +129,7 @@ export const {
   useLazyGetAnnotationsQuery,
   useAddAnnotationMutation,
   useEditAnnotationMutation,
+  useDeleteAnnotationMutation,
   useBookmarkMutation,
   useUnmarkMutation,
   useGetArticleNotesQuery
