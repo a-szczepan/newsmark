@@ -48,7 +48,7 @@
   .actionBtn {
     width: 62px;
     text-align: center;
-    
+
     &:hover,
     &:focus,
     &:active {
@@ -101,4 +101,14 @@
   @media screen and (min-width: global.$tablet) {
     overflow: visible;
   }
+}
+
+.accordionWrapper {
+  width: 100%;
+  height: auto;
+}
+
+.annotationList {
+  overflow: auto;
+  height: 100%;
 }
