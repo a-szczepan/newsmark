@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Input.module.scss';
 import { Typography } from '../Typography/Typography';
 import { ButtonType, Button } from '../Button/Button';
@@ -15,7 +15,6 @@ export enum InputType {
 type SharedInputProps = React.HTMLProps<HTMLInputElement> & {
   id?: string;
   placeholder?: string;
-  onChange?: React.ChangeEvent;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: string;
@@ -47,7 +46,6 @@ export const Input: React.FC<InputProps> = ({
   label,
   name,
   placeholder,
-  onChange,
   value,
   error = false,
   errorMessage,
@@ -55,6 +53,8 @@ export const Input: React.FC<InputProps> = ({
   reference,
   classes = []
 }) => {
+  const [inputValue, setInputValue] = useState(value ? value : '');
+
   return (
     <div
       className={classnames(styles.input, ...classes, {
@@ -73,8 +73,8 @@ export const Input: React.FC<InputProps> = ({
         type={InputType[type]}
         aria-label={name}
         {...(disabled && { disabled: true })}
-        {...(value && { value: value })}
-        {...(onChange && { onChange: onChange })}
+        {...(value && { value: inputValue })}
+        onChange={(e) => setInputValue(e.target.value)}
         ref={reference}
       />
       {error && errorMessage && (
@@ -99,6 +99,7 @@ export const Textarea: React.FC<TextAreaProps> = ({
   classes = [],
   reference
 }) => {
+  const [textAreaValue, settextAreaValue] = useState(value ? value : '');
   return (
     <div
       className={classnames(styles.input, ...classes, {
@@ -115,7 +116,8 @@ export const Textarea: React.FC<TextAreaProps> = ({
         className={classnames(styles.inputField)}
         aria-label={name}
         {...(disabled && { disabled: true })}
-        {...(value && { value: value })}
+        {...(value && { value: textAreaValue })}
+        onChange={(e) => settextAreaValue(e.target.value)}
         rows={rows}
         {...(readOnly && { readOnly: readOnly })}
         ref={reference}
@@ -133,7 +135,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   id,
   type = 'search',
   placeholder,
-  onChange,
   onSubmitAction,
   disabled = false,
   classes = [],
