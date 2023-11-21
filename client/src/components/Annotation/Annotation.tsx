@@ -181,7 +181,7 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
         <IconButton
           icon={IconType.edit}
           buttonAction={() => {
-            setEditMode(true);
+            setEditMode(annotationId);
           }}
         />
         <IconButton icon={IconType.remove} buttonAction={() => {}} />

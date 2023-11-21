@@ -30,7 +30,9 @@ const usePanelState = () => {
   const [bookmarkOpt, setBookmarkOpt] = useState(false);
   const [annotationOpt, setAnnotationOpt] = useState(false);
   const [viewOpt, setViewOpt] = useState(false);
-  const [isAnnotationEditMode, setIsAnnotationEditMode] = useState(false);
+  const [editModeAnnotationId, setEditModeAnnotationId] = useState<
+    number | null
+  >(null);
   const [bookmark] = useBookmarkMutation({});
   const [unmark] = useUnmarkMutation({});
 
@@ -51,13 +53,13 @@ const usePanelState = () => {
 
   const toggleAnnotate = () => {
     setAnnotationOpt(!annotationOpt);
-    setIsAnnotationEditMode(true);
+    setEditModeAnnotationId(null); // Reset edit mode when switching to annotate
     setViewOpt(false);
   };
 
   const toggleView = () => {
     setViewOpt(!viewOpt);
-    setIsAnnotationEditMode(false);
+    setEditModeAnnotationId(null); // Reset edit mode when switching to annotate
     setAnnotationOpt(false);
   };
 
@@ -67,8 +69,8 @@ const usePanelState = () => {
     setAnnotationOpt,
     viewOpt,
     setViewOpt,
-    isAnnotationEditMode,
-    setIsAnnotationEditMode,
+    editModeAnnotationId,
+    setEditModeAnnotationId,
     toggleBookmark,
     toggleAnnotate,
     toggleView
@@ -86,8 +88,8 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
     setAnnotationOpt,
     viewOpt,
     setViewOpt,
-    isAnnotationEditMode,
-    setIsAnnotationEditMode,
+    editModeAnnotationId,
+    setEditModeAnnotationId,
     toggleBookmark,
     toggleAnnotate,
     toggleView
@@ -136,7 +138,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                   <div key={i}>
                     <Accordion header={a.title}>
                       <div className={styles.annotationWrapper}>
-                        {isAnnotationEditMode ? (
+                        {editModeAnnotationId === a.id ? (
                           <EditAnnotation
                             data={{
                               titleValue: a.title,
@@ -155,7 +157,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                               noteValue: a.note
                             }}
                             selectedText={a.selectedText}
-                            setEditMode={setIsAnnotationEditMode}
+                            setEditMode={setEditModeAnnotationId}
                             annotationId={a.id}
                           />
                         )}
@@ -221,8 +223,8 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
     bookmarkOpt,
     annotationOpt,
     viewOpt,
-    isAnnotationEditMode,
-    setIsAnnotationEditMode,
+    editModeAnnotationId,
+    setEditModeAnnotationId,
     toggleBookmark,
     toggleAnnotate,
     toggleView
@@ -305,7 +307,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
                 <div key={i}>
                   <Accordion header={a.title}>
                     <div className={styles.annotationWrapper}>
-                      {isAnnotationEditMode ? (
+                      {editModeAnnotationId === a.id ? (
                         <EditAnnotation
                           annotationId={a.id}
                           data={{
@@ -325,7 +327,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
                             noteValue: a.note
                           }}
                           selectedText={a.selectedText}
-                          setEditMode={setIsAnnotationEditMode}
+                          setEditMode={setEditModeAnnotationId}
                         />
                       )}
                     </div>
