@@ -37,7 +37,15 @@ const updateAnnotation = async (update, query) =>
   await Annotation.update(update, query);
 
 exports.addNote = async (req, res) => {
-  const { title, selectedText, color, note, articleUrl } = req.body;
+  const {
+    title,
+    selectedText,
+    paragraphNumber,
+    substringPosition,
+    color,
+    note,
+    articleUrl,
+  } = req.body;
   const { email } = res.locals.user;
   const url = articleUrl.replace(/[%]/g, "/");
 
@@ -52,6 +60,8 @@ exports.addNote = async (req, res) => {
       articleUrl: url,
       title,
       selectedText,
+      paragraphNumber,
+      substringPosition,
       color,
       note,
     });
@@ -69,6 +79,8 @@ exports.addNote = async (req, res) => {
       articleUrl: url,
       title,
       selectedText,
+      paragraphNumber,
+      substringPosition,
       color,
       note,
     });
@@ -120,12 +132,20 @@ exports.getArticleAnnotations = async (req, res) => {
 };
 
 exports.updateAnnotation = async (req, res) => {
-  const { title, selectedText, color, note, articleUrl } = req.body;
+  const {
+    title,
+    selectedText,
+    paragraphNumber,
+    substringPosition,
+    color,
+    note,
+    articleUrl,
+  } = req.body;
   const annotationId = req.params.id;
   const { email } = res.locals.user;
 
   await updateAnnotation(
-    { title, selectedText, color, note },
+    { title, selectedText, paragraphNumber, substringPosition, color, note },
     { where: { id: annotationId } }
   ).then(async () => {
     const annotations = await findAnnotations({

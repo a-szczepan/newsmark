@@ -22,6 +22,12 @@ module.exports = (sequelize, Sequelize) => {
       selectedText: {
         type: Sequelize.STRING,
       },
+      paragraphNumber: {
+        type: Sequelize.INTEGER,
+      },
+      substringPosition: {
+        type: Sequelize.JSON,
+      },
       color: {
         type: Sequelize.STRING,
       },
