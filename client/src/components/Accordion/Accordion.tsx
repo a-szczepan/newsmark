@@ -5,11 +5,13 @@ import { Button, ButtonType, IconButton } from '../Button/Button';
 import { IconType } from '../Icon/Icon';
 
 type AccordionProps = PropsWithChildren<{
+  id?: string;
   header: string;
   opened?: boolean;
 }>;
 
 export const Accordion: React.FC<AccordionProps> = ({
+  id,
   header,
   opened = false,
   children
@@ -20,6 +22,7 @@ export const Accordion: React.FC<AccordionProps> = ({
       <div className={styles.accordionHeader}>
         <Typography styleVariant="body">• {header}</Typography>
         <IconButton
+          id={id}
           icon={isOpened ? IconType.chevronUp : IconType.chevronDown}
           buttonAction={() => setIsOpened(!isOpened)}
         />

@@ -20,14 +20,14 @@ type AnnotationNote = {
 type EditAnnotationProps = {
   annotationId?: number;
   data?: AnnotationNote;
-  selectedText: string;
+  highlighted: any;
   setAnnotations: any;
 };
 
 type ReadAnnotationProps = {
   annotationId: number;
   data: AnnotationNote;
-  selectedText: string;
+  highlighted: any;
   setEditMode: any;
   setAnnotations: any;
 };
@@ -70,7 +70,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   annotationId,
   data,
-  selectedText,
+  highlighted,
   setAnnotations
 }) => {
   const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
@@ -103,6 +103,8 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             annotation: {
               title,
               selectedText,
+              paragraphNumber: highlighted.paragraphNumber,
+              substringPosition: highlighted.substringPosition,
               color: selectedColor,
               note,
               articleUrl: url
@@ -113,6 +115,8 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           addAnnotation({
             title,
             selectedText,
+            paragraphNumber: highlighted.paragraphNumber,
+            substringPosition: highlighted.substringPosition,
             color: selectedColor,
             note,
             articleUrl: url
@@ -132,7 +136,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
         name="title"
         rows={5}
         reference={selectedTextRef}
-        value={selectedText}
+        value={highlighted?.text}
         readOnly
       />
       <ColorPicker
@@ -166,7 +170,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
 export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
   annotationId,
   data,
-  selectedText,
+  highlighted,
   setEditMode,
   setAnnotations
 }) => {
@@ -179,7 +183,7 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
 
   return (
     <div>
-      <Textarea name="selected" readOnly value={selectedText} />
+      <Textarea name="selected" readOnly value={highlighted.text} />
       <Textarea
         name="note"
         label="Note"

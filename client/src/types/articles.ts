@@ -94,9 +94,10 @@ export interface ArticleAnnotationsAPI {
   articleUrl: string;
   title: string;
   selectedText: string;
+  paragraphNumber: number;
   color: string;
   note: string;
-  createdAt: string; 
+  createdAt: string;
   updatedAt: string;
 }
 
@@ -106,6 +107,11 @@ export interface ArticleAnnotation {
   articleUrl: string;
   title: string;
   selectedText: string;
+  paragraphNumber: string;
+  substringPosition: {
+    start: number;
+    end: number;
+  };
   color: string;
   note: string;
 }

@@ -127,6 +127,7 @@ const articleApi = api.injectEndpoints({
 export const {
   useGetArticleQuery,
   useLazyGetAnnotationsQuery,
+  useGetAnnotationsQuery,
   useAddAnnotationMutation,
   useEditAnnotationMutation,
   useDeleteAnnotationMutation,

@@ -53,13 +53,13 @@ const usePanelState = () => {
 
   const toggleAnnotate = () => {
     setAnnotationOpt(!annotationOpt);
-    setEditModeAnnotationId(null); // Reset edit mode when switching to annotate
+    setEditModeAnnotationId(null);
     setViewOpt(false);
   };
 
   const toggleView = () => {
     setViewOpt(!viewOpt);
-    setEditModeAnnotationId(null); // Reset edit mode when switching to annotate
+    setEditModeAnnotationId(null);
     setAnnotationOpt(false);
   };
 
@@ -78,10 +78,10 @@ const usePanelState = () => {
 };
 
 type PanelProps = {
-  selectedText: string;
+  highlighted: any;
 };
 
-export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
+export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
   const {
     bookmarkOpt,
     annotationOpt,
@@ -119,7 +119,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
           <hr />
           <div className={styles.annotationWrapper}>
             <EditAnnotation
-              selectedText={selectedText}
+              highlighted={highlighted}
               setAnnotations={setAnnotations}
             />
           </div>
@@ -136,7 +136,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
               annotations.map((a, i) => {
                 return (
                   <div key={i}>
-                    <Accordion header={a.title}>
+                    <Accordion header={a.title} id={`annotation-read-${a.id}`}>
                       <div className={styles.annotationWrapper}>
                         {editModeAnnotationId === a.id ? (
                           <EditAnnotation
@@ -145,7 +145,11 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                               colorValue: a.color,
                               noteValue: a.note
                             }}
-                            selectedText={a.selectedText}
+                            highlighted={{
+                              text: a.selectedText,
+                              paragraphNumber: a.paragraphNumber,
+                              substringPosition: a.substringPosition
+                            }}
                             setAnnotations={setAnnotations}
                             annotationId={a.id}
                           />
@@ -156,7 +160,11 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
                               colorValue: a.color,
                               noteValue: a.note
                             }}
-                            selectedText={a.selectedText}
+                            highlighted={{
+                              text: a.selectedText,
+                              paragraphNumber: a.paragraphNumber,
+                              substringPosition: a.substringPosition
+                            }}
                             setEditMode={setEditModeAnnotationId}
                             setAnnotations={setAnnotations}
                             annotationId={a.id}
@@ -201,6 +209,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
           Annotation
         </IconButton>
         <IconButton
+        id="test-id"
           icon={IconType.eye}
           buttonAction={() => {
             toggleView();
@@ -219,7 +228,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ selectedText }) => {
   );
 };
 
-export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
+export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
   const {
     bookmarkOpt,
     annotationOpt,
@@ -280,7 +289,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
         <div className="container">
           <div className={styles.annotationWrapper}>
             <EditAnnotation
-              selectedText={selectedText}
+              highlighted={highlighted}
               setAnnotations={annotations}
             />
           </div>
@@ -306,7 +315,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
             annotations.map((a, i) => {
               return (
                 <div key={i}>
-                  <Accordion header={a.title}>
+                  <Accordion header={a.title} id={`annotation-read-${a.id}`}>
                     <div className={styles.annotationWrapper}>
                       {editModeAnnotationId === a.id ? (
                         <EditAnnotation
@@ -316,7 +325,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
                             colorValue: a.color,
                             noteValue: a.note
                           }}
-                          selectedText={a.selectedText}
+                          highlighted={{
+                            text: a.selectedText,
+                            paragraphNumber: a.paragraphNumber,
+                            substringPosition: a.substringPosition
+                          }}
                           setAnnotations={setAnnotations}
                         />
                       ) : (
@@ -327,7 +340,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({ selectedText }) => {
                             colorValue: a.color,
                             noteValue: a.note
                           }}
-                          selectedText={a.selectedText}
+                          highlighted={{
+                            text: a.selectedText,
+                            paragraphNumber: a.paragraphNumber,
+                            substringPosition: a.substringPosition
+                          }}
                           setEditMode={setEditModeAnnotationId}
                           setAnnotations={setAnnotations}
                         />
