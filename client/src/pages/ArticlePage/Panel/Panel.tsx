@@ -21,8 +21,19 @@ import {
 } from '../../../components/Annotation/Annotation';
 import { Accordion } from '../../../components/Accordion/Accordion';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
-import { openModal, closeModal } from '../../../store/slices/modalSlice';
+import {
+  openAnnotationModal,
+  closeAnnotationModal
+} from '../../../store/slices/annotationModalSlice';
+import {
+  openViewModal,
+  closeViewModal
+} from '../../../store/slices/viewModalSlice';
 import { useSelector } from 'react-redux';
+
+type PanelProps = {
+  highlighted: any;
+};
 
 const usePanelState = () => {
   const [searchParams] = useSearchParams();
@@ -31,18 +42,32 @@ const usePanelState = () => {
     url
   });
   const [bookmarkOpt, setBookmarkOpt] = useState(false);
-  const [annotationOpt, setAnnotationOpt] = useState(false);
-  const [viewOpt, setViewOpt] = useState(false);
+
   const [editModeAnnotationId, setEditModeAnnotationId] = useState<
     number | null
   >(null);
   const [bookmark] = useBookmarkMutation({});
   const [unmark] = useUnmarkMutation({});
-  const isModalOpen = useSelector((state: ModalState) => state.modal.isOpened);
+  const isAnnotationModalOpen = useSelector(
+    (state: any) => state.annotationModal.isOpened
+  );
+  const isViewModalOpen = useSelector((state: any) => state.viewModal.isOpened);
   const dispatch = useDispatch();
 
-  const triggerModal = () => {
-    if (isModalOpen) {dispatch(closeModal())} else {dispatch(openModal());}
+  const triggerAnnotationModal = () => {
+    if (isAnnotationModalOpen) {
+      dispatch(closeAnnotationModal());
+    } else {
+      dispatch(openAnnotationModal());
+    }
+  };
+
+  const triggerViewModal = () => {
+    if (isViewModalOpen) {
+      dispatch(closeViewModal());
+    } else {
+      dispatch(openViewModal());
+    }
   };
 
   useEffect(() => {
@@ -56,28 +81,20 @@ const usePanelState = () => {
       unmark({ url });
     }
     setBookmarkOpt(!bookmarkOpt);
-    setAnnotationOpt(false);
-    setViewOpt(false);
   };
 
   const toggleAnnotate = () => {
-    setAnnotationOpt(!annotationOpt);
     setEditModeAnnotationId(null);
-    setViewOpt(false);
-    triggerModal();
+    triggerAnnotationModal();
   };
 
   const toggleView = () => {
-    setViewOpt(!viewOpt);
     setEditModeAnnotationId(null);
-    setAnnotationOpt(false);
-    triggerModal();
+    triggerViewModal();
   };
 
   return {
     bookmarkOpt,
-    annotationOpt,
-    viewOpt,
     editModeAnnotationId,
     setEditModeAnnotationId,
     toggleBookmark,
@@ -86,16 +103,13 @@ const usePanelState = () => {
   };
 };
 
-type PanelProps = {
-  highlighted: any;
-};
-
 export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
-  const isModalOpen = useSelector((state: ModalState) => state.modal.isOpened);
+  const isAnnotationModalOpen = useSelector(
+    (state: any) => state.annotationModal.isOpened
+  );
+  const isViewModalOpen = useSelector((state: any) => state.viewModal.isOpened);
   const {
     bookmarkOpt,
-    annotationOpt,
-    viewOpt,
     editModeAnnotationId,
     setEditModeAnnotationId,
     toggleBookmark,
@@ -112,14 +126,12 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
 
   useEffect(() => {
     getAnnotations({ url });
-    if (gotannotations) {
-      setAnnotations(fetchedAnnotations);
-    }
-  }, [fetchedAnnotations, viewOpt]);
+    if (gotannotations) setAnnotations(fetchedAnnotations);
+  }, [fetchedAnnotations, isViewModalOpen]);
 
   return (
     <>
-      {annotationOpt && (
+      {isAnnotationModalOpen && (
         <MobileModal>
           <Typography styleVariant="h3" tag={Tags.h1}>
             Add annotation
@@ -133,7 +145,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           </div>
         </MobileModal>
       )}
-      {viewOpt && (
+      {isViewModalOpen && (
         <MobileModal>
           <Typography styleVariant="h3" tag={Tags.h1}>
             Annotations
@@ -209,7 +221,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           }}
           lightVariant
           classes={
-            annotationOpt
+            isAnnotationModalOpen
               ? [styles.annotationClicked, styles.actionBtn]
               : [styles.actionBtn]
           }
@@ -224,7 +236,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           }}
           lightVariant
           classes={
-            viewOpt
+            isViewModalOpen
               ? [styles.viewClicked, styles.actionBtn]
               : [styles.actionBtn]
           }
@@ -237,10 +249,10 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
 };
 
 export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
+  const [annotationOpt, setAnnotationOpt] = useState(false);
+  const [viewOpt, setViewOpt] = useState(false);
   const {
     bookmarkOpt,
-    annotationOpt,
-    viewOpt,
     editModeAnnotationId,
     setEditModeAnnotationId,
     toggleBookmark,
@@ -268,6 +280,8 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
         iconVariant="start"
         buttonAction={() => {
           toggleBookmark();
+          setAnnotationOpt(false);
+          setViewOpt(false);
         }}
         classes={
           bookmarkOpt
@@ -284,6 +298,8 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
         iconVariant="start"
         buttonAction={() => {
           toggleAnnotate();
+          setAnnotationOpt(!annotationOpt);
+          setViewOpt(false);
         }}
         classes={
           annotationOpt
@@ -310,6 +326,8 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
         iconVariant="start"
         buttonAction={() => {
           toggleView();
+          setViewOpt(!viewOpt);
+          setAnnotationOpt(false);
         }}
         classes={
           viewOpt ? [styles.viewClicked, styles.option] : [styles.option]

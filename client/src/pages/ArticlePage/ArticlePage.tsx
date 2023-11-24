@@ -13,6 +13,7 @@ import { ArticlePageDoc } from '../../types/articles';
 import { DesktopPanel, MobilePanel } from './Panel/Panel';
 import { useHighlighter } from '../../hooks/useHighlighter';
 import classnames from 'classnames';
+import { useDispatch } from 'react-redux';
 
 export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams();
