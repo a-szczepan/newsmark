@@ -20,6 +20,9 @@ import {
   ReadAnnotation
 } from '../../../components/Annotation/Annotation';
 import { Accordion } from '../../../components/Accordion/Accordion';
+import { useDispatch } from 'react-redux/es/hooks/useDispatch';
+import { openModal, closeModal } from '../../../store/slices/modalSlice';
+import { useSelector } from 'react-redux';
 
 const usePanelState = () => {
   const [searchParams] = useSearchParams();
@@ -35,6 +38,12 @@ const usePanelState = () => {
   >(null);
   const [bookmark] = useBookmarkMutation({});
   const [unmark] = useUnmarkMutation({});
+  const isModalOpen = useSelector((state: ModalState) => state.modal.isOpened);
+  const dispatch = useDispatch();
+
+  const triggerModal = () => {
+    if (isModalOpen) {dispatch(closeModal())} else {dispatch(openModal());}
+  };
 
   useEffect(() => {
     if (gotNotes) setBookmarkOpt(articleNotes?.isBookmarked);
@@ -55,20 +64,20 @@ const usePanelState = () => {
     setAnnotationOpt(!annotationOpt);
     setEditModeAnnotationId(null);
     setViewOpt(false);
+    triggerModal();
   };
 
   const toggleView = () => {
     setViewOpt(!viewOpt);
     setEditModeAnnotationId(null);
     setAnnotationOpt(false);
+    triggerModal();
   };
 
   return {
     bookmarkOpt,
     annotationOpt,
-    setAnnotationOpt,
     viewOpt,
-    setViewOpt,
     editModeAnnotationId,
     setEditModeAnnotationId,
     toggleBookmark,
@@ -82,12 +91,11 @@ type PanelProps = {
 };
 
 export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
+  const isModalOpen = useSelector((state: ModalState) => state.modal.isOpened);
   const {
     bookmarkOpt,
     annotationOpt,
-    setAnnotationOpt,
     viewOpt,
-    setViewOpt,
     editModeAnnotationId,
     setEditModeAnnotationId,
     toggleBookmark,
@@ -112,7 +120,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
   return (
     <>
       {annotationOpt && (
-        <MobileModal isOpened={annotationOpt} setIsOpened={setAnnotationOpt}>
+        <MobileModal>
           <Typography styleVariant="h3" tag={Tags.h1}>
             Add annotation
           </Typography>
@@ -126,7 +134,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
         </MobileModal>
       )}
       {viewOpt && (
-        <MobileModal isOpened={viewOpt} setIsOpened={setViewOpt}>
+        <MobileModal>
           <Typography styleVariant="h3" tag={Tags.h1}>
             Annotations
           </Typography>
@@ -209,7 +217,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           Annotation
         </IconButton>
         <IconButton
-        id="test-id"
+          id="test-id"
           icon={IconType.eye}
           buttonAction={() => {
             toggleView();

@@ -10,38 +10,37 @@ import {
 import styles from './MobileModal.module.scss';
 import { IconButton } from '../../../components/Button/Button';
 import { IconType } from '../../../components/Icon/Icon';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal } from '../../../store/slices/modalSlice';
 
 type MobileModalProps = PropsWithChildren<{
-  isOpened: boolean;
-  setIsOpened: Dispatch<SetStateAction<boolean>>;
   classes?: string[];
 }>;
 
-export const MobileModal: React.FC<MobileModalProps> = ({
-  isOpened,
-  setIsOpened,
-  children
-}) => {
+export const MobileModal: React.FC<MobileModalProps> = ({ children }) => {
+  const dispatch = useDispatch();
+  const isModalOpen = useSelector((state: ModalState) => state.modal.isOpened);
+
   useEffect(() => {
-    if (isOpened) document.body.style.overflow = 'hidden';
+    if (isModalOpen) document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'scroll';
     };
-  }, [isOpened]);
+  }, [isModalOpen]);
 
   return (
     <>
-      {isOpened &&
+      {isModalOpen &&
         createPortal(
           <div className={styles.underlay}>
             <div
               className={classnames(styles.modal, {
-                [styles.closing]: !isOpened
+                [styles.closing]: !isModalOpen
               })}
             >
               <IconButton
                 buttonAction={() => {
-                  setIsOpened(false);
+                  dispatch(closeModal());
                 }}
                 icon={IconType.close}
                 lightVariant
