@@ -4,6 +4,7 @@ import { api } from './api/apiService';
 import userReducer from './slices/userSlice';
 import annotationModalReducer from './slices/annotationModalSlice';
 import viewModalReducer from './slices/viewModalSlice';
+import accordionReducer from './slices/accordionSlice';
 
 //DEV NOTE:  https://redux.js.org/usage/migrating-to-modern-redux
 const store = configureStore({
@@ -11,7 +12,8 @@ const store = configureStore({
     [api.reducerPath]: api.reducer,
     user: userReducer,
     annotationModal: annotationModalReducer,
-    viewModal: viewModalReducer
+    viewModal: viewModalReducer,
+    accordion: accordionReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware)

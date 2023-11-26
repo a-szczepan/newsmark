@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Ref, useEffect, useState } from 'react';
 import { MobileModal } from '../MobileModal/MobileModal';
 import { Tags, Typography } from '../../../components/Typography/Typography';
 import styles from './Panel.module.scss';
@@ -30,6 +30,7 @@ import {
   closeViewModal
 } from '../../../store/slices/viewModalSlice';
 import { useSelector } from 'react-redux';
+import { closeAllAccordions } from '../../../store/slices/accordionSlice';
 
 type PanelProps = {
   highlighted: any;
@@ -123,6 +124,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
     { data: fetchedAnnotations, isSuccess: gotannotations }
   ] = useLazyGetAnnotationsQuery({});
   const [annotations, setAnnotations] = useState<any[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getAnnotations({ url });
@@ -156,7 +158,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
               annotations.map((a, i) => {
                 return (
                   <div key={i}>
-                    <Accordion header={a.title} id={`annotation-read-${a.id}`}>
+                    <Accordion header={a.title} id={a.id}>
                       <div className={styles.annotationWrapper}>
                         {editModeAnnotationId === a.id ? (
                           <EditAnnotation
@@ -233,6 +235,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           icon={IconType.eye}
           buttonAction={() => {
             toggleView();
+            if (!isViewModalOpen) dispatch(closeAllAccordions());
           }}
           lightVariant
           classes={
@@ -266,6 +269,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
     { data: fetchedAnnotations, isSuccess: gotannotations }
   ] = useLazyGetAnnotationsQuery({});
   const [annotations, setAnnotations] = useState<any[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getAnnotations({ url });
@@ -321,6 +325,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
       )}
       <hr />
       <Button
+        id={'view-btn'}
         variant={ButtonType.text}
         icon={IconType.eye}
         iconVariant="start"
@@ -328,6 +333,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
           toggleView();
           setViewOpt(!viewOpt);
           setAnnotationOpt(false);
+          if (!viewOpt) dispatch(closeAllAccordions());
         }}
         classes={
           viewOpt ? [styles.viewClicked, styles.option] : [styles.option]

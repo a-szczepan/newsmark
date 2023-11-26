@@ -4,6 +4,10 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import styles from './MobileModal.module.scss';
 import { IconButton } from '../../../components/Button/Button';
 import { IconType } from '../../../components/Icon/Icon';
+import { closeAnnotationModal } from '../../../store/slices/annotationModalSlice';
+import { closeViewModal } from '../../../store/slices/viewModalSlice';
+import { useDispatch } from 'react-redux';
+import { closeAllAccordions } from '../../../store/slices/accordionSlice';
 
 type MobileModalProps = PropsWithChildren<{
   classes?: string[];
@@ -11,6 +15,8 @@ type MobileModalProps = PropsWithChildren<{
 
 export const MobileModal: React.FC<MobileModalProps> = ({ children }) => {
   const [isOpened, setIsOpened] = useState(true);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (isOpened) document.body.style.overflow = 'hidden';
     return () => {
@@ -27,6 +33,9 @@ export const MobileModal: React.FC<MobileModalProps> = ({ children }) => {
               <IconButton
                 buttonAction={() => {
                   setIsOpened(!isOpened);
+                  dispatch(closeAnnotationModal());
+                  dispatch(closeViewModal());
+                  dispatch(closeAllAccordions());
                 }}
                 icon={IconType.close}
                 lightVariant

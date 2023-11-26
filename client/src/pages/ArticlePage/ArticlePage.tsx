@@ -14,6 +14,8 @@ import { DesktopPanel, MobilePanel } from './Panel/Panel';
 import { useHighlighter } from '../../hooks/useHighlighter';
 import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
+import { openViewModal } from '../../store/slices/viewModalSlice';
+import { toggleAccordion } from '../../store/slices/accordionSlice';
 
 export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -26,6 +28,56 @@ export const ArticlePage: React.FC = () => {
   });
   const [articleData, setArticleData] = useState<ArticlePageDoc>();
   const highlighted = useHighlighter();
+  const dispatch = useDispatch();
+
+  function addSpansToSelections(paragraphId: number, toHighlight: any) {
+    const paragraph = document.getElementById(`article-paragraph-${paragraphId}`);
+  
+    const paragraphClasses = paragraph?.getAttribute('class');
+    const newParagraph = document.createElement('p');
+    newParagraph.setAttribute('id', `article-paragraph-${paragraphId}`);
+    newParagraph.setAttribute('class', paragraphClasses as string);
+  
+    const paragraphText = paragraph ? paragraph.textContent : '';
+  
+    function checkIndex(index) {
+      return toHighlight.find((item) => item?.start === index);
+    }
+  
+    let textTemp = '';
+    for (let i = 0; i < paragraphText!.length; i++) {
+      textTemp += paragraphText![i];
+      const present = checkIndex(i + 1);
+      if (present) {
+        const newText = document.createTextNode(textTemp);
+        newParagraph.appendChild(newText);
+        textTemp = '';
+        const newSpan = document.createElement('span');
+        newSpan.setAttribute(
+          'class',
+          `${classnames(styles.color, styles[present.color])}`
+        );
+        const newContent = document.createTextNode(
+          paragraphText?.slice(present.start, present.end)!
+        );
+        newSpan.appendChild(newContent);
+        newSpan.addEventListener('click', (e) => {
+          e.stopImmediatePropagation();
+          // document.getElementById("view-btn")?.click();
+          dispatch(openViewModal());
+          dispatch(toggleAccordion(present.id));
+  
+        });
+        newParagraph.appendChild(newSpan);
+        i = present.end;
+      }
+      if (i + 1 === paragraphText!.length) {
+        const newText = document.createTextNode(textTemp);
+        newParagraph.appendChild(newText);
+      }
+    }
+    paragraph?.replaceWith(newParagraph);
+  }
 
   useEffect(() => {
     if (gotArticle) {
@@ -35,9 +87,11 @@ export const ArticlePage: React.FC = () => {
 
   useEffect(() => {
     if (gotannotations && article) {
+
       const groupedHighlights = fetchedAnnotations.reduce(
         (result, annotation) => {
-          const { paragraphNumber, selectedText, substringPosition, color } =
+          console.log(annotation)
+          const { id, paragraphNumber, selectedText, substringPosition, color } =
             annotation;
 
           if (!result[paragraphNumber]) {
@@ -48,6 +102,7 @@ export const ArticlePage: React.FC = () => {
           }
 
           result[paragraphNumber].toHighlight.push({
+            id: id,
             substring: selectedText,
             start: substringPosition.start,
             end: substringPosition.end,
@@ -63,6 +118,7 @@ export const ArticlePage: React.FC = () => {
       type HighlightElement = {
         paragraph: number;
         toHighlight: {
+          id: number;
           substring: string;
           start: number;
           end: number;
@@ -137,53 +193,3 @@ export const ArticlePage: React.FC = () => {
     </>
   );
 };
-
-function addSpansToSelections(paragraphId: number, toHighlight: any) {
-  const paragraph = document.getElementById(`article-paragraph-${paragraphId}`);
-
-  const paragraphClasses = paragraph?.getAttribute('class');
-  const newParagraph = document.createElement('p');
-  newParagraph.setAttribute('id', `article-paragraph-${paragraphId}`);
-  newParagraph.setAttribute('class', paragraphClasses as string);
-
-  const paragraphText = paragraph ? paragraph.textContent : '';
-
-  function checkIndex(index) {
-    return toHighlight.find((item) => item?.start === index);
-  }
-
-  let textTemp = '';
-  for (let i = 0; i < paragraphText!.length; i++) {
-    textTemp += paragraphText![i];
-    const present = checkIndex(i + 1);
-    if (present) {
-      const newText = document.createTextNode(textTemp);
-      newParagraph.appendChild(newText);
-      textTemp = '';
-      const newSpan = document.createElement('span');
-      newSpan.setAttribute(
-        'class',
-        `${classnames(styles.color, styles[present.color])}`
-      );
-      const newContent = document.createTextNode(
-        paragraphText?.slice(present.start, present.end)!
-      );
-      newSpan.appendChild(newContent);
-      newSpan.addEventListener('click', (e) => {
-        //TODO
-        e.stopImmediatePropagation();
-        document.getElementById('test-id')?.click();
-
-        document.getElementById('annotation-read-12')?.click();
-
-      });
-      newParagraph.appendChild(newSpan);
-      i = present.end;
-    }
-    if (i + 1 === paragraphText!.length) {
-      const newText = document.createTextNode(textTemp);
-      newParagraph.appendChild(newText);
-    }
-  }
-  paragraph?.replaceWith(newParagraph);
-}

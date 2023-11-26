@@ -7,7 +7,6 @@ export const viewModalSlice = createSlice({
   },
   reducers: {
     openViewModal: (state) => {
-        console.log(state)
       state.isOpened = true;
     },
     closeViewModal: (state) => {
