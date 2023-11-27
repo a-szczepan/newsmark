@@ -29,6 +29,7 @@ export const ArticlePage: React.FC = () => {
   const [articleData, setArticleData] = useState<ArticlePageDoc>();
   const highlighted = useHighlighter();
   const dispatch = useDispatch();
+  const [viewOption, setViewOption] = useState(false)
 
   function addSpansToSelections(paragraphId: number, toHighlight: any) {
     const paragraph = document.getElementById(`article-paragraph-${paragraphId}`);
@@ -63,7 +64,7 @@ export const ArticlePage: React.FC = () => {
         newSpan.appendChild(newContent);
         newSpan.addEventListener('click', (e) => {
           e.stopImmediatePropagation();
-          // document.getElementById("view-btn")?.click();
+          setViewOption(true)
           dispatch(openViewModal());
           dispatch(toggleAccordion(present.id));
   
@@ -90,7 +91,6 @@ export const ArticlePage: React.FC = () => {
 
       const groupedHighlights = fetchedAnnotations.reduce(
         (result, annotation) => {
-          console.log(annotation)
           const { id, paragraphNumber, selectedText, substringPosition, color } =
             annotation;
 
@@ -185,7 +185,7 @@ export const ArticlePage: React.FC = () => {
           <div className={styles.articleSectionWrapper}>
             {articleData && articleSection}
             <hr />
-            {!isMobile && <DesktopPanel highlighted={highlighted} />}
+            {!isMobile && <DesktopPanel highlighted={highlighted} triggerAnnotationView={{viewOption, setViewOption}}/>}
           </div>
         </Layout>
         {isMobile && <MobilePanel highlighted={highlighted} />}

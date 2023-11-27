@@ -34,6 +34,7 @@ import { closeAllAccordions } from '../../../store/slices/accordionSlice';
 
 type PanelProps = {
   highlighted: any;
+  triggerAnnotationView?: any;
 };
 
 const usePanelState = () => {
@@ -251,9 +252,14 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
   );
 };
 
-export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
+export const DesktopPanel: React.FC<PanelProps> = ({
+  highlighted,
+  triggerAnnotationView: {viewOption, setViewOption}
+}) => {
   const [annotationOpt, setAnnotationOpt] = useState(false);
-  const [viewOpt, setViewOpt] = useState(false);
+  const [viewOpt, setViewOpt] = useState(
+    viewOption ? viewOption : false
+  );
   const {
     bookmarkOpt,
     editModeAnnotationId,
@@ -270,6 +276,10 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
   ] = useLazyGetAnnotationsQuery({});
   const [annotations, setAnnotations] = useState<any[]>([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setViewOpt(viewOption);
+  }, [viewOption]);
 
   useEffect(() => {
     getAnnotations({ url });
@@ -333,6 +343,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
           toggleView();
           setViewOpt(!viewOpt);
           setAnnotationOpt(false);
+          setViewOption(false)
           if (!viewOpt) dispatch(closeAllAccordions());
         }}
         classes={
@@ -347,7 +358,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({ highlighted }) => {
             annotations.map((a, i) => {
               return (
                 <div key={i}>
-                  <Accordion header={a.title} id={`annotation-read-${a.id}`}>
+                  <Accordion header={a.title} id={a.id}>
                     <div className={styles.annotationWrapper}>
                       {editModeAnnotationId === a.id ? (
                         <EditAnnotation
