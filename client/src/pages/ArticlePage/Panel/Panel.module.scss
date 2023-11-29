@@ -70,6 +70,9 @@
   );
 
   display: flex;
+  position:sticky;
+  top: 88px;
+  height: 100%;
   flex-direction: column;
   max-width: 240px;
   width: 100%;
@@ -89,7 +92,7 @@
 
   @media screen and (min-width: global.$desktop) {
     max-width: 305px;
-    position: relative;
+    position: sticky;
   }
 }
 
