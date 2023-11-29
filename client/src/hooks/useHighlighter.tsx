@@ -13,21 +13,25 @@ export const useHighlighter = () => {
   useEffect(() => {
     const saveSelection = () => {
       const selection = window.getSelection();
-      if (selection && selection.rangeCount >= 1) {
+      const anchorNode = selection?.anchorNode;
+      const parentNode = anchorNode?.parentNode;
+
+      if (selection && parentNode) {
         const selectedText = selection.toString();
-
-        const start = isBackwards()
-          ? selection.focusOffset
-          : selection.anchorOffset;
-        const end = isBackwards()
-          ? selection.anchorOffset
-          : selection.focusOffset;
-
-        const selectedParagraphNumber = findParagraphNumber(
-          selection.anchorNode?.parentNode!
+        const selectedParagraphNumber = findParagraphNumber(parentNode);
+        const offsetDifference = getSubstringPosition(
+          parentNode.textContent,
+          selection?.anchorNode?.textContent
         );
 
-        if (selectedText && selectedParagraphNumber && end)
+        const start = isBackwards()
+          ? selection.focusOffset + offsetDifference
+          : selection.anchorOffset + offsetDifference;
+        const end = isBackwards()
+          ? selection.anchorOffset + offsetDifference
+          : selection.focusOffset + offsetDifference;
+
+        if (selectedText && selectedParagraphNumber && end) {
           setHighlightedData({
             text: selectedText,
             paragraphNumber: selectedParagraphNumber,
@@ -36,6 +40,7 @@ export const useHighlighter = () => {
               end
             }
           });
+        }
       }
     };
 
@@ -60,6 +65,11 @@ function findParagraphNumber(node: Node) {
   } else {
     return null;
   }
+}
+
+function getSubstringPosition(text, subText) {
+  const position = text.indexOf(subText);
+  return position;
 }
 
 function isBackwards() {

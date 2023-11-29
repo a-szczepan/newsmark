@@ -1,4 +1,4 @@
-import { Ref, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MobileModal } from '../MobileModal/MobileModal';
 import { Tags, Typography } from '../../../components/Typography/Typography';
 import styles from './Panel.module.scss';
@@ -31,6 +31,7 @@ import {
 } from '../../../store/slices/viewModalSlice';
 import { useSelector } from 'react-redux';
 import { closeAllAccordions } from '../../../store/slices/accordionSlice';
+import { useGetAnnotations } from '../../../hooks/useGetAnnotations';
 
 type PanelProps = {
   highlighted: any;
@@ -120,17 +121,14 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
   } = usePanelState();
   const [searchParams] = useSearchParams();
   const url = searchParams.get('url');
-  const [
-    getAnnotations,
-    { data: fetchedAnnotations, isSuccess: gotannotations }
-  ] = useLazyGetAnnotationsQuery({});
-  const [annotations, setAnnotations] = useState<any[]>([]);
+  const { annotations, setAnnotations, getAnnotations } = useGetAnnotations();
+  // const [annotations, setAnnotations] = useState<any[]>([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
     getAnnotations({ url });
-    if (gotannotations) setAnnotations(fetchedAnnotations);
-  }, [fetchedAnnotations, isViewModalOpen]);
+    // if (gotannotations) setAnnotations(fetchedAnnotations);
+  }, [isViewModalOpen]);
 
   return (
     <>
@@ -141,10 +139,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           </Typography>
           <hr />
           <div className={styles.annotationWrapper}>
-            <EditAnnotation
-              highlighted={highlighted}
-              setAnnotations={setAnnotations}
-            />
+            <EditAnnotation highlighted={highlighted} />
           </div>
         </MobileModal>
       )}
@@ -159,7 +154,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
               annotations.map((a, i) => {
                 return (
                   <div key={i}>
-                    <Accordion header={a.title} id={a.id}>
+                    <Accordion header={a.title} id={a.id.toString()}>
                       <div className={styles.annotationWrapper}>
                         {editModeAnnotationId === a.id ? (
                           <EditAnnotation
@@ -173,7 +168,6 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                               paragraphNumber: a.paragraphNumber,
                               substringPosition: a.substringPosition
                             }}
-                            setAnnotations={setAnnotations}
                             annotationId={a.id}
                           />
                         ) : (
@@ -189,7 +183,6 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                               substringPosition: a.substringPosition
                             }}
                             setEditMode={setEditModeAnnotationId}
-                            setAnnotations={setAnnotations}
                             annotationId={a.id}
                           />
                         )}
@@ -254,12 +247,10 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
 
 export const DesktopPanel: React.FC<PanelProps> = ({
   highlighted,
-  triggerAnnotationView: {viewOption, setViewOption}
+  triggerAnnotationView: { viewOption, setViewOption }
 }) => {
   const [annotationOpt, setAnnotationOpt] = useState(false);
-  const [viewOpt, setViewOpt] = useState(
-    viewOption ? viewOption : false
-  );
+  const [viewOpt, setViewOpt] = useState(viewOption ? viewOption : false);
   const {
     bookmarkOpt,
     editModeAnnotationId,
@@ -270,21 +261,14 @@ export const DesktopPanel: React.FC<PanelProps> = ({
   } = usePanelState();
   const [searchParams] = useSearchParams();
   const url = searchParams.get('url');
-  const [
-    getAnnotations,
-    { data: fetchedAnnotations, isSuccess: gotannotations }
-  ] = useLazyGetAnnotationsQuery({});
-  const [annotations, setAnnotations] = useState<any[]>([]);
+  const { annotations, getAnnotations } = useGetAnnotations();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setViewOpt(viewOption);
-  }, [viewOption]);
+  useEffect(() => setViewOpt(viewOption), [viewOption]);
 
   useEffect(() => {
     getAnnotations({ url });
-    if (gotannotations) setAnnotations(fetchedAnnotations);
-  }, [fetchedAnnotations, viewOpt]);
+  }, [viewOpt]);
 
   return (
     <div className={styles.optionsSection}>
@@ -326,10 +310,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
       {annotationOpt && (
         <div className="container">
           <div className={styles.annotationWrapper}>
-            <EditAnnotation
-              highlighted={highlighted}
-              setAnnotations={annotations}
-            />
+            <EditAnnotation highlighted={highlighted} />
           </div>
         </div>
       )}
@@ -343,7 +324,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
           toggleView();
           setViewOpt(!viewOpt);
           setAnnotationOpt(false);
-          setViewOption(false)
+          setViewOption(false);
           if (!viewOpt) dispatch(closeAllAccordions());
         }}
         classes={
@@ -358,7 +339,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
             annotations.map((a, i) => {
               return (
                 <div key={i}>
-                  <Accordion header={a.title} id={a.id}>
+                  <Accordion header={a.title} id={(a.id).toString()}>
                     <div className={styles.annotationWrapper}>
                       {editModeAnnotationId === a.id ? (
                         <EditAnnotation
@@ -373,7 +354,6 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                             paragraphNumber: a.paragraphNumber,
                             substringPosition: a.substringPosition
                           }}
-                          setAnnotations={setAnnotations}
                         />
                       ) : (
                         <ReadAnnotation
@@ -389,7 +369,6 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                             substringPosition: a.substringPosition
                           }}
                           setEditMode={setEditModeAnnotationId}
-                          setAnnotations={setAnnotations}
                         />
                       )}
                     </div>

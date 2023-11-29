@@ -10,6 +10,7 @@ import {
   useEditAnnotationMutation
 } from '../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
+import { useGetAnnotations } from '../../hooks/useGetAnnotations';
 
 type AnnotationNote = {
   titleValue: string;
@@ -21,7 +22,6 @@ type EditAnnotationProps = {
   annotationId?: number;
   data?: AnnotationNote;
   highlighted: any;
-  setAnnotations: any;
 };
 
 type ReadAnnotationProps = {
@@ -29,7 +29,6 @@ type ReadAnnotationProps = {
   data: AnnotationNote;
   highlighted: any;
   setEditMode: any;
-  setAnnotations: any;
 };
 
 type ColorPickerProps = {
@@ -70,13 +69,14 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   annotationId,
   data,
-  highlighted,
-  setAnnotations
+  highlighted
 }) => {
   const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
-  const [addAnnotation] = useAddAnnotationMutation({});
-  const [editAnnotation, { data: annotations, isSuccess: gotAnnotations }] =
+  const [addAnnotation, { data: addded, isSuccess: addedSuccess }] =
+    useAddAnnotationMutation({});
+  const [editAnnotation, { data: annotations, isSuccess: editedSuccess }] =
     useEditAnnotationMutation({});
+  const { getAnnotations } = useGetAnnotations();
   const titleRef = useRef<HTMLInputElement>(null);
   const selectedTextRef = useRef<HTMLTextAreaElement>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
@@ -87,8 +87,8 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   const url = searchParams.get('url');
 
   useEffect(() => {
-    if (gotAnnotations) setAnnotations(annotations);
-  }, [annotations]);
+    if (addedSuccess || editedSuccess) getAnnotations({ url });
+  }, [annotations, addded]);
 
   return (
     <form
@@ -112,7 +112,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             annotationId
           });
         } else {
-          addAnnotation({
+          await addAnnotation({
             title,
             selectedText,
             paragraphNumber: highlighted.paragraphNumber,
@@ -171,15 +171,18 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
   annotationId,
   data,
   highlighted,
-  setEditMode,
-  setAnnotations
+  setEditMode
 }) => {
-  const [deleteAnnotation, { data: annotations, isSuccess: gotAnnotations }] =
+  const [deleteAnnotation, { data: deletedAnnotations, isSuccess: deleted }] =
     useDeleteAnnotationMutation({});
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get('url');
+  const { getAnnotations } = useGetAnnotations();
 
   useEffect(() => {
-    if (gotAnnotations) setAnnotations(annotations);
-  }, [annotations]);
+    console.log('tu');
+    if (deleted) getAnnotations({ url });
+  }, [deletedAnnotations]);
 
   return (
     <div>
@@ -202,6 +205,7 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
           icon={IconType.remove}
           buttonAction={() => {
             deleteAnnotation(annotationId);
+            getAnnotations({ url });
           }}
         />
       </div>
