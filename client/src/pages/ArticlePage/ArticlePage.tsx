@@ -38,7 +38,6 @@ export const ArticlePage: React.FC = () => {
     newParagraph.setAttribute('class', paragraphClasses as string);
 
     const paragraphText = paragraph ? paragraph.textContent : '';
-    // console.log(toHighlight, "tohiglight")
     function checkIndex(index) {
       return toHighlight.find((item) => item?.start === index);
     }

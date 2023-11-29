@@ -10,7 +10,6 @@ import {
 import { IconType } from '../../../components/Icon/Icon';
 import {
   useBookmarkMutation,
-  useLazyGetAnnotationsQuery,
   useGetArticleNotesQuery,
   useUnmarkMutation
 } from '../../../store/api/articleApi';
@@ -121,13 +120,11 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
   } = usePanelState();
   const [searchParams] = useSearchParams();
   const url = searchParams.get('url');
-  const { annotations, setAnnotations, getAnnotations } = useGetAnnotations();
-  // const [annotations, setAnnotations] = useState<any[]>([]);
+  const { annotations, getAnnotations } = useGetAnnotations();
   const dispatch = useDispatch();
 
   useEffect(() => {
     getAnnotations({ url });
-    // if (gotannotations) setAnnotations(fetchedAnnotations);
   }, [isViewModalOpen]);
 
   return (
@@ -339,7 +336,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
             annotations.map((a, i) => {
               return (
                 <div key={i}>
-                  <Accordion header={a.title} id={(a.id).toString()}>
+                  <Accordion header={a.title} id={a.id.toString()}>
                     <div className={styles.annotationWrapper}>
                       {editModeAnnotationId === a.id ? (
                         <EditAnnotation

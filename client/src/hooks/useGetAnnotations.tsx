@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useLazyGetAnnotationsQuery } from '../store/api/articleApi';
-import { ArticlePageDoc } from 'src/types/articles';
 
 type AnnotationAPI = {
   id: number;
@@ -29,8 +27,7 @@ export const useGetAnnotations = () => {
 
   useEffect(() => {
     if (gotannotations) setAnnotations(fetchedAnnotations);
-    console.log("triggered")
   }, [fetchedAnnotations, gotannotations]);
 
-  return { annotations, setAnnotations, getAnnotations };
+  return { annotations, getAnnotations };
 };

@@ -180,7 +180,6 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
   const { getAnnotations } = useGetAnnotations();
 
   useEffect(() => {
-    console.log('tu');
     if (deleted) getAnnotations({ url });
   }, [deletedAnnotations]);
 
