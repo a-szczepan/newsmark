@@ -31,7 +31,7 @@ export const useHighlighter = () => {
           ? selection.anchorOffset + offsetDifference
           : selection.focusOffset + offsetDifference;
 
-        if (selectedText && selectedParagraphNumber && end) {
+        if (selectedText && selectedParagraphNumber !== null && end) {
           setHighlightedData({
             text: selectedText,
             paragraphNumber: selectedParagraphNumber,
