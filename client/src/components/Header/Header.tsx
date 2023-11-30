@@ -6,6 +6,7 @@ import { useWidthChecker } from '../../hooks/useWidthChecker';
 import { Drawer } from '../Drawer/Drawer';
 import classnames from 'classnames';
 import { IconType } from '../Icon/Icon';
+import { useNavigate } from 'react-router-dom';
 
 type HeaderProps = {
   isHomePage?: boolean;
@@ -63,9 +64,10 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const LoggedInHeader = (): JSX.Element => {
+    const navigate = useNavigate();
     return (
       <div className={styles.header}>
-        <Logo /><IconButton buttonAction={() => {}} icon={IconType.user} lightVariant round classes={[styles.userButton]}/>
+        <Logo /><IconButton buttonAction={() => navigate('/user')} icon={IconType.user} lightVariant round classes={[styles.userButton]}/>
       </div>
     );
   };

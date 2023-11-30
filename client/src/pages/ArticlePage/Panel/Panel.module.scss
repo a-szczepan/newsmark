@@ -1,49 +1,7 @@
 @use '../../../styles/global' as global;
 
-@mixin clickedIconButton(
-  $color: var(--color-light1),
-  $fillColor: var(--color-light1),
-  $circleColor: var(--color-black)
-) {
-  & .bookmarkClicked,
-  & .annotationClicked {
-    & svg {
-      fill: $fillColor;
-      color: $color;
-    }
-  }
-
-  & .viewClicked {
-    & svg {
-      fill: $fillColor;
-
-      & circle {
-        fill: $circleColor;
-      }
-    }
-  }
-}
-
 .mobilePanel {
-  @include clickedIconButton(
-    var(--color-light1),
-    var(--color-light1),
-    var(--color-black)
-  );
-
-  height: 48px;
-  padding: 2px 0;
-  width: 100%;
-  position: sticky;
-  bottom: 0;
-  z-index: 100;
-  background-color: var(--color-black);
-  font-size: 0.6rem;
-  color: var(--color-light1);
-  font-weight: 300;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
+  @include global.mobilePanel;
 
   .actionBtn {
     width: 62px;
@@ -56,21 +14,17 @@
       background-color: inherit;
     }
   }
-
-  @media screen and (min-width: 470px) {
-    gap: 56px;
-  }
 }
 
 .optionsSection {
-  @include clickedIconButton(
+  @include global.clickedIconButton(
     var(--color-black),
     var(--color-black),
     var(--color-light1)
   );
 
   display: flex;
-  position:sticky;
+  position: sticky;
   top: 88px;
   height: 100%;
   flex-direction: column;
@@ -120,4 +74,3 @@
     height: auto;
   }
 }
-
