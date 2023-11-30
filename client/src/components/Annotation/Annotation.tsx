@@ -22,7 +22,7 @@ type AnnotationNote = {
 
 type EditAnnotationProps = {
   annotationId?: number;
-  data?: AnnotationNote;
+  formData?: AnnotationNote;
   highlighted: any;
   isAnnotationVisible?: any;
 };
@@ -71,22 +71,24 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   annotationId,
-  data,
+  formData,
   highlighted,
   isAnnotationVisible
 }) => {
-  const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
   const [addAnnotation, { data: addded, isSuccess: addedSuccess }] =
     useAddAnnotationMutation({});
   const [editAnnotation, { data: annotations, isSuccess: editedSuccess }] =
     useEditAnnotationMutation({});
   const { getAnnotations } = useGetAnnotations();
+  const [data, setData] = useState(formData)
+  const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
   const titleRef = useRef<HTMLInputElement>(null);
   const selectedTextRef = useRef<HTMLTextAreaElement>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
   const [selectedColor, setSelectedColor] = useState(
     data ? data.colorValue : 'green'
   );
+
   const [searchParams] = useSearchParams();
   const url = searchParams.get('url');
   const dispatch = useDispatch();
@@ -115,6 +117,13 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
               articleUrl: url
             },
             annotationId
+          }).then(() => {
+            if (isAnnotationVisible) {
+              isAnnotationVisible(false);
+            } else {
+              dispatch(closeAnnotationModal())
+            }
+            setData(undefined);
           });
         } else {
           await addAnnotation({
@@ -131,6 +140,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             } else {
               dispatch(closeAnnotationModal())
             }
+            setData(undefined);
           });
         }
       }}

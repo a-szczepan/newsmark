@@ -156,7 +156,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                       <div className={styles.annotationWrapper}>
                         {editModeAnnotationId === a.id ? (
                           <EditAnnotation
-                            data={{
+                            formData={{
                               titleValue: a.title,
                               colorValue: a.color,
                               noteValue: a.note
@@ -345,7 +345,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                       {editModeAnnotationId === a.id ? (
                         <EditAnnotation
                           annotationId={a.id}
-                          data={{
+                          formData={{
                             titleValue: a.title,
                             colorValue: a.color,
                             noteValue: a.note
