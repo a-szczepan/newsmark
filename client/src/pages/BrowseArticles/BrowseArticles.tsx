@@ -14,6 +14,7 @@ import { Tags, Typography } from '../../components/Typography/Typography';
 import { Layout } from '../../components/Layout/Layout';
 import { Footer } from '../../components/Footer/Footer';
 import { useNavigate } from 'react-router-dom';
+import { Loader } from '../../components/Loader/Loader';
 
 //DEV NOTE: Create divider component - one for whole app
 
@@ -58,7 +59,7 @@ const BrowseArticles: React.FC = () => {
     return (
       <article className={styles.articleCard}>
         <div
-        className={styles.wrapper}
+          className={styles.wrapper}
           onClick={() => navigate(`/article?url=${url}`)}
         >
           {image.length > 0 && <img src={image} alt={title} />}
@@ -88,6 +89,7 @@ const BrowseArticles: React.FC = () => {
               ))}
             </section>
           )}
+          {!articles && <Loader />}
         </div>
       </Layout>
       <Footer />

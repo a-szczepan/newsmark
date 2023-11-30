@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux';
 import { openViewModal } from '../../store/slices/viewModalSlice';
 import { toggleAccordion } from '../../store/slices/accordionSlice';
 import { useGetAnnotations } from '../../hooks/useGetAnnotations';
+import { Loader } from '../../components/Loader/Loader';
+import { Footer } from '../../components/Footer/Footer';
 
 export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -180,6 +182,7 @@ export const ArticlePage: React.FC = () => {
         <Layout>
           <div className={styles.articleSectionWrapper}>
             {articleData && articleSection}
+            {!articleData && <Loader />}
             <hr />
             {!isMobile && (
               <DesktopPanel
@@ -191,6 +194,7 @@ export const ArticlePage: React.FC = () => {
         </Layout>
         {isMobile && <MobilePanel highlighted={highlighted} />}
       </div>
+      <Footer />
     </>
   );
 };
