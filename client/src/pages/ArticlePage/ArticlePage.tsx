@@ -194,7 +194,7 @@ export const ArticlePage: React.FC = () => {
         </Layout>
         {isMobile && <MobilePanel highlighted={highlighted} />}
       </div>
-      <Footer />
+      {!isMobile && <Footer />}
     </>
   );
 };
