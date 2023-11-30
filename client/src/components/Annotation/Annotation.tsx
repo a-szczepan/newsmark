@@ -11,6 +11,8 @@ import {
 } from '../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
 import { useGetAnnotations } from '../../hooks/useGetAnnotations';
+import { closeAnnotationModal } from '../../store/slices/annotationModalSlice';
+import { useDispatch } from 'react-redux';
 
 type AnnotationNote = {
   titleValue: string;
@@ -22,6 +24,7 @@ type EditAnnotationProps = {
   annotationId?: number;
   data?: AnnotationNote;
   highlighted: any;
+  isAnnotationVisible?: any;
 };
 
 type ReadAnnotationProps = {
@@ -69,7 +72,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   annotationId,
   data,
-  highlighted
+  highlighted,
+  isAnnotationVisible
 }) => {
   const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
   const [addAnnotation, { data: addded, isSuccess: addedSuccess }] =
@@ -85,6 +89,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   );
   const [searchParams] = useSearchParams();
   const url = searchParams.get('url');
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (addedSuccess || editedSuccess) getAnnotations({ url });
@@ -120,6 +125,12 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             color: selectedColor,
             note,
             articleUrl: url
+          }).then(() => {
+            if (isAnnotationVisible) {
+              isAnnotationVisible(false);
+            } else {
+              dispatch(closeAnnotationModal())
+            }
           });
         }
       }}

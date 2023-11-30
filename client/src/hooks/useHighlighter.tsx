@@ -44,10 +44,9 @@ export const useHighlighter = () => {
       }
     };
 
-    document.addEventListener('mouseup', saveSelection);
-
+    document.addEventListener('focusin', saveSelection);
     return () => {
-      document.removeEventListener('mouseup', saveSelection);
+      document.removeEventListener('focusin', saveSelection);
     };
   }, []);
 

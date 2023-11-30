@@ -57,6 +57,7 @@ const usePanelState = () => {
   const dispatch = useDispatch();
 
   const triggerAnnotationModal = () => {
+
     if (isAnnotationModalOpen) {
       dispatch(closeAnnotationModal());
     } else {
@@ -98,6 +99,8 @@ const usePanelState = () => {
   return {
     bookmarkOpt,
     editModeAnnotationId,
+    isAnnotationModalOpen,
+    isViewModalOpen,
     setEditModeAnnotationId,
     toggleBookmark,
     toggleAnnotate,
@@ -106,14 +109,12 @@ const usePanelState = () => {
 };
 
 export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
-  const isAnnotationModalOpen = useSelector(
-    (state: any) => state.annotationModal.isOpened
-  );
-  const isViewModalOpen = useSelector((state: any) => state.viewModal.isOpened);
   const {
     bookmarkOpt,
     editModeAnnotationId,
     setEditModeAnnotationId,
+    isAnnotationModalOpen,
+    isViewModalOpen,
     toggleBookmark,
     toggleAnnotate,
     toggleView
@@ -307,7 +308,10 @@ export const DesktopPanel: React.FC<PanelProps> = ({
       {annotationOpt && (
         <div className="container">
           <div className={styles.annotationWrapper}>
-            <EditAnnotation highlighted={highlighted} />
+            <EditAnnotation
+              highlighted={highlighted}
+              isAnnotationVisible={setAnnotationOpt}
+            />
           </div>
         </div>
       )}
@@ -351,6 +355,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                             paragraphNumber: a.paragraphNumber,
                             substringPosition: a.substringPosition
                           }}
+                          isAnnotationVisible={setAnnotationOpt}
                         />
                       ) : (
                         <ReadAnnotation
