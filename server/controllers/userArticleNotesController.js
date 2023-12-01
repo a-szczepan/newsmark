@@ -8,9 +8,13 @@ const Annotation = require("../models/annotationModel")(
   db.Sequelize
 );
 
+const Article = require("../models/articleModel")(db.sequelize, db.Sequelize);
+
 const findNote = async (query) => await UserNotes.findOne(query);
 
 const findAnnotations = async (query) => await Annotation.findAll(query);
+
+const findAllNotes = async (query) => await UserNotes.findAll(query);
 
 const createAnnotation = async (data) => {
   try {
@@ -47,7 +51,7 @@ exports.addNote = async (req, res) => {
     articleUrl,
   } = req.body;
   const { email } = res.locals.user;
-  const url = articleUrl.replace(/[%]/g, "/");
+  const url = articleUrl;
 
   let userNote = await findNote({
     where: { articleUrl: url, userEmail: email },
@@ -103,7 +107,7 @@ exports.addNote = async (req, res) => {
 };
 
 exports.getArticleNotes = async (req, res) => {
-  const url = req.query.url.replace(/[%]/g, "/");
+  const url = req.query.url;
   const { email } = res.locals.user;
 
   const userNote = await findNote({
@@ -117,7 +121,7 @@ exports.getArticleNotes = async (req, res) => {
 };
 
 exports.getArticleAnnotations = async (req, res) => {
-  const url = req.query.url.replace(/[%]/g, "/");
+  const url = req.query.url;
   const { email } = res.locals.user;
 
   const articleAnnotations = await findAnnotations({
@@ -198,7 +202,7 @@ exports.deleteAnnotation = async (req, res) => {
 };
 
 exports.bookmark = async (req, res) => {
-  const url = req.query.url.replace(/[%2F]/g, "/");
+  const url = req.query.url;
   const { email } = res.locals.user;
 
   let userNote = await findNote({
@@ -230,7 +234,7 @@ exports.bookmark = async (req, res) => {
 };
 
 exports.unmark = async (req, res) => {
-  const url = req.query.url.replace(/[%2F]/g, "/");
+  const url = req.query.url;
   const { email } = res.locals.user;
   await updateUserNote(
     { isBookmarked: false },
@@ -242,4 +246,61 @@ exports.unmark = async (req, res) => {
     });
   });
   return res.status(200).send(userNote);
+};
+
+exports.getAllUsersBookmarks = async (req, res) => {
+  const { email } = res.locals.user;
+
+  try {
+    let userBookmarks = await findAllNotes({
+      where: { userEmail: email, isBookmarked: true },
+      raw: true,
+    });
+
+    userBookmarks = await Promise.all(
+      userBookmarks.map(async ({ userEmail, articleUrl }) => {
+        const article = await Article.findOne({
+          where: { url: articleUrl },
+          raw: true,
+        });
+
+        if (article) {
+          return {
+            userEmail,
+            articleUrl,
+            articleTitle: article.title,
+            articleSummary: article.summary,
+            imageURL: article.imageURL
+          };
+        } else {
+          console.log(`Article not found for URL: ${articleUrl}`);
+          return null;
+        }
+      })
+    );
+
+    userBookmarks = userBookmarks.filter((bookmark) => bookmark !== null);
+
+    if (userBookmarks.length === 0)
+      return res.status(404).send({ message: "Not found" });
+
+    return res.status(200).send(userBookmarks);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+exports.getAllUsersAnnotations = async (req, res) => {
+  const { email } = res.locals.user;
+
+  const userAnnotations = await findAnnotations({
+    where: { userEmail: email },
+    raw: true,
+  });
+
+  if (userAnnotations === null)
+    return res.status(404).send({ message: "Not found" });
+
+  return res.status(200).send(userAnnotations);
 };

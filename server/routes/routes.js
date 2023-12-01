@@ -27,6 +27,17 @@ exports.getPaths = () => {
   );
   router.post("/api/logout", requireUser, session.invalidateSession);
 
+  router.get(
+    "/api/user/bookmarks",
+    requireUser,
+    articlenote.getAllUsersBookmarks
+  );
+  router.get(
+    "/api/user/allannotations",
+    requireUser,
+    articlenote.getAllUsersAnnotations
+  );
+
   router.get("/api/article", requireUser, article.getArticle);
 
   router.get("/api/articlenote", requireUser, articlenote.getArticleNotes);

@@ -10,7 +10,7 @@ const articleApi = api.injectEndpoints({
     getArticle: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/article?url=${query.url}`,
+          url: `http://localhost:5000/api/article?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -41,7 +41,7 @@ const articleApi = api.injectEndpoints({
     getArticleNotes: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/articlenote?url=${query.url}`,
+          url: `http://localhost:5000/api/articlenote?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -51,7 +51,7 @@ const articleApi = api.injectEndpoints({
     getAnnotations: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/articleannotation?url=${query.url}`,
+          url: `http://localhost:5000/api/articleannotation?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -104,7 +104,7 @@ const articleApi = api.injectEndpoints({
       query: (query) => {
         console.log(query);
         return {
-          url: `/articlenote/bookmark?url=${query.url.replaceAll('/', '%2F')}`,
+          url: `/articlenote/bookmark?url=${encodeURIComponent(query.url)}`,
           method: 'PUT',
           credentials: 'include',
           mode: 'cors'
@@ -114,7 +114,7 @@ const articleApi = api.injectEndpoints({
     unmark: builder.mutation({
       query: (query) => {
         return {
-          url: `/articlenote/unmark?url=${query.url.replaceAll('/', '%2F')}`,
+          url: `/articlenote/unmark?url=${encodeURIComponent(query.url)}`,
           method: 'PUT',
           credentials: 'include',
           mode: 'cors'

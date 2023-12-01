@@ -6,7 +6,7 @@ const { parseHTML } = require("../utils/parseHTML.utils");
 const findArticle = async (query) => await Article.findOne(query);
 
 exports.getArticle = async (req, res) => {
-  const url = req.query.url.replace(/[%]/g, "/");
+  const url = req.query.url;
 
   const article = await findArticle({
     where: { url },

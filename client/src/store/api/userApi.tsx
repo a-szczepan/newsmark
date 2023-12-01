@@ -42,7 +42,27 @@ const userApi = api.injectEndpoints({
         credentials: 'include',
         mode: 'cors'
       })
-    })
+    }),
+    getAllBookmarks: builder.query({
+      query: () => {
+        return {
+          url: '/user/bookmarks',
+          method: 'GET',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
+    }),
+    getAllAnnotations: builder.query({
+      query: () => {
+        return {
+          url: '/user/allannotations',
+          method: 'GET',
+          credentials: 'include',
+          mode: 'cors'
+        };
+      }
+    }),
   }),
   overrideExisting: false
 });
@@ -51,5 +71,7 @@ export const {
   useGetUserQuery,
   useLoginWithPasswordMutation,
   useRegisterWithPasswordMutation,
-  useLogoutMutation
+  useLogoutMutation,
+  useGetAllBookmarksQuery,
+  useGetAllAnnotationsQuery
 } = userApi;
