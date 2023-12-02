@@ -270,7 +270,7 @@ exports.getAllUsersBookmarks = async (req, res) => {
             articleUrl,
             articleTitle: article.title,
             articleSummary: article.summary,
-            imageURL: article.imageURL
+            imageURL: article.imageURL,
           };
         } else {
           console.log(`Article not found for URL: ${articleUrl}`);
@@ -294,12 +294,51 @@ exports.getAllUsersBookmarks = async (req, res) => {
 exports.getAllUsersAnnotations = async (req, res) => {
   const { email } = res.locals.user;
 
-  const userAnnotations = await findAnnotations({
+  let userAnnotations = await findAnnotations({
     where: { userEmail: email },
     raw: true,
   });
 
-  if (userAnnotations === null)
+  userAnnotations = userAnnotations.reduce((acc, annotation) => {
+    const existingArticle = acc.find(
+      (item) => item.articleUrl === annotation.articleUrl
+    );
+
+    if (existingArticle) {
+      existingArticle.annotations.push(annotation);
+    } else {
+      acc.push({
+        articleUrl: annotation.articleUrl,
+        annotations: [annotation],
+      });
+    }
+
+    return acc;
+  }, []);
+
+  userAnnotations = await Promise.all(
+    userAnnotations.map(async ({ articleUrl, annotations }) => {
+      const article = await Article.findOne({
+        where: { url: articleUrl },
+        raw: true,
+      });
+
+      if (article) {
+        return {
+          articleUrl,
+          annotations,
+          articleTitle: article.title,
+        };
+      } else {
+        console.log(`Article not found for URL: ${articleUrl}`);
+        return null;
+      }
+    })
+  );
+
+  userAnnotations = userAnnotations.filter((annotation) => annotation !== null);
+
+  if (userAnnotations.length === 0)
     return res.status(404).send({ message: "Not found" });
 
   return res.status(200).send(userAnnotations);
