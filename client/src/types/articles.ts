@@ -108,13 +108,15 @@ export interface ArticleAnnotation {
   title: string;
   selectedText: string;
   paragraphNumber: string;
-  substringPosition: {
-    start: number;
-    end: number;
-  };
+  substringPosition: SubstringPosition;
   color: string;
   note: string;
 }
+
+type SubstringPosition = {
+  start: number;
+  end: number;
+};
 
 interface Multimedia {
   url: string;

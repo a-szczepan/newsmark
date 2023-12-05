@@ -9,12 +9,14 @@ import { toggleAccordion } from '../../store/slices/accordionSlice';
 type AccordionProps = PropsWithChildren<{
   id?: string;
   header: string;
+  boldHeader?: boolean;
   opened?: boolean;
 }>;
 
 export const Accordion: React.FC<AccordionProps> = ({
   id,
   header,
+  boldHeader = false,
   children
 }) => {
   const isOpen = useSelector((state: any) => state?.accordion[id!]);
@@ -26,7 +28,12 @@ export const Accordion: React.FC<AccordionProps> = ({
   return (
     <div className={styles.accordion}>
       <div className={styles.accordionHeader}>
-        <Typography styleVariant="body">• {header}</Typography>
+        <Typography
+          styleVariant="body"
+          {...(boldHeader && { classes: [styles.boldHeader] })}
+        >
+          {header}
+        </Typography>
         <IconButton
           id={id}
           icon={isOpen ? IconType.chevronUp : IconType.chevronDown}

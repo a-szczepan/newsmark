@@ -57,7 +57,6 @@ const usePanelState = () => {
   const dispatch = useDispatch();
 
   const triggerAnnotationModal = () => {
-
     if (isAnnotationModalOpen) {
       dispatch(closeAnnotationModal());
     } else {
@@ -137,7 +136,13 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           </Typography>
           <hr />
           <div className={styles.annotationWrapper}>
-            <EditAnnotation highlighted={highlighted} />
+            <EditAnnotation
+              url={url?.toString()!}
+              highlighted={highlighted}
+              handleAnnotationEditComplete={() =>
+                dispatch(closeAnnotationModal())
+              }
+            />
           </div>
         </MobileModal>
       )}
@@ -156,6 +161,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                       <div className={styles.annotationWrapper}>
                         {editModeAnnotationId === a.id ? (
                           <EditAnnotation
+                            url={url?.toString()!}
                             formData={{
                               titleValue: a.title,
                               colorValue: a.color,
@@ -167,6 +173,9 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                               substringPosition: a.substringPosition
                             }}
                             annotationId={a.id}
+                            handleAnnotationEditComplete={() =>
+                              dispatch(closeViewModal())
+                            }
                           />
                         ) : (
                           <ReadAnnotation
@@ -181,6 +190,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                               substringPosition: a.substringPosition
                             }}
                             setEditMode={setEditModeAnnotationId}
+                            handleAnnotationDeleteComplete={()=> getAnnotations({ url })}
                             annotationId={a.id}
                           />
                         )}
@@ -223,7 +233,6 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
           Annotation
         </IconButton>
         <IconButton
-          id="test-id"
           icon={IconType.eye}
           buttonAction={() => {
             toggleView();
@@ -309,8 +318,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({
         <div className="container">
           <div className={styles.annotationWrapper}>
             <EditAnnotation
+              url={url?.toString()!}
               highlighted={highlighted}
-              isAnnotationVisible={setAnnotationOpt}
+              handleAnnotationEditComplete={() => {
+                setAnnotationOpt(false);
+              }}
             />
           </div>
         </div>
@@ -344,6 +356,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                     <div className={styles.annotationWrapper}>
                       {editModeAnnotationId === a.id ? (
                         <EditAnnotation
+                          url={url?.toString()!}
                           annotationId={a.id}
                           formData={{
                             titleValue: a.title,
@@ -355,7 +368,9 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                             paragraphNumber: a.paragraphNumber,
                             substringPosition: a.substringPosition
                           }}
-                          isAnnotationVisible={setAnnotationOpt}
+                          handleAnnotationEditComplete={() => {
+                            setAnnotationOpt(false);
+                          }}
                         />
                       ) : (
                         <ReadAnnotation
@@ -371,6 +386,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                             substringPosition: a.substringPosition
                           }}
                           setEditMode={setEditModeAnnotationId}
+                          handleAnnotationDeleteComplete={()=> getAnnotations({ url })}
                         />
                       )}
                     </div>

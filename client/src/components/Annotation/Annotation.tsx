@@ -11,8 +11,6 @@ import {
 } from '../../store/api/articleApi';
 import { useSearchParams } from 'react-router-dom';
 import { useGetAnnotations } from '../../hooks/useGetAnnotations';
-import { closeAnnotationModal } from '../../store/slices/annotationModalSlice';
-import { useDispatch } from 'react-redux';
 
 type AnnotationNote = {
   titleValue: string;
@@ -22,9 +20,10 @@ type AnnotationNote = {
 
 type EditAnnotationProps = {
   annotationId?: number;
+  url: string;
   formData?: AnnotationNote;
   highlighted: any;
-  isAnnotationVisible?: any;
+  handleAnnotationEditComplete: any;
 };
 
 type ReadAnnotationProps = {
@@ -32,6 +31,7 @@ type ReadAnnotationProps = {
   data: AnnotationNote;
   highlighted: any;
   setEditMode: any;
+  handleAnnotationDeleteComplete: any;
 };
 
 type ColorPickerProps = {
@@ -71,16 +71,17 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
 export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   annotationId,
+  url,
   formData,
   highlighted,
-  isAnnotationVisible
+  handleAnnotationEditComplete
 }) => {
   const [addAnnotation, { data: addded, isSuccess: addedSuccess }] =
     useAddAnnotationMutation({});
   const [editAnnotation, { data: annotations, isSuccess: editedSuccess }] =
     useEditAnnotationMutation({});
   const { getAnnotations } = useGetAnnotations();
-  const [data, setData] = useState(formData)
+  const [data, setData] = useState(formData);
   const [addNote, setAddNote] = useState(data?.noteValue ? true : false);
   const titleRef = useRef<HTMLInputElement>(null);
   const selectedTextRef = useRef<HTMLTextAreaElement>(null);
@@ -88,10 +89,6 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
   const [selectedColor, setSelectedColor] = useState(
     data ? data.colorValue : 'green'
   );
-
-  const [searchParams] = useSearchParams();
-  const url = searchParams.get('url');
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (addedSuccess || editedSuccess) getAnnotations({ url });
@@ -118,11 +115,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             },
             annotationId
           }).then(() => {
-            if (isAnnotationVisible) {
-              isAnnotationVisible(false);
-            } else {
-              dispatch(closeAnnotationModal())
-            }
+            handleAnnotationEditComplete();
             setData(undefined);
           });
         } else {
@@ -135,11 +128,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             note,
             articleUrl: url
           }).then(() => {
-            if (isAnnotationVisible) {
-              isAnnotationVisible(false);
-            } else {
-              dispatch(closeAnnotationModal())
-            }
+            handleAnnotationEditComplete();
             setData(undefined);
           });
         }
@@ -192,6 +181,7 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
   annotationId,
   data,
   highlighted,
+  handleAnnotationDeleteComplete,
   setEditMode
 }) => {
   const [deleteAnnotation, { data: deletedAnnotations, isSuccess: deleted }] =
@@ -203,17 +193,18 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
   useEffect(() => {
     if (deleted) getAnnotations({ url });
   }, [deletedAnnotations]);
-
   return (
     <div>
       <Textarea name="selected" readOnly value={highlighted.text} />
-      <Textarea
-        name="note"
-        label="Note"
-        rows={5}
-        readOnly
-        value={data.noteValue}
-      />
+      {data.noteValue && (
+        <Textarea
+          name="note"
+          label="Note"
+          rows={5}
+          readOnly
+          value={data.noteValue}
+        />
+      )}
       <div className={styles.iconButtonsGroup}>
         <IconButton
           icon={IconType.edit}
@@ -224,8 +215,9 @@ export const ReadAnnotation: React.FC<ReadAnnotationProps> = ({
         <IconButton
           icon={IconType.remove}
           buttonAction={() => {
-            deleteAnnotation(annotationId);
-            getAnnotations({ url });
+            deleteAnnotation(annotationId).then(() =>
+              handleAnnotationDeleteComplete()
+            );
           }}
         />
       </div>

@@ -12,6 +12,10 @@
     }
   }
 
+  & .boldHeader {
+    font-weight: 600;
+  }
+
   & .content {
     padding: 16px;
     display: flex;

@@ -1,3 +1,4 @@
+import { AllUserAnnotationsAPI, AllUserBookmarksAPI } from '../../types/userNotes';
 import { api } from './apiService';
 
 const userApi = api.injectEndpoints({
@@ -51,6 +52,11 @@ const userApi = api.injectEndpoints({
           credentials: 'include',
           mode: 'cors'
         };
+      },
+      transformResponse: (
+        data: AllUserBookmarksAPI[]
+      ): AllUserBookmarksAPI[] => {
+        return data;
       }
     }),
     getAllAnnotations: builder.query({
@@ -61,8 +67,13 @@ const userApi = api.injectEndpoints({
           credentials: 'include',
           mode: 'cors'
         };
-      }
-    }),
+      },
+      transformResponse: (
+        data: AllUserAnnotationsAPI[]
+      ): AllUserAnnotationsAPI[] => {
+        return data;
+      },
+    })
   }),
   overrideExisting: false
 });
@@ -72,6 +83,7 @@ export const {
   useLoginWithPasswordMutation,
   useRegisterWithPasswordMutation,
   useLogoutMutation,
-  useGetAllBookmarksQuery,
-  useGetAllAnnotationsQuery
+  useLazyGetAllAnnotationsQuery,
+  useLazyGetAllBookmarksQuery,
+  useLazyGetUserQuery
 } = userApi;
