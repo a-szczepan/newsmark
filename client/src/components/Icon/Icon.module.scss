@@ -1,4 +1,6 @@
 .small {
+  margin-top: auto;
+  margin-bottom: auto;
   svg {
     margin: auto;
     height: 16px;
@@ -7,6 +9,8 @@
 }
 
 .medium {
+  margin-top: auto;
+  margin-bottom: auto;
   & svg {
     margin: auto;
     height: 24px;
@@ -15,6 +19,8 @@
 }
 
 .large {
+  margin-top: auto;
+  margin-bottom: auto;
   svg {
     margin: auto;
     height: 32px;
