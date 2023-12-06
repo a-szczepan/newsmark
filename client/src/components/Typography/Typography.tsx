@@ -34,6 +34,7 @@ type TypographyProps = PropsWithChildren<{
   classes?: string[];
   styleVariant?: TextVariant;
   tag?: Tags;
+  bold?: boolean;
 }>;
 
 export const Typography: React.FC<TypographyProps> = ({
@@ -41,11 +42,12 @@ export const Typography: React.FC<TypographyProps> = ({
   classes = [],
   styleVariant = 'p',
   tag,
+  bold,
   children
 }): JSX.Element => {
   const Tag = tag ? Tags[tag] : TextVariantMap[styleVariant];
   return (
-    <Tag id={id} className={classnames(styles[styleVariant], ...classes)}>
+    <Tag id={id} className={classnames(styles[styleVariant],{[styles.bold]: bold}, ...classes)}>
       {children}
     </Tag>
   );
