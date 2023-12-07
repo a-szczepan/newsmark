@@ -1,4 +1,7 @@
-import { AllUserAnnotationsAPI, AllUserBookmarksAPI } from '../../types/userNotes';
+import {
+  AllUserAnnotationsAPI,
+  AllUserBookmarksAPI
+} from '../../types/userNotes';
 import { api } from './apiService';
 
 const userApi = api.injectEndpoints({
@@ -45,9 +48,11 @@ const userApi = api.injectEndpoints({
       })
     }),
     getAllBookmarks: builder.query({
-      query: () => {
+      query: (params) => {
         return {
-          url: '/user/bookmarks',
+          url: `/user/bookmarks${
+            params.phrase ? `?phrase=${params.phrase}` : ''
+          }`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -60,9 +65,11 @@ const userApi = api.injectEndpoints({
       }
     }),
     getAllAnnotations: builder.query({
-      query: () => {
+      query: (params) => {
         return {
-          url: '/user/allannotations',
+          url: `/user/allannotations${
+            params.phrase ? `?phrase=${params.phrase}` : ''
+          }`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -72,7 +79,7 @@ const userApi = api.injectEndpoints({
         data: AllUserAnnotationsAPI[]
       ): AllUserAnnotationsAPI[] => {
         return data;
-      },
+      }
     })
   }),
   overrideExisting: false

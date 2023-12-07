@@ -19,30 +19,56 @@ import { SearchInput } from '../../components/Input/Input';
 import { Tags, Typography } from '../../components/Typography/Typography';
 import { Loader } from '../../components/Loader/Loader';
 import { Footer } from '../../components/Footer/Footer';
+import {
+  AllUserAnnotationsAPI,
+  AllUserBookmarksAPI
+} from '../../types/userNotes';
 
 export const useGetUserPageContent = () => {
-  const [fetchAnnotations, { data: annotations }] =
+  const [annotations, setAnnotations] = useState<AllUserAnnotationsAPI[] | []>(
+    []
+  );
+  const [bookmarks, setBookmarks] = useState<AllUserBookmarksAPI[] | []>([]);
+  const [fetchAnnotations, { data: annotationsData, error: annotationsError }] =
     useLazyGetAllAnnotationsQuery();
-  const [fetchBookmarks, { data: bookmarks }] = useLazyGetAllBookmarksQuery({});
+  const [fetchBookmarks, { data: bookmarksData, error: bookmarkError }] =
+    useLazyGetAllBookmarksQuery({});
 
   useEffect(() => {
     fetchAnnotations({}).then(() => fetchBookmarks({}));
   }, []);
 
+  useEffect(() => {
+    setAnnotations(annotationsData ? annotationsData : []);
+    setBookmarks(bookmarksData ? bookmarksData : []);
+  }, [annotationsData, bookmarksData]);
+
+  useEffect(() => {
+    if (annotationsError) setAnnotations([]);
+    if (bookmarkError) setBookmarks([]);
+  }, [annotationsError, bookmarkError]);
+
   const triggerRefetchAnnotations = () => {
     fetchAnnotations({});
+    setAnnotations(annotationsData ? annotationsData : []);
+  };
+
+  const searchNotes = (phrase: string) => {
+    console.log(phrase);
+    fetchAnnotations({ phrase }).then(() => fetchBookmarks({ phrase }));
   };
 
   return {
     annotations,
     bookmarks,
-    triggerRefetchAnnotations
+    triggerRefetchAnnotations,
+    searchNotes
   };
 };
 
 export const UserPage: React.FC = () => {
   const isMobile = useWidthChecker() <= 768 ? true : false;
-  const { annotations, bookmarks, triggerRefetchAnnotations } =
+  const { annotations, bookmarks, triggerRefetchAnnotations, searchNotes } =
     useGetUserPageContent();
 
   const [activeView, setActiveView] = useState<'bookmarks' | 'annotations'>(
@@ -246,7 +272,7 @@ export const UserPage: React.FC = () => {
             </Typography>
             <div className={styles.searchWrapper}>
               <SearchInput
-                onSubmitAction={() => {}}
+                onSubmitAction={searchNotes}
                 classes={[styles.search]}
               />
             </div>

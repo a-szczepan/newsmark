@@ -16,6 +16,24 @@ const findAnnotations = async (query) => await Annotation.findAll(query);
 
 const findAllNotes = async (query) => await UserNotes.findAll(query);
 
+const filterAnnotationsListByPhrase = (data, phrase) => {
+  const lowercasedPhrase = phrase.toLowerCase();
+
+  return data.filter((item) => {
+    const articleTitleContainsPhrase = item.articleTitle
+      .toLowerCase()
+      .includes(lowercasedPhrase);
+    const annotationContainsPhrase = item.annotations.some(
+      (annotation) =>
+        annotation.title.toLowerCase().includes(lowercasedPhrase) ||
+        annotation.selectedText.toLowerCase().includes(lowercasedPhrase) ||
+        annotation.note.toLowerCase().includes(lowercasedPhrase)
+    );
+
+    return articleTitleContainsPhrase || annotationContainsPhrase;
+  });
+};
+
 const createAnnotation = async (data) => {
   try {
     const newAnnotation = await Annotation.create({ ...data, valid: true });
@@ -250,6 +268,7 @@ exports.unmark = async (req, res) => {
 
 exports.getAllUsersBookmarks = async (req, res) => {
   const { email } = res.locals.user;
+  const phrase = req.query.phrase;
 
   try {
     let userBookmarks = await findAllNotes({
@@ -281,6 +300,19 @@ exports.getAllUsersBookmarks = async (req, res) => {
 
     userBookmarks = userBookmarks.filter((bookmark) => bookmark !== null);
 
+    if (phrase)
+      userBookmarks = userBookmarks.filter((bookmark) => {
+        const lowercasedPhrase = phrase?.toLowerCase();
+        const articleTitleContainsPhrase = bookmark?.articleTitle
+          .toLowerCase()
+          .includes(lowercasedPhrase);
+        const articleSummaryContainsPhrase = bookmark.articleSummary
+          ?.toLowerCase()
+          .includes(lowercasedPhrase);
+
+        return articleTitleContainsPhrase || articleSummaryContainsPhrase;
+      });
+
     if (userBookmarks.length === 0)
       return res.status(404).send({ message: "Not found" });
 
@@ -293,6 +325,7 @@ exports.getAllUsersBookmarks = async (req, res) => {
 
 exports.getAllUsersAnnotations = async (req, res) => {
   const { email } = res.locals.user;
+  const phrase = req.query.phrase;
 
   let userAnnotations = await findAnnotations({
     where: { userEmail: email },
@@ -337,6 +370,9 @@ exports.getAllUsersAnnotations = async (req, res) => {
   );
 
   userAnnotations = userAnnotations.filter((annotation) => annotation !== null);
+
+  if (phrase)
+    userAnnotations = filterAnnotationsListByPhrase(userAnnotations, phrase);
 
   if (userAnnotations.length === 0)
     return res.status(404).send({ message: "Not found" });
