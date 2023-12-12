@@ -12,34 +12,60 @@ export const useHighlighter = () => {
 
   useEffect(() => {
     const saveSelection = () => {
-      const selection = window.getSelection();
+      let selection = window.getSelection();
+
       const anchorNode = selection?.anchorNode;
-      const parentNode = anchorNode?.parentNode;
+      const focusNode = selection?.focusNode;
 
-      if (selection && parentNode) {
+      const multiparagraph = isMultipleParagraphsSelection(
+        anchorNode!,
+        focusNode!
+      );
+
+      if (multiparagraph && selection) {
+        const anchorParentNode = anchorNode?.parentNode!;
+        const focusParentNode = focusNode?.parentNode!;
         const selectedText = selection.toString();
-        const selectedParagraphNumber = findParagraphNumber(parentNode);
-        const offsetDifference = getSubstringPosition(
-          parentNode.textContent,
-          selection?.anchorNode?.textContent
-        );
 
-        const start = isBackwards()
-          ? selection.focusOffset + offsetDifference
-          : selection.anchorOffset + offsetDifference;
-        const end = isBackwards()
-          ? selection.anchorOffset + offsetDifference
-          : selection.focusOffset + offsetDifference;
+        //  uncomment!!!! do not remove
+        // if (selectedText && selectedParagraphNumber !== null) {
+        //   setHighlightedData({
+        //     text: selectedText,
+        //     paragraphNumber: selectedParagraphNumber,
+        //     substringPosition: findStartAndEnd(
+        //       selectedText,
+        //       anchorParentNode,
+        //       focusParentNode
+        //     )
+        //   });
+        // }
+      } else {
+        const parentNode = anchorNode?.parentNode;
+        if (selection && parentNode) {
+          const selectedText = selection.toString();
+          const selectedParagraphNumber = findParagraphNumber(parentNode);
+          const offsetDifference = getSubstringPosition(
+            parentNode.textContent,
+            selection?.anchorNode?.textContent
+          );
 
-        if (selectedText && selectedParagraphNumber !== null && end) {
-          setHighlightedData({
-            text: selectedText,
-            paragraphNumber: selectedParagraphNumber,
-            substringPosition: {
-              start,
-              end
-            }
-          });
+          const start = isBackwards()
+            ? selection.focusOffset + offsetDifference
+            : selection.anchorOffset + offsetDifference;
+          const end = isBackwards()
+            ? selection.anchorOffset + offsetDifference
+            : selection.focusOffset + offsetDifference;
+
+          if (selectedText && selectedParagraphNumber !== null && end) {
+            setHighlightedData({
+              text: selectedText,
+              paragraphNumber: selectedParagraphNumber,
+              substringPosition: {
+                start,
+                end
+              }
+            });
+          }
         }
       }
     };
@@ -54,6 +80,46 @@ export const useHighlighter = () => {
 };
 
 /* UTILS */
+function isMultipleParagraphsSelection(anchorNode: Node, focusNode: Node) {
+  return anchorNode?.textContent !== focusNode?.textContent;
+}
+
+function findStartAndEnd(selectedText, anchorParent, focusParent) {
+  const text = isBackwards()
+    ? focusParent?.textContent
+    : anchorParent?.textContent;
+  let subtext = selectedText.substring(0, selectedText.indexOf('\n'));
+  const start = text.indexOf(subtext);
+  const end = selectedText.split('').reverse().indexOf('\n');
+
+  return {
+    start,
+    end
+  };
+}
+
+function findParagraphs(anchorNode: Node, focusNode: Node) {
+  if (
+    anchorNode.nodeType === Node.ELEMENT_NODE &&
+    focusNode.nodeType === Node.ELEMENT_NODE
+  ) {
+    const anchorElement = anchorNode as Element;
+    const anchorParagraphNumber = Number(
+      anchorElement.id?.replace('article-paragraph-', '')
+    );
+    const focusElement = focusNode as Element;
+    const focusParagraphNumber = Number(
+      focusElement.id?.replace('article-paragraph-', '')
+    );
+
+    const start = Math.min(anchorParagraphNumber, focusParagraphNumber);
+    const end = Math.max(anchorParagraphNumber, focusParagraphNumber);
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  } else {
+    return null;
+  }
+}
 
 function findParagraphNumber(node: Node) {
   if (node.nodeType === Node.ELEMENT_NODE) {
@@ -67,6 +133,7 @@ function findParagraphNumber(node: Node) {
 }
 
 function getSubstringPosition(text, subText) {
+  console.log(text, 'text', subText, 'subText');
   const position = text.indexOf(subText);
   return position;
 }

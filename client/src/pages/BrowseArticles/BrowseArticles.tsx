@@ -60,7 +60,7 @@ const BrowseArticles: React.FC = () => {
       <article className={styles.articleCard}>
         <div
           className={styles.wrapper}
-          onClick={() => navigate(`/article?url=${url}`)}
+          onClick={() => navigate(`/article?url=${encodeURIComponent(url)}`)}
         >
           {image.length > 0 && <img src={image} alt={title} />}
           <Typography styleVariant="h5" tag={Tags.h1}>

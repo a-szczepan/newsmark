@@ -16,6 +16,7 @@ import { toggleAccordion } from '../../store/slices/accordionSlice';
 import { useGetAnnotations } from '../../hooks/useGetAnnotations';
 import { Loader } from '../../components/Loader/Loader';
 import { Footer } from '../../components/Footer/Footer';
+import { addSpansToMultilineParagraph } from '../../utils/documentConversion';
 
 export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -83,6 +84,56 @@ export const ArticlePage: React.FC = () => {
     paragraph?.replaceWith(newParagraph);
   }
 
+  function addMultiParagraphSpans(paragraphsList: number[], toHighlight) {
+    for (let i = 0; i < paragraphsList.length; i++) {
+      const currentParagraph: HTMLElement = document.getElementById(
+        `article-paragraph-${paragraphsList[i]}`
+      )!;
+
+      const newSpan = document.createElement('span');
+      newSpan.setAttribute(
+        'class',
+        `${classnames(styles.color, styles[toHighlight.color])}`
+      );
+      newSpan.addEventListener('click', (e) => {
+        e.stopImmediatePropagation();
+        setViewOption(true);
+        dispatch(openViewModal());
+        // dispatch(toggleAccordion(present.id));
+      });
+
+      if (currentParagraph) {
+        if (i === 0 || i == paragraphsList.length - 1) {
+          const paragraph = i === 0 ? 'first' : 'last';
+          const index =
+            paragraph === 'first' ? toHighlight.start : toHighlight.end;
+          newSpan.appendChild(
+            document.createTextNode(
+              paragraph === 'first'
+                ? currentParagraph?.innerText!.slice(index)
+                : currentParagraph?.innerText!.slice(0, index)
+            )
+          );
+          const newParagraph: HTMLParagraphElement | null =
+            addSpansToMultilineParagraph(
+              paragraph,
+              Array.from(currentParagraph.childNodes),
+              newSpan,
+              index
+            );
+          if (newParagraph) currentParagraph.replaceWith(newParagraph);
+        } else {
+          const newContent = document.createTextNode(
+            currentParagraph?.innerText!
+          );
+          newSpan.appendChild(newContent);
+          currentParagraph.innerHTML = '';
+          currentParagraph?.appendChild(newSpan);
+        }
+      }
+    }
+  }
+
   useEffect(() => {
     if (gotArticle) {
       setArticleData(article);
@@ -92,6 +143,7 @@ export const ArticlePage: React.FC = () => {
 
   useEffect(() => {
     if (annotations && article) {
+      //jesli paragraphNumber.len == 1 :
       const groupedHighlights = annotations.reduce((result, annotation) => {
         const { id, paragraphNumber, selectedText, substringPosition, color } =
           annotation;
@@ -130,6 +182,12 @@ export const ArticlePage: React.FC = () => {
       highlightsList.forEach((element) =>
         addSpansToSelections(element.paragraph, element.toHighlight)
       );
+
+      addMultiParagraphSpans([0, 1, 2, 3], {
+        start: 160,
+        end: 200,
+        color: 'pink'
+      });
     }
   }, [articleData, annotations]);
 
