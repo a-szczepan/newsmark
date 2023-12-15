@@ -10,7 +10,9 @@ const articleApi = api.injectEndpoints({
     getArticle: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/article?url=${encodeURIComponent(query.url)}`,
+          url: `http://localhost:5000/api/article?url=${encodeURIComponent(
+            query.url
+          )}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -41,22 +43,28 @@ const articleApi = api.injectEndpoints({
     getArticleNotes: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/articlenote?url=${encodeURIComponent(query.url)}`,
+          url: `http://localhost:5000/api/articlenote?url=${encodeURIComponent(
+            query.url
+          )}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
         };
-      }
+      },
+      keepUnusedDataFor: 0
     }),
     getAnnotations: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/articleannotation?url=${encodeURIComponent(query.url)}`,
+          url: `http://localhost:5000/api/articleannotation?url=${encodeURIComponent(
+            query.url
+          )}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
         };
-      }
+      },
+      keepUnusedDataFor: 0
     }),
     addAnnotation: builder.mutation({
       query: (annotation) => {
@@ -102,7 +110,6 @@ const articleApi = api.injectEndpoints({
     }),
     bookmark: builder.mutation({
       query: (query) => {
-        console.log(query);
         return {
           url: `/articlenote/bookmark?url=${encodeURIComponent(query.url)}`,
           method: 'PUT',

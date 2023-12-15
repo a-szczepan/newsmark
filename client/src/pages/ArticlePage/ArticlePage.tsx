@@ -89,6 +89,7 @@ export const ArticlePage: React.FC = () => {
       const currentParagraph: HTMLElement = document.getElementById(
         `article-paragraph-${paragraphsList[i]}`
       )!;
+      const paragraphClasses = currentParagraph?.getAttribute('class');
 
       const newSpan = document.createElement('span');
       newSpan.setAttribute(
@@ -99,7 +100,7 @@ export const ArticlePage: React.FC = () => {
         e.stopImmediatePropagation();
         setViewOption(true);
         dispatch(openViewModal());
-        // dispatch(toggleAccordion(present.id));
+        dispatch(toggleAccordion(toHighlight.id));
       });
 
       if (currentParagraph) {
@@ -121,6 +122,11 @@ export const ArticlePage: React.FC = () => {
               newSpan,
               index
             );
+          newParagraph?.setAttribute(
+            'id',
+            `article-paragraph-${paragraphsList[i]}`
+          );
+          newParagraph?.setAttribute('class', paragraphClasses as string);
           if (newParagraph) currentParagraph.replaceWith(newParagraph);
         } else {
           const newContent = document.createTextNode(
@@ -137,34 +143,38 @@ export const ArticlePage: React.FC = () => {
   useEffect(() => {
     if (gotArticle) {
       setArticleData(article);
-      getAnnotations({ url });
+      getAnnotations({ url }, false);
     }
   }, [article, annotations]);
 
   useEffect(() => {
+
     if (annotations && article) {
-      //jesli paragraphNumber.len == 1 :
-      const groupedHighlights = annotations.reduce((result, annotation) => {
-        const { id, paragraphNumber, selectedText, substringPosition, color } =
-          annotation;
-        if (!result[paragraphNumber]) {
-          result[paragraphNumber] = {
-            paragraph: paragraphNumber,
-            toHighlight: []
-          };
-        }
+      const groupedSingleParagraphHighlights = annotations.reduce(
+        (result, annotation) => {
+          const { id, paragraphs, selectedText, substringPosition, color } =
+            annotation;
+          if (annotation.paragraphs.length > 1) return result;
+          if (!result[paragraphs[0]]) {
+            result[paragraphs[0]] = {
+              paragraph: paragraphs[0],
+              toHighlight: []
+            };
+          }
 
-        result[paragraphNumber].toHighlight.push({
-          id: id,
-          substring: selectedText,
-          start: substringPosition.start,
-          end: substringPosition.end,
-          color: color
-        });
+          result[paragraphs[0]].toHighlight.push({
+            id: id,
+            substring: selectedText,
+            start: substringPosition.start,
+            end: substringPosition.end,
+            color: color
+          });
 
-        result[paragraphNumber].toHighlight.sort((a, b) => a.start - b.start);
-        return result;
-      }, {});
+          result[paragraphs[0]].toHighlight.sort((a, b) => a.start - b.start);
+          return result;
+        },
+        {}
+      );
 
       type HighlightElement = {
         paragraph: number;
@@ -177,16 +187,21 @@ export const ArticlePage: React.FC = () => {
         }[];
       };
       const highlightsList = Object.values(
-        groupedHighlights
+        groupedSingleParagraphHighlights
       ) as HighlightElement[];
       highlightsList.forEach((element) =>
         addSpansToSelections(element.paragraph, element.toHighlight)
       );
 
-      addMultiParagraphSpans([0, 1, 2, 3], {
-        start: 160,
-        end: 200,
-        color: 'pink'
+      annotations.forEach((annotation) => {
+        if (annotation.paragraphs.length > 1) {
+          addMultiParagraphSpans(annotation.paragraphs.map(Number), {
+            id: annotation.id,
+            start: annotation.substringPosition.start,
+            end: annotation.substringPosition.end,
+            color: annotation.color
+          });
+        }
       });
     }
   }, [articleData, annotations]);
@@ -208,10 +223,10 @@ export const ArticlePage: React.FC = () => {
           <picture>
             <img src={articleData.imageURL} />
           </picture>
-          {article?.figcaption && (
+          {articleData?.figcaption && (
             <figcaption>
               <Typography styleVariant="caption">
-                {article?.figcaption.replace('Credit...', ' ')}
+                {articleData?.figcaption.replace('Credit...', ' ')}
               </Typography>
             </figcaption>
           )}
@@ -219,7 +234,7 @@ export const ArticlePage: React.FC = () => {
       )}
       {article?.paragraphs && (
         <div>
-          {article.paragraphs.map((paragraph, i) => (
+          {articleData?.paragraphs.map((paragraph, i) => (
             <Typography
               id={`article-paragraph-${i}`}
               styleVariant="body"

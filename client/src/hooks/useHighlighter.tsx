@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export const useHighlighter = () => {
   const [highlightedData, setHighlightedData] = useState<{
     text: string;
-    paragraphNumber: number | null;
+    paragraphs: number[] | null;
     substringPosition: {
       start: number;
       end: number;
@@ -26,19 +26,19 @@ export const useHighlighter = () => {
         const anchorParentNode = anchorNode?.parentNode!;
         const focusParentNode = focusNode?.parentNode!;
         const selectedText = selection.toString();
+        const paragraphs = findParagraphs(anchorParentNode!, focusParentNode!);
 
-        //  uncomment!!!! do not remove
-        // if (selectedText && selectedParagraphNumber !== null) {
-        //   setHighlightedData({
-        //     text: selectedText,
-        //     paragraphNumber: selectedParagraphNumber,
-        //     substringPosition: findStartAndEnd(
-        //       selectedText,
-        //       anchorParentNode,
-        //       focusParentNode
-        //     )
-        //   });
-        // }
+        if (selectedText && paragraphs?.length! > 0) {
+          setHighlightedData({
+            text: selectedText,
+            paragraphs: paragraphs,
+            substringPosition: findStartAndEnd(
+              selectedText,
+              anchorParentNode,
+              focusParentNode
+            )
+          });
+        }
       } else {
         const parentNode = anchorNode?.parentNode;
         if (selection && parentNode) {
@@ -59,7 +59,7 @@ export const useHighlighter = () => {
           if (selectedText && selectedParagraphNumber !== null && end) {
             setHighlightedData({
               text: selectedText,
-              paragraphNumber: selectedParagraphNumber,
+              paragraphs: [selectedParagraphNumber],
               substringPosition: {
                 start,
                 end
@@ -100,8 +100,10 @@ function findStartAndEnd(selectedText, anchorParent, focusParent) {
 
 function findParagraphs(anchorNode: Node, focusNode: Node) {
   if (
-    anchorNode.nodeType === Node.ELEMENT_NODE &&
-    focusNode.nodeType === Node.ELEMENT_NODE
+    (anchorNode.nodeType === Node.ELEMENT_NODE ||
+      anchorNode.nodeType === Node.TEXT_NODE) &&
+    (focusNode.nodeType === Node.ELEMENT_NODE ||
+      focusNode.nodeType === Node.TEXT_NODE)
   ) {
     const anchorElement = anchorNode as Element;
     const anchorParagraphNumber = Number(

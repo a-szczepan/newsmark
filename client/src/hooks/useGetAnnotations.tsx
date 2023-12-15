@@ -7,7 +7,7 @@ type AnnotationAPI = {
   articleUrl: string;
   title: string;
   selectedText: string;
-  paragraphNumber: number;
+  paragraphs: string[];
   substringPosition: {
     end: number;
     start: number;

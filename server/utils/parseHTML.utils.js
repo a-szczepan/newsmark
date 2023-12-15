@@ -19,7 +19,7 @@ exports.parseHTML = (document) => {
     .querySelector('section[name="articleBody"]')
     ?.querySelectorAll("p");
 
-  const paragraphsArray = Array.from(paragraphs).map(
+  const paragraphsArray = Array.from(paragraphs)?.map(
     (paragraph) => paragraph?.textContent
   );
 

@@ -5,8 +5,12 @@ export const addSpansToMultilineParagraph = (
   index: number
 ): HTMLParagraphElement | null => {
   const newParagraph = document.createElement('p');
-  if (children.length === 1 && children[0].nodeType === Node.TEXT_NODE)
-    return null;
+  // if (
+  //   children.length === 1 &&
+  //   children[0].nodeType === Node.TEXT_NODE
+  // ) {
+  //   return null;
+  // }
   if (children.length > 0) {
     if (paragraph === 'first') {
       let positionCounter = 0;
@@ -29,9 +33,11 @@ export const addSpansToMultilineParagraph = (
       });
 
       return newParagraph;
-    } else if (paragraph === 'last') {
+    }
+    if (paragraph === 'last') {
       let sliceRange: number = index;
       newParagraph.appendChild(newSpan);
+      console.log(sliceRange);
       children.forEach((element: Node) => {
         const textLen: number = element.textContent?.length!;
         if (sliceRange > 0)

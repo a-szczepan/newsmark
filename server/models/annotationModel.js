@@ -20,10 +20,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
       },
       selectedText: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT('long'),
       },
-      paragraphNumber: {
-        type: Sequelize.INTEGER,
+      paragraphs: {
+        type: Sequelize.JSON,
       },
       substringPosition: {
         type: Sequelize.JSON,

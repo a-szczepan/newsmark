@@ -139,9 +139,10 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
             <EditAnnotation
               url={url?.toString()!}
               highlighted={highlighted}
-              handleAnnotationEditComplete={() =>
-                dispatch(closeAnnotationModal())
-              }
+              handleAnnotationEditComplete={() => {
+                getAnnotations({ url });
+                dispatch(closeAnnotationModal());
+              }}
             />
           </div>
         </MobileModal>
@@ -169,13 +170,14 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                             }}
                             highlighted={{
                               text: a.selectedText,
-                              paragraphNumber: a.paragraphNumber,
+                              paragraphs: a.paragraphs,
                               substringPosition: a.substringPosition
                             }}
                             annotationId={a.id}
-                            handleAnnotationEditComplete={() =>
-                              dispatch(closeViewModal())
-                            }
+                            handleAnnotationEditComplete={() => {
+                              getAnnotations({ url }), false;
+                              dispatch(closeViewModal());
+                            }}
                           />
                         ) : (
                           <ReadAnnotation
@@ -186,11 +188,13 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                             }}
                             highlighted={{
                               text: a.selectedText,
-                              paragraphNumber: a.paragraphNumber,
+                              paragraphs: a.paragraphs,
                               substringPosition: a.substringPosition
                             }}
                             setEditMode={setEditModeAnnotationId}
-                            handleAnnotationDeleteComplete={()=> getAnnotations({ url })}
+                            handleAnnotationDeleteComplete={() => {
+                              window.location.reload();
+                            }}
                             annotationId={a.id}
                           />
                         )}
@@ -274,7 +278,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
   useEffect(() => setViewOpt(viewOption), [viewOption]);
 
   useEffect(() => {
-    getAnnotations({ url });
+    getAnnotations({ url }, false);
   }, [viewOpt]);
 
   return (
@@ -321,6 +325,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
               url={url?.toString()!}
               highlighted={highlighted}
               handleAnnotationEditComplete={() => {
+                getAnnotations({ url }, false);
                 setAnnotationOpt(false);
               }}
             />
@@ -365,10 +370,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                           }}
                           highlighted={{
                             text: a.selectedText,
-                            paragraphNumber: a.paragraphNumber,
+                            paragraphs: a.paragraphs,
                             substringPosition: a.substringPosition
                           }}
                           handleAnnotationEditComplete={() => {
+                            getAnnotations({ url }, false);
                             setAnnotationOpt(false);
                           }}
                         />
@@ -382,11 +388,13 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                           }}
                           highlighted={{
                             text: a.selectedText,
-                            paragraphNumber: a.paragraphNumber,
+                            paragraphs: a.paragraphs,
                             substringPosition: a.substringPosition
                           }}
                           setEditMode={setEditModeAnnotationId}
-                          handleAnnotationDeleteComplete={()=> getAnnotations({ url })}
+                          handleAnnotationDeleteComplete={() => {
+                            window.location.reload();
+                          }}
                         />
                       )}
                     </div>

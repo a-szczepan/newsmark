@@ -94,7 +94,7 @@ export interface ArticleAnnotationsAPI {
   articleUrl: string;
   title: string;
   selectedText: string;
-  paragraphNumber: number;
+  paragraphs: number[];
   color: string;
   note: string;
   createdAt: string;
@@ -107,7 +107,7 @@ export interface ArticleAnnotation {
   articleUrl: string;
   title: string;
   selectedText: string;
-  paragraphNumber: string;
+  paragraphs: string[];
   substringPosition: SubstringPosition;
   color: string;
   note: string;

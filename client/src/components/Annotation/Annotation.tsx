@@ -107,7 +107,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
             annotation: {
               title,
               selectedText,
-              paragraphNumber: highlighted.paragraphNumber,
+              paragraphs: highlighted.paragraphs,
               substringPosition: highlighted.substringPosition,
               color: selectedColor,
               note,
@@ -122,7 +122,7 @@ export const EditAnnotation: React.FC<EditAnnotationProps> = ({
           await addAnnotation({
             title,
             selectedText,
-            paragraphNumber: highlighted.paragraphNumber,
+            paragraphs: highlighted.paragraphs,
             substringPosition: highlighted.substringPosition,
             color: selectedColor,
             note,

@@ -54,7 +54,7 @@ export const useGetUserPageContent = () => {
   };
 
   const searchNotes = (phrase: string) => {
-    console.log(phrase);
+
     fetchAnnotations({ phrase }).then(() => fetchBookmarks({ phrase }));
   };
 

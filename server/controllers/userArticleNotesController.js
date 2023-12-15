@@ -62,7 +62,7 @@ exports.addNote = async (req, res) => {
   const {
     title,
     selectedText,
-    paragraphNumber,
+    paragraphs,
     substringPosition,
     color,
     note,
@@ -82,7 +82,7 @@ exports.addNote = async (req, res) => {
       articleUrl: url,
       title,
       selectedText,
-      paragraphNumber,
+      paragraphs,
       substringPosition,
       color,
       note,
@@ -101,7 +101,7 @@ exports.addNote = async (req, res) => {
       articleUrl: url,
       title,
       selectedText,
-      paragraphNumber,
+      paragraphs,
       substringPosition,
       color,
       note,
@@ -157,7 +157,7 @@ exports.updateAnnotation = async (req, res) => {
   const {
     title,
     selectedText,
-    paragraphNumber,
+    paragraphs,
     substringPosition,
     color,
     note,
@@ -167,7 +167,7 @@ exports.updateAnnotation = async (req, res) => {
   const { email } = res.locals.user;
 
   await updateAnnotation(
-    { title, selectedText, paragraphNumber, substringPosition, color, note },
+    { title, selectedText, paragraphs, substringPosition, color, note },
     { where: { id: annotationId } }
   ).then(async () => {
     const annotations = await findAnnotations({
