@@ -2,7 +2,7 @@ const fs = require("fs");
 const mysql = require("mysql2/promise");
 const path = require("path");
 const basename = path.basename(__filename);
-const modelsDir = path.resolve() + "\\models";
+const modelsDir = path.resolve() + "\/models";
 const { Sequelize } = require("sequelize");
 const db = {};
 
