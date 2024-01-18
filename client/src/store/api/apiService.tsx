@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const URL = 'http://localhost:5000/api';
+const URL = 'https://newsmark.onrender.com/api';
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({

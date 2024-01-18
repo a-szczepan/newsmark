@@ -10,7 +10,7 @@ const articleApi = api.injectEndpoints({
     getArticle: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/article?url=${encodeURIComponent(
+          url: `${process.env.REACT_APP_SERVER_URL}/api/article?url=${encodeURIComponent(
             query.url
           )}`,
           method: 'GET',
@@ -43,7 +43,7 @@ const articleApi = api.injectEndpoints({
     getArticleNotes: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/articlenote?url=${encodeURIComponent(
+          url: `${process.env.REACT_APP_SERVER_URL}/api/articlenote?url=${encodeURIComponent(
             query.url
           )}`,
           method: 'GET',
@@ -56,7 +56,7 @@ const articleApi = api.injectEndpoints({
     getAnnotations: builder.query({
       query: (query) => {
         return {
-          url: `http://localhost:5000/api/articleannotation?url=${encodeURIComponent(
+          url: `${process.env.REACT_APP_SERVER_URL}/api/articleannotation?url=${encodeURIComponent(
             query.url
           )}`,
           method: 'GET',

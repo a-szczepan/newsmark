@@ -7,7 +7,7 @@ const Session = require("../models/sessionModel")(db.sequelize, db.Sequelize);
 const accessTokenCookieOptions = {
   maxAge: 900000,
   httpOnly: false,
-  domain: "localhost",
+  domain: ".netlify.app",
   path: "/",
   sameSite: "lax",
   secure: false,
@@ -77,7 +77,7 @@ exports.createNewSession = async (req, res) => {
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
 
   return res.locals.provider === "google"
-    ? res.redirect(308, "http://localhost:8080/articles")
+    ? res.redirect(308, `${process.env.REACT_APP_SERVER_URL}/articles`)
     : res.status(200).send({ message: "success" });
 };
 
@@ -98,7 +98,7 @@ exports.getSessionHandler = async (req, res) => {
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
 
   return res.locals.provider === "google"
-    ? res.redirect(308, "http://localhost:8080/articles")
+    ? res.redirect(308, `${process.env.REACT_APP_SERVER_URL}/articles`)
     : res.status(200).send({ message: "success" });
 };
 

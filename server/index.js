@@ -10,7 +10,7 @@ const { deserializeUser } = require("./middleware/deserializeUser");
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:8080",
+  origin: "https://newsmark.netlify.app/",
   credentials: true,
 };
 
