@@ -1,9 +1,4 @@
 [[redirects]]
-  from = "/"
-  to = "/login"
-  status = 301
-
-[[redirects]]
-  from = "/"
-  to = "/register"
-  status = 301
+  from = "/*"
+  to = "/"
+  status = 200
