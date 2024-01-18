@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from '../Login/Login.module.scss';
 import { AuthForm } from '../../components/AuthForm/AuthForm';
 import { getGoogleOAuthURL } from '../../utils/auth';
-import { GOOGLE_REGISTER_URL } from '../../../config';
+// import { GOOGLE_REGISTER_URL } from '../../../config';
 import { useRegisterWithPasswordMutation } from '../../store/api/userApi';
 import { UserFormData } from '../../types/user';
 
@@ -25,7 +25,7 @@ const Register: React.FC = () => {
   };
 
   const onSubmitWithGoogle = () => {
-    location.assign(getGoogleOAuthURL(GOOGLE_REGISTER_URL));
+    location.assign(getGoogleOAuthURL(process.env.REACT_APP_GOOGLE_REGISTER_URL!));
   };
 
   return (

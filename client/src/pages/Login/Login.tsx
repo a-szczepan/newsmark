@@ -5,7 +5,6 @@ import { useLoginWithPasswordMutation } from '../../store/api/userApi';
 import styles from './Login.module.scss';
 import { AuthForm } from '../../components/AuthForm/AuthForm';
 import { UserFormData } from '../../types/user';
-import { GOOGLE_LOGIN_URL } from '../../../config';
 
 const Login: React.FC = () => {
   const [login, { isSuccess }] = useLoginWithPasswordMutation();
@@ -25,7 +24,7 @@ const Login: React.FC = () => {
   };
 
   const onSubmitWithGoogle = () => {
-    location.assign(getGoogleOAuthURL(GOOGLE_LOGIN_URL));
+    location.assign(getGoogleOAuthURL(process.env.REACT_APP_GOOGLE_LOGIN_URL!));
   };
 
   return (

@@ -1,5 +1,4 @@
 import { api } from './apiService';
-import { NYT_API_KEY } from '../../../config';
 import {
   ArticleSearchAPI,
   BrowserPageArticle,
@@ -16,7 +15,7 @@ const browserApi = api.injectEndpoints({
       keepUnusedDataFor: 3600,
       query: () => {
         return {
-          url: `https://api.nytimes.com/svc/topstories/v2/world.json?api-key=${NYT_API_KEY}`,
+          url: `https://api.nytimes.com/svc/topstories/v2/world.json?api-key=${process.env.REACT_APP_NYT_API_KEY}`,
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -32,7 +31,7 @@ const browserApi = api.injectEndpoints({
     searchArticles: builder.query({
       query: (query, page = 0) => {
         return {
-          url: `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${query}&page=${page}&api-key=${NYT_API_KEY}`,
+          url: `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${query}&page=${page}&api-key=${process.env.REACT_APP_NYT_API_KEY}`,
           method: 'GET'
         };
       },
