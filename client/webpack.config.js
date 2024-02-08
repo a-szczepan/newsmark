@@ -2,6 +2,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const path = require('path')
+const dotEnv = require('dotenv-webpack')
 
 module.exports = {
   entry: './src/index.tsx',
@@ -61,6 +62,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser'
-    })
+    }),
+    new dotEnv()
   ]
 }
