@@ -1,25 +1,20 @@
-import {
-  ArticleAPI,
-  ArticleAnnotationsAPI,
-  ArticlePageDoc
-} from '../../types/articles';
-import { api } from './apiService';
+import { ArticleAPI, ArticleAnnotationsAPI, ArticlePageDoc } from '../../types/articles'
+import { api } from './apiService'
+const REACT_APP_SERVER_URL = 'https://newsmark.onrender.com'
 
 const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getArticle: builder.query({
       query: (query) => {
         return {
-          url: `${process.env.REACT_APP_SERVER_URL}/api/article?url=${encodeURIComponent(
-            query.url
-          )}`,
+          url: `${REACT_APP_SERVER_URL}/api/article?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
       transformResponse: (response: ArticleAPI): ArticlePageDoc => {
-        const article = (({
+        const article = (({ url, title, header, summary, imageURL, figcaption, paragraphs }) => ({
           url,
           title,
           header,
@@ -27,17 +22,9 @@ const articleApi = api.injectEndpoints({
           imageURL,
           figcaption,
           paragraphs
-        }) => ({
-          url,
-          title,
-          header,
-          summary,
-          imageURL,
-          figcaption,
-          paragraphs
-        }))(response);
+        }))(response)
 
-        return article;
+        return article
       }
     }),
     getArticleNotes: builder.query({
@@ -49,7 +36,7 @@ const articleApi = api.injectEndpoints({
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
       keepUnusedDataFor: 0
     }),
@@ -62,7 +49,7 @@ const articleApi = api.injectEndpoints({
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
       keepUnusedDataFor: 0
     }),
@@ -74,7 +61,7 @@ const articleApi = api.injectEndpoints({
           body: annotation,
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       }
     }),
     editAnnotation: builder.mutation({
@@ -85,12 +72,10 @@ const articleApi = api.injectEndpoints({
           body: annotation,
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
-      transformResponse: (
-        data: ArticleAnnotationsAPI[]
-      ): ArticleAnnotationsAPI[] => {
-        return data;
+      transformResponse: (data: ArticleAnnotationsAPI[]): ArticleAnnotationsAPI[] => {
+        return data
       }
     }),
     deleteAnnotation: builder.mutation({
@@ -100,12 +85,10 @@ const articleApi = api.injectEndpoints({
           method: 'DELETE',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
-      transformResponse: (
-        data: ArticleAnnotationsAPI[]
-      ): ArticleAnnotationsAPI[] => {
-        return data;
+      transformResponse: (data: ArticleAnnotationsAPI[]): ArticleAnnotationsAPI[] => {
+        return data
       }
     }),
     bookmark: builder.mutation({
@@ -115,7 +98,7 @@ const articleApi = api.injectEndpoints({
           method: 'PUT',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       }
     }),
     unmark: builder.mutation({
@@ -125,11 +108,11 @@ const articleApi = api.injectEndpoints({
           method: 'PUT',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       }
     })
   })
-});
+})
 
 export const {
   useGetArticleQuery,
@@ -141,4 +124,4 @@ export const {
   useBookmarkMutation,
   useUnmarkMutation,
   useGetArticleNotesQuery
-} = articleApi;
+} = articleApi
