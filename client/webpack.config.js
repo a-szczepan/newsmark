@@ -57,12 +57,12 @@ module.exports = {
     historyApiFallback: true
   },
   plugins: [
+    new dotEnv({ systemvars: true, path: path.resolve(process.cwd(), '.env') }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'public', 'index.html')
     }),
     new webpack.ProvidePlugin({
       process: 'process/browser'
-    }),
-    new dotEnv({systemvars: true})
+    })
   ]
 }
