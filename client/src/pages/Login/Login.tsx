@@ -9,6 +9,7 @@ import { UserFormData } from '../../types/user';
 const Login: React.FC = () => {
   const [login, { isSuccess }] = useLoginWithPasswordMutation();
   const navigate = useNavigate();
+  const googleLoginUrl = process.env.REACT_APP_GOOGLE_LOGIN_URL ?? ''
 
   useEffect(() => {
     if (isSuccess) navigate('/articles');
@@ -24,7 +25,7 @@ const Login: React.FC = () => {
   };
 
   const onSubmitWithGoogle = () => {
-    location.assign(getGoogleOAuthURL(process.env.REACT_APP_GOOGLE_LOGIN_URL!));
+    location.assign(getGoogleOAuthURL(googleLoginUrl));
   };
 
   return (

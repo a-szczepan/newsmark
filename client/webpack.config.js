@@ -63,6 +63,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       process: 'process/browser'
     }),
-    new dotEnv()
+    new dotEnv({systemvars: true})
   ]
 }
