@@ -1,19 +1,19 @@
-import React, { PropsWithChildren, useState } from 'react';
-import { Formik, Form, Field } from 'formik';
-import styles from './AuthForm.module.scss';
-import { Input, InputType } from '../Input/Input';
-import { Button, ButtonType } from '../Button/Button';
-import { IconType } from '../Icon/Icon';
-import { Tags, Typography } from '../Typography/Typography';
-import Newspaper from '../../assets/images/Newspaper.svg';
-import { Logo } from '../Logo/Logo';
-import { FormValidationSchema } from '../../utils/formValidation';
-import { Alert, Color } from '../Alert/Alert';
+import React, { PropsWithChildren, useState } from 'react'
+import { Formik, Form, Field } from 'formik'
+import styles from './AuthForm.module.scss'
+import { Input, InputType } from '../Input/Input'
+import { Button, ButtonType } from '../Button/Button'
+import { IconType } from '../Icon/Icon'
+import { Tags, Typography } from '../Typography/Typography'
+import Newspaper from '../../assets/images/Newspaper.svg'
+import { Logo } from '../Logo/Logo'
+import { FormValidationSchema } from '../../utils/formValidation'
+import { Alert, Color } from '../Alert/Alert'
 
 type FormCardProps = PropsWithChildren & {
-  header: string;
-  caption: string;
-};
+  header: string
+  caption: string
+}
 
 const FormCard: React.FC<FormCardProps> = ({ header, caption, children }) => {
   return (
@@ -32,27 +32,28 @@ const FormCard: React.FC<FormCardProps> = ({ header, caption, children }) => {
         {children}
       </div>
     </div>
-  );
-};
+  )
+}
 
 type AuthFormProps = {
-  submitActionWithPassword: (values: any, action: any) => void;
-  submitActionWithGoogleAuth: () => void;
+  submitActionWithPassword: (values: any, action: any) => void
+  submitActionWithGoogleAuth: () => void
   formText: {
-    header: string;
-    caption: string;
-  };
-};
+    header: string
+    caption: string
+  }
+}
 
 export const AuthForm: React.FC<AuthFormProps> = ({
   submitActionWithPassword,
   submitActionWithGoogleAuth,
   formText
 }) => {
-  const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginError, setLoginError] = useState<string | null>(null)
 
   const EmailInput = ({ field, form: { touched, errors } }) => {
-    const hasErrors = typeof errors.email !== 'undefined' ? true : false;
+    const hasErrors = typeof errors.email !== 'undefined' ? true : false
+
     return (
       <Input
         name="email"
@@ -62,23 +63,21 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         error={hasErrors && touched.email ? true : false}
         {...(hasErrors && touched.email && { errorMessage: errors.email })}
       />
-    );
-  };
-
-  const PasswordInput = ({ field, form: { touched, errors } }) => {
-    const hasErrors = typeof errors.password !== 'undefined' ? true : false;
+    )
+  }
+  const PasswordInput = ({ field, form: { touched, errors }, ...props }) => {
+    const hasErrors = typeof errors.password !== 'undefined' ? true : false
     return (
       <Input
-        name="password"
         type={InputType.password}
         label="password"
+        {...props}
         {...field}
         error={hasErrors && touched.password ? true : false}
-        {...(hasErrors &&
-          touched.password && { errorMessage: errors.password })}
+        {...(hasErrors && touched.password && { errorMessage: errors.password })}
       />
-    );
-  };
+    )
+  }
 
   return (
     <FormCard {...formText}>
@@ -87,38 +86,33 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         initialValues={{ email: '', password: '' }}
         validationSchema={FormValidationSchema}
         onSubmit={(values) => {
-          submitActionWithPassword(values, setLoginError);
-        }}
-      >
-        {({ errors }) => (
-          <Form>
+          submitActionWithPassword(values, setLoginError)
+        }}>
+        {({ values, handleChange, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
             {loginError && (
               <Alert background={Color.red} onClose={() => setLoginError(null)}>
                 {loginError}
               </Alert>
             )}
             <Field
-              type="text"
               name="email"
-              required
               component={EmailInput}
-              error={errors.email}
+              value={values.email}
+              onChange={handleChange}
             />
+
             <Field
-              type="text"
               name="password"
-              required
               component={PasswordInput}
-              error={errors.password}
+              value={values.password}
+              onChange={handleChange}
             />
-            <Button
-              buttonAction={() => {}}
-              variant={ButtonType.solid}
-              type="submit"
-            >
+
+            <Button buttonAction={() => {}} variant={ButtonType.solid} type="submit">
               Continue
             </Button>
-          </Form>
+          </form>
         )}
       </Formik>
 
@@ -128,11 +122,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           buttonAction={submitActionWithGoogleAuth}
           variant={ButtonType.lined}
           icon={IconType.google}
-          classes={[styles.googleAuthButton]}
-        >
+          classes={[styles.googleAuthButton]}>
           Continue with Google
         </Button>
       </div>
     </FormCard>
-  );
-};
+  )
+}

@@ -1,9 +1,9 @@
-import classnames from 'classnames';
-import React, { useState } from 'react';
-import styles from './Input.module.scss';
-import { Typography } from '../Typography/Typography';
-import { ButtonType, Button } from '../Button/Button';
-import { IconSize, IconType } from '../Icon/Icon';
+import classnames from 'classnames'
+import React, { useEffect, useState } from 'react'
+import styles from './Input.module.scss'
+import { Typography } from '../Typography/Typography'
+import { ButtonType, Button } from '../Button/Button'
+import { IconSize, IconType } from '../Icon/Icon'
 
 export enum InputType {
   text = 'text',
@@ -13,32 +13,32 @@ export enum InputType {
 }
 
 type SharedInputProps = React.HTMLProps<HTMLInputElement> & {
-  id?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  error?: boolean;
-  errorMessage?: string;
-  value?: string;
-  classes?: string[];
-  readOnly?: boolean;
-};
+  id?: string
+  placeholder?: string
+  disabled?: boolean
+  error?: boolean
+  errorMessage?: string
+  classes?: string[]
+  readOnly?: boolean
+  onChange?: () => any
+}
 
 type InputProps = SharedInputProps & {
-  type: InputType;
-  label: string;
-  name: string;
-  reference?: React.Ref<HTMLInputElement>;
-};
+  type: InputType
+  label: string
+  name: string
+  reference?: React.Ref<HTMLInputElement>
+}
 
 type SearchInputProps = SharedInputProps & {
-  type?: 'search';
-  onSubmitAction: any;
-};
+  type?: 'search'
+  onSubmitAction: any
+}
 
 type TextAreaProps = SharedInputProps & {
-  rows?: number;
-  reference?: React.Ref<HTMLTextAreaElement>;
-};
+  rows?: number
+  reference?: React.Ref<HTMLTextAreaElement>
+}
 
 export const Input: React.FC<InputProps> = ({
   id,
@@ -46,22 +46,20 @@ export const Input: React.FC<InputProps> = ({
   label,
   name,
   placeholder,
-  value,
   error = false,
   errorMessage,
   disabled = false,
   reference,
+  onChange,
   classes = []
 }) => {
-  const [inputValue, setInputValue] = useState(value ? value : '');
 
   return (
     <div
       className={classnames(styles.input, ...classes, {
         [styles.error]: error,
         [styles.disabled]: disabled
-      })}
-    >
+      })}>
       <label htmlFor={name} {...(disabled && { 'aria-disabled': true })}>
         <Typography styleVariant="label">{label}</Typography>
       </label>
@@ -73,8 +71,7 @@ export const Input: React.FC<InputProps> = ({
         type={InputType[type]}
         aria-label={name}
         {...(disabled && { disabled: true })}
-        {...(value && { value: inputValue })}
-        onChange={(e) => setInputValue(e.target.value)}
+        {...(onChange && { onChange: onChange })}
         ref={reference}
       />
       {error && errorMessage && (
@@ -83,8 +80,8 @@ export const Input: React.FC<InputProps> = ({
         </Typography>
       )}
     </div>
-  );
-};
+  )
+}
 
 export const Textarea: React.FC<TextAreaProps> = ({
   id,
@@ -99,14 +96,13 @@ export const Textarea: React.FC<TextAreaProps> = ({
   classes = [],
   reference
 }) => {
-  const [textAreaValue, settextAreaValue] = useState(value ? value : '');
+  const [textAreaValue, settextAreaValue] = useState(value ? value : '')
   return (
     <div
       className={classnames(styles.input, ...classes, {
         [styles.error]: error,
         [styles.disabled]: disabled
-      })}
-    >
+      })}>
       <label htmlFor={name} {...(disabled && { 'aria-disabled': true })}>
         <Typography styleVariant="label">{label}</Typography>
       </label>
@@ -128,8 +124,8 @@ export const Textarea: React.FC<TextAreaProps> = ({
         </Typography>
       )}
     </div>
-  );
-};
+  )
+}
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   id,
@@ -146,10 +142,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         [styles.disabled]: disabled
       })}
       onSubmit={(e) => {
-        e.preventDefault();
-        onSubmitAction(e.target[0].value);
-      }}
-    >
+        e.preventDefault()
+        onSubmitAction(e.target[0].value)
+      }}>
       <input
         id={id}
         className={classnames(styles[InputType[type]], styles.inputField)}
@@ -157,8 +152,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         placeholder={placeholder}
         {...(disabled && { disabled: true })}
         aria-label="search"
-        {...HTMLprops}
-      ></input>
+        {...HTMLprops}></input>
       <Button
         variant={ButtonType.solid}
         icon={IconType.search}
@@ -166,8 +160,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         buttonAction={() => {}}
         classes={[styles.searchButton]}
         type="submit"
-        {...(disabled && { disabled: true })}
-      ></Button>
+        {...(disabled && { disabled: true })}></Button>
     </form>
-  );
-};
+  )
+}
