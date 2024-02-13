@@ -7,7 +7,6 @@ const Session = require('../models/sessionModel')(db.sequelize, db.Sequelize)
 const accessTokenCookieOptions = {
   maxAge: 900000,
   httpOnly: false,
-  domain: '.onrender.com',
   path: '/',
   sameSite: 'none',
   secure: true

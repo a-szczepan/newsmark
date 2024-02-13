@@ -1,39 +1,38 @@
-const { verifyJwt } = require("../utils/jwt.utils");
-const { reIssueAccessToken } = require("../controllers/sessionConntroller");
+const { verifyJwt } = require('../utils/jwt.utils')
+const { reIssueAccessToken } = require('../controllers/sessionConntroller')
 
 exports.deserializeUser = async (req, res, next) => {
-  const { accessToken, refreshToken } = req.cookies;
+  const { accessToken, refreshToken } = req.cookies
 
-  if (!accessToken && !refreshToken) return next();
+  if (!accessToken && !refreshToken) return next()
 
-  let jwt;
+  let jwt
 
-  if (accessToken) jwt = verifyJwt(accessToken);
-  const decodedUser = jwt?.decoded;
+  if (accessToken) jwt = verifyJwt(accessToken)
+  const decodedUser = jwt?.decoded
   if (decodedUser) {
     res.locals.user = {
       id: decodedUser.session,
-      email: decodedUser.email,
-    };
-    return next();
+      email: decodedUser.email
+    }
+    return next()
   }
 
   if ((jwt?.expired && refreshToken) || (!accessToken && refreshToken)) {
-    const newAccessToken = await reIssueAccessToken({ refreshToken });
-    const result = verifyJwt(newAccessToken);
+    const newAccessToken = await reIssueAccessToken({ refreshToken })
+    const result = verifyJwt(newAccessToken)
     res.locals.user = {
       id: result.decoded?.session,
-      email: result.decoded?.email,
-    };
-    res.cookie("accessToken", newAccessToken, {
+      email: result.decoded?.email
+    }
+    res.cookie('accessToken', newAccessToken, {
       maxAge: 900000,
       httpOnly: false,
-      domain: ".onrender.com",
-      path: "/",
-      sameSite: "none",
-      secure: true,
-    });
+      path: '/',
+      sameSite: 'none',
+      secure: true
+    })
   }
 
-  return next();
-};
+  return next()
+}
