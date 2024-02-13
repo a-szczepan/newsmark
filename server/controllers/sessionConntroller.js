@@ -7,7 +7,7 @@ const Session = require("../models/sessionModel")(db.sequelize, db.Sequelize);
 const accessTokenCookieOptions = {
   maxAge: 900000,
   httpOnly: false,
-  domain: ".netlify.app",
+  domain: "https://newsmark.netlify.app",
   path: "/",
   sameSite: "lax",
   secure: false,

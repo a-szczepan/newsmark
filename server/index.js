@@ -17,8 +17,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookies());
 app.use(express.json());
-app.use(deserializeUser);
 app.use(getPaths());
+app.use(deserializeUser);
 
 const run = async () => {
   db.sequelize.sync({ force: false }).then(() => {
