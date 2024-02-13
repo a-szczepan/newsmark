@@ -9,8 +9,8 @@ const accessTokenCookieOptions = {
   httpOnly: false,
   domain: 'https://newsmark.netlify.app',
   path: '/',
-  sameSite: 'lax',
-  secure: false
+  sameSite: 'none',
+  secure: true
 }
 
 const refreshTokenCookieOptions = {
