@@ -28,10 +28,10 @@ exports.deserializeUser = async (req, res, next) => {
     res.cookie("accessToken", newAccessToken, {
       maxAge: 900000,
       httpOnly: false,
-      domain: "https://newsmark.netlify.app",
+      domain: "newsmark.netlify.app",
       path: "/",
-      sameSite: "lax",
-      secure: false,
+      sameSite: "none",
+      secure: true,
     });
   }
 
