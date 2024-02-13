@@ -49,7 +49,7 @@ exports.reIssueAccessToken = async ({ refreshToken }) => {
 
 exports.createNewSession = async (req, res) => {
   const { id, email } = res.locals.user
-  console(res.locals.user, 'createNewSession localcs user')
+  console.log(res.locals.user, 'createNewSession localcs user')
   let session = await findSession({
     where: { userEmail: res.locals.user.email }
   })
