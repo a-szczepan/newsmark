@@ -89,6 +89,8 @@ exports.registerWithPassword = async (req, res, next) => {
       email: user.email,
     };
 
+    console.log(res.locals, "registeredWithPass")
+
     return next();
   } catch (error) {
     console.error("Error registering user:", error);
