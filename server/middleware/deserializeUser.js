@@ -28,7 +28,7 @@ exports.deserializeUser = async (req, res, next) => {
     res.cookie("accessToken", newAccessToken, {
       maxAge: 900000,
       httpOnly: false,
-      domain: "newsmark.netlify.app",
+      domain: ".onrender.com",
       path: "/",
       sameSite: "none",
       secure: true,
