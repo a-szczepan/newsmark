@@ -27,9 +27,8 @@ exports.deserializeUser = async (req, res, next) => {
     }
     res.cookie('accessToken', newAccessToken, {
       maxAge: 900000,
-      domain: 'szczpanczyk.tech',
-      sameSite: 'lax',
-      secure: false
+      sameSite: 'none',
+      secure: true
     })
   }
 
