@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const googleLoginUrl = 'https://szczpanczyk.tech/api/login/oauth/google'
 
   useEffect(() => {
-    if (isSuccess) navigate('https://newsmark.szczpanczyk.tech/articles');
+    if (isSuccess) navigate('/articles');
   }, [isSuccess]);
 
   const onSubmitWithPassword = async (

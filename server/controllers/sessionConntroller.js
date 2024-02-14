@@ -74,7 +74,7 @@ exports.createNewSession = async (req, res) => {
   res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
 
   return res.locals.provider === 'google'
-    ? res.redirect(308, `${process.env.REACT_APP_SERVER_URL}/articles`)
+    ? res.redirect(308, `${process.env.REACT_APP_URL}/articles`)
     : res.status(200).send({ message: 'success' })
 }
 
