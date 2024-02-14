@@ -8,6 +8,7 @@ const accessTokenCookieOptions = {
   maxAge: 900000,
   domain: 'szczpanczyk.tech',
   sameSite: 'none',
+  partitioned: true ,
   secure: true
 }
 
