@@ -9,7 +9,7 @@ import { UserFormData } from '../../types/user';
 const Login: React.FC = () => {
   const [login, { isSuccess }] = useLoginWithPasswordMutation();
   const navigate = useNavigate();
-  const googleLoginUrl = 'https://newsmark.onrender.com/api/login/oauth/google'
+  const googleLoginUrl = 'https://szczpanczyk.tech/api/login/oauth/google'
 
   useEffect(() => {
     if (isSuccess) navigate('/articles');

@@ -1,6 +1,6 @@
 import { ArticleAPI, ArticleAnnotationsAPI, ArticlePageDoc } from '../../types/articles'
 import { api } from './apiService'
-const REACT_APP_SERVER_URL = 'https://newsmark.onrender.com'
+const REACT_APP_SERVER_URL = 'https://szczpanczyk.tech/'
 
 const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({

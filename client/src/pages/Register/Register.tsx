@@ -21,7 +21,7 @@ const Register: React.FC = () => {
   }
 
   const onSubmitWithGoogle = () => {
-    location.assign(getGoogleOAuthURL('https://newsmark.onrender.com/api/users/oauth/google'))
+    location.assign(getGoogleOAuthURL('https://szczpanczyk.tech/api/users/oauth/google'))
   }
 
   return (
