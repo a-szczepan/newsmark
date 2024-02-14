@@ -11,7 +11,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isSuccess) navigate('/articles')
+    if (isSuccess) navigate('https://newsmark.szczpanczyk.tech/articles')
   }, [isSuccess])
 
   const onSubmitWithPassword = async (userData: UserFormData, setLoginError: any) => {
