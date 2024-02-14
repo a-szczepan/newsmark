@@ -1,13 +1,12 @@
 import { ArticleAPI, ArticleAnnotationsAPI, ArticlePageDoc } from '../../types/articles'
 import { api } from './apiService'
-const REACT_APP_SERVER_URL = 'https://szczpanczyk.tech/'
 
 const articleApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getArticle: builder.query({
       query: (query) => {
         return {
-          url: `${REACT_APP_SERVER_URL}/api/article?url=${encodeURIComponent(query.url)}`,
+          url: `/api/article?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -30,9 +29,7 @@ const articleApi = api.injectEndpoints({
     getArticleNotes: builder.query({
       query: (query) => {
         return {
-          url: `${process.env.REACT_APP_SERVER_URL}/api/articlenote?url=${encodeURIComponent(
-            query.url
-          )}`,
+          url: `/api/articlenote?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -43,9 +40,7 @@ const articleApi = api.injectEndpoints({
     getAnnotations: builder.query({
       query: (query) => {
         return {
-          url: `${process.env.REACT_APP_SERVER_URL}/api/articleannotation?url=${encodeURIComponent(
-            query.url
-          )}`,
+          url: `/api/articleannotation?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
