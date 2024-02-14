@@ -6,8 +6,9 @@ const Session = require('../models/sessionModel')(db.sequelize, db.Sequelize)
 
 const accessTokenCookieOptions = {
   maxAge: 900000,
-  sameSite: 'none',
-  secure: true
+  domain: 'szczpanczyk.tech',
+  sameSite: 'lex',
+  secure: false
 }
 
 const refreshTokenCookieOptions = {
