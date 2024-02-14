@@ -49,7 +49,6 @@ exports.reIssueAccessToken = async ({ refreshToken }) => {
 
 exports.createNewSession = async (req, res) => {
   const { id, email } = res.locals.user
-  console.log(res.locals.user, 'createNewSession localcs user')
   let session = await findSession({
     where: { userEmail: res.locals.user.email }
   })
@@ -71,7 +70,6 @@ exports.createNewSession = async (req, res) => {
     { email, session: session.id },
     { expiresIn: process.env.REFRESH_TOKEN_TTL }
   )
-  console.log(accessToken, refreshToken)
   res.cookie('accessToken', accessToken, accessTokenCookieOptions)
   res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions)
 

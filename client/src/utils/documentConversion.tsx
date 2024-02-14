@@ -37,7 +37,6 @@ export const addSpansToMultilineParagraph = (
     if (paragraph === 'last') {
       let sliceRange: number = index;
       newParagraph.appendChild(newSpan);
-      console.log(sliceRange);
       children.forEach((element: Node) => {
         const textLen: number = element.textContent?.length!;
         if (sliceRange > 0)
