@@ -10,7 +10,7 @@ const { deserializeUser } = require("./middleware/deserializeUser");
 const app = express();
 
 const corsOptions = {
-  origin: "https://newsmark.szczpanczyk.tech/",
+  origin: "https://newsmark.szczpanczyk.tech",
   credentials: true,
 };
 
