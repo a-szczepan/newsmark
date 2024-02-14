@@ -30,7 +30,8 @@ exports.deserializeUser = async (req, res, next) => {
       domain: 'szczpanczyk.tech',
       sameSite: 'none',
       secure: true,
-      partitioned: true 
+      partitioned: true ,
+      httpOnly: true
     })
   }
 
