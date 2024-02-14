@@ -6,7 +6,7 @@ const articleApi = api.injectEndpoints({
     getArticle: builder.query({
       query: (query) => {
         return {
-          url: `/api/article?url=${encodeURIComponent(query.url)}`,
+          url: `/article?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -29,7 +29,7 @@ const articleApi = api.injectEndpoints({
     getArticleNotes: builder.query({
       query: (query) => {
         return {
-          url: `/api/articlenote?url=${encodeURIComponent(query.url)}`,
+          url: `/articlenote?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
@@ -40,7 +40,7 @@ const articleApi = api.injectEndpoints({
     getAnnotations: builder.query({
       query: (query) => {
         return {
-          url: `/api/articleannotation?url=${encodeURIComponent(query.url)}`,
+          url: `/articleannotation?url=${encodeURIComponent(query.url)}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
