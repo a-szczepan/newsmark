@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { paddingDecorator } from '../decorators';
 import { SearchInput } from '../../components/Input/Input';
 import { getEnumEntries } from '../utils';
+import { withRouter } from 'storybook-addon-react-router-v6';
 
 const meta = {
   title: 'Components/Input',
@@ -15,7 +16,7 @@ const meta = {
       url: 'https://www.figma.com/file/QsqqfX07v3j9m5FUppaZQd/Newsmark?type=design&node-id=66-175&mode=design&t=Dbe78or8ODBQzSvl-0'
     }
   },
-  decorators: [paddingDecorator]
+  decorators: [paddingDecorator, withRouter]
 } satisfies Meta<typeof SearchInput>;
 
 export default meta;
@@ -27,5 +28,5 @@ export const SearchInputDefault: Story = {
     placeholder: 'Search...',
     onSubmitAction: ()=>{console.log("search")}
   },
-  render: (args) => <SearchInput {...args}>input</SearchInput>
+  render: (args) => <SearchInput {...args}/>
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { paddingDecorator } from '../decorators';
 import { Logo } from '../../components/Logo/Logo';
+import { withRouter } from 'storybook-addon-react-router-v6';
 
 const meta = {
   title: 'Components/Logo',
@@ -9,7 +10,7 @@ const meta = {
   parameters: {
     layout: 'fullscreen'
   },
-  decorators: [paddingDecorator]
+  decorators: [paddingDecorator, withRouter]
 } satisfies Meta<typeof Logo>;
 
 export default meta;
