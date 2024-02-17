@@ -1,6 +1,6 @@
-import type { StorybookConfig } from '@storybook/react-webpack5';
-const { getLocalIdentName } = require("css-loader-shorter-classnames");
-const getLocalIdent = getLocalIdentName();
+import type { StorybookConfig } from '@storybook/react-webpack5'
+const { getLocalIdentName } = require('css-loader-shorter-classnames')
+const getLocalIdent = getLocalIdentName()
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -11,10 +11,11 @@ const config: StorybookConfig = {
     '@storybook/preset-scss',
     '@storybook/addon-docs',
     '@storybook/addon-a11y',
-    '@storybook/addon-designs',
-    "storybook-addon-pseudo-states",
-    'storybook-css-modules',
     'storybook-addon-react-router-v6',
+    '@storybook/addon-designs',
+    'storybook-addon-pseudo-states',
+    'storybook-css-modules',
+    'storybook-addon-fetch-mock',
     {
       name: '@storybook/addon-styling',
       options: {
@@ -33,7 +34,7 @@ const config: StorybookConfig = {
           }
         }
       }
-    },
+    }
   ],
   framework: {
     name: '@storybook/react-webpack5',
@@ -42,5 +43,5 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag'
   }
-};
-export default config;
+}
+export default config
