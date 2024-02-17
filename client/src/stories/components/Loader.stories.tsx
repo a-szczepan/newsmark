@@ -7,7 +7,8 @@ const meta = {
   title: 'Components/Loader',
   component: Loader,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    fetchMock: {}
   },
   decorators: [paddingDecorator]
 } satisfies Meta<typeof Loader>;

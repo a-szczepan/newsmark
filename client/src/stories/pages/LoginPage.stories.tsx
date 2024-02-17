@@ -14,6 +14,7 @@ const meta = {
   component: Login,
   parameters: {
     layout: 'fullscreen',
+    fetchMock: {},
     design: {
       type: 'figma',
       url: 'https://www.figma.com/file/QsqqfX07v3j9m5FUppaZQd/Newsmark?type=design&node-id=228-3&mode=design&t=fK2CNfHDQwCCxnmz-0'

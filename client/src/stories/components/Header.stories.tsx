@@ -9,7 +9,8 @@ const meta = {
   component: Header,
   tags: ['autodocs'],
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    fetchMock: {}
   },
   decorators: [paddingDecorator, withRouter]
 } satisfies Meta<typeof Header>;

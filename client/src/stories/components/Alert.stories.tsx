@@ -10,7 +10,8 @@ const meta = {
   title: 'Components/Alert',
   component: Alert,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    fetchMock: {}
   },
   argTypes: {
     background: {

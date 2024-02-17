@@ -8,7 +8,8 @@ const meta = {
   title: 'Components/Logo',
   component: Logo,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    fetchMock: {}
   },
   decorators: [paddingDecorator, withRouter]
 } satisfies Meta<typeof Logo>;
