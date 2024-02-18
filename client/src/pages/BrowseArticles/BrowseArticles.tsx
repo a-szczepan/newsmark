@@ -12,27 +12,17 @@ import { Layout } from '../../components/Layout/Layout'
 import { Footer } from '../../components/Footer/Footer'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '../../components/Loader/Loader'
+import { useGetUser } from '../../hooks/useGetUser'
 
 //DEV NOTE: Create divider component - one for whole app
 
 const BrowseArticles: React.FC = () => {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { data: user, isSuccess: gotUser } = useGetUserQuery({})
   const { data: browserArticles, isSuccess: gotBrowseArticles } = useGetMainPageArticlesQuery({})
   const [search, { data: searchedArticles, isSuccess: gotSearchedArticles }] =
     useLazySearchArticlesQuery({})
   const [articles, setArticles] = useState<BrowserPageArticle[]>()
-
-  useEffect(() => {
-    if (gotUser)
-      dispatch(
-        userLoggedIn({
-          sessionId: user?.id,
-          email: user?.email
-        })
-      )
-  }, [gotUser])
+  useGetUser()
 
   useEffect(() => {
     if (gotBrowseArticles) setArticles(browserArticles)

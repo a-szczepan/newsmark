@@ -23,6 +23,7 @@ import {
   AllUserAnnotationsAPI,
   AllUserBookmarksAPI
 } from '../../types/userNotes';
+import { useGetUser } from '../../hooks/useGetUser';
 
 export const useGetUserPageContent = () => {
   const [annotations, setAnnotations] = useState<AllUserAnnotationsAPI[] | []>(
@@ -70,10 +71,10 @@ export const UserPage: React.FC = () => {
   const isMobile = useWidthChecker() <= 768 ? true : false;
   const { annotations, bookmarks, triggerRefetchAnnotations, searchNotes } =
     useGetUserPageContent();
-
   const [activeView, setActiveView] = useState<'bookmarks' | 'annotations'>(
     annotations ? 'annotations' : 'bookmarks'
   );
+  useGetUser()  
 
   const AnnotationSection: React.FC = () => {
     const [editModeAnnotationId, setEditModeAnnotationId] = useState<

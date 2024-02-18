@@ -1,8 +1,5 @@
-import {
-  AllUserAnnotationsAPI,
-  AllUserBookmarksAPI
-} from '../../types/userNotes';
-import { api } from './apiService';
+import { AllUserAnnotationsAPI, AllUserBookmarksAPI } from '../../types/userNotes'
+import { api } from './apiService'
 
 const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,7 +10,7 @@ const userApi = api.injectEndpoints({
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       }
     }),
     loginWithPassword: builder.mutation({
@@ -24,7 +21,7 @@ const userApi = api.injectEndpoints({
           body: user,
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       }
     }),
     registerWithPassword: builder.mutation({
@@ -35,7 +32,7 @@ const userApi = api.injectEndpoints({
           body: user,
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       }
     }),
     logout: builder.mutation({
@@ -50,40 +47,32 @@ const userApi = api.injectEndpoints({
     getAllBookmarks: builder.query({
       query: (params) => {
         return {
-          url: `/user/bookmarks${
-            params.phrase ? `?phrase=${params.phrase}` : ''
-          }`,
+          url: `/user/bookmarks${params.phrase ? `?phrase=${params.phrase}` : ''}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
-      transformResponse: (
-        data: AllUserBookmarksAPI[]
-      ): AllUserBookmarksAPI[] => {
-        return data;
+      transformResponse: (data: AllUserBookmarksAPI[]): AllUserBookmarksAPI[] => {
+        return data
       }
     }),
     getAllAnnotations: builder.query({
       query: (params) => {
         return {
-          url: `/user/allannotations${
-            params.phrase ? `?phrase=${params.phrase}` : ''
-          }`,
+          url: `/user/allannotations${params.phrase ? `?phrase=${params.phrase}` : ''}`,
           method: 'GET',
           credentials: 'include',
           mode: 'cors'
-        };
+        }
       },
-      transformResponse: (
-        data: AllUserAnnotationsAPI[]
-      ): AllUserAnnotationsAPI[] => {
-        return data;
+      transformResponse: (data: AllUserAnnotationsAPI[]): AllUserAnnotationsAPI[] => {
+        return data
       }
     })
   }),
   overrideExisting: false
-});
+})
 
 export const {
   useGetUserQuery,
@@ -93,4 +82,4 @@ export const {
   useLazyGetAllAnnotationsQuery,
   useLazyGetAllBookmarksQuery,
   useLazyGetUserQuery
-} = userApi;
+} = userApi
