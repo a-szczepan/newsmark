@@ -6,9 +6,9 @@ const Session = require('../models/sessionModel')(db.sequelize, db.Sequelize)
 
 const accessTokenCookieOptions = {
   maxAge: 900000,
-  domain: 'szczpanczyk.tech',
+  domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'szczpanczyk.tech',
   sameSite: 'none',
-  partitioned: true ,
+  partitioned: true,
   secure: true,
   httpOnly: true
 }
@@ -101,12 +101,13 @@ exports.getSessionHandler = async (req, res) => {
 
 exports.invalidateSession = async (req, res) => {
   const { email } = req.body
+  console.log('invalidate session')
   await updateSession({ valid: false }, { where: { userEmail: email } })
 
-  res.cookie('accessToken', null, { maxAge: 0, httpOnly: true })
-  res.cookie('refreshToken', null, { maxAge: 0, httpOnly: true })
+  res.clearCookie('accessToken', { httpOnly: true })
+  res.clearCookie('refreshToken', { httpOnly: true })
 
-  return res.status(200).send('Logged out')
+  return res.status(200).json({ message: 'Logged out' });
 }
 
 //unused yet

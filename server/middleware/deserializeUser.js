@@ -27,7 +27,7 @@ exports.deserializeUser = async (req, res, next) => {
     }
     res.cookie('accessToken', newAccessToken, {
       maxAge: 900000,
-      domain: 'szczpanczyk.tech',
+      domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'szczpanczyk.tech',
       sameSite: 'none',
       secure: true,
       partitioned: true ,
