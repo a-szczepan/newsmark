@@ -1,22 +1,20 @@
-import React from 'react';
-import { Logo } from '../Logo/Logo';
-import styles from './Header.module.scss';
-import { Button, ButtonType, IconButton } from '../Button/Button';
-import { useWidthChecker } from '../../hooks/useWidthChecker';
-import { Drawer } from '../Drawer/Drawer';
-import classnames from 'classnames';
-import { IconType } from '../Icon/Icon';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Logo } from '../Logo/Logo'
+import styles from './Header.module.scss'
+import { Button, ButtonType, IconButton } from '../Button/Button'
+import { useWidthChecker } from '../../hooks/useWidthChecker'
+import { Drawer } from '../Drawer/Drawer'
+import classnames from 'classnames'
+import { IconType } from '../Icon/Icon'
+import { UserModal } from '../UserModal/UserModal'
 
 type HeaderProps = {
-  isHomePage?: boolean;
-};
+  isHomePage?: boolean
+}
 
-export const Header: React.FC<HeaderProps> = ({
-  isHomePage = false
-}: HeaderProps): JSX.Element => {
+export const Header: React.FC<HeaderProps> = ({ isHomePage = false }: HeaderProps): JSX.Element => {
   const HomePageHeader = (): JSX.Element => {
-    const isMobile = useWidthChecker() <= 1200 ? true : false;
+    const isMobile = useWidthChecker() <= 1200 ? true : false
 
     const desktopHeader = (
       <nav className={styles.header}>
@@ -38,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
           </Button>
         </div>
       </nav>
-    );
+    )
 
     const drawerContent = (
       <nav className={classnames(styles.header)}>
@@ -58,19 +56,31 @@ export const Header: React.FC<HeaderProps> = ({
           </Button>
         </Drawer>
       </nav>
-    );
+    )
 
-    return isMobile ? drawerContent : desktopHeader;
-  };
+    return isMobile ? drawerContent : desktopHeader
+  }
 
   const LoggedInHeader = (): JSX.Element => {
-    const navigate = useNavigate();
+    const [showModal, setShowModal] = useState<boolean>(false)
     return (
       <div className={styles.header}>
-        <Logo /><IconButton buttonAction={() => navigate('/user')} icon={IconType.user} lightVariant round classes={[styles.userButton]}/>
+        <Logo />
+        <>
+          <IconButton
+            buttonAction={() => {
+              setShowModal(!showModal)
+            }}
+            icon={IconType.user}
+            lightVariant
+            round
+            classes={[styles.userButton]}
+          />
+          {showModal && <UserModal />}
+        </>
       </div>
-    );
-  };
+    )
+  }
 
-  return isHomePage ? <HomePageHeader /> : <LoggedInHeader />;
-};
+  return isHomePage ? <HomePageHeader /> : <LoggedInHeader />
+}

@@ -10,8 +10,10 @@ import chevronUp from '../../assets/icons/chevron-up.svg';
 import close from '../../assets/icons/close.svg';
 import edit from '../../assets/icons/edit.svg';
 import eye from '../../assets/icons/eye.svg';
+import fileText from '../../assets/icons/file-text.svg'
 import github from '../../assets/icons/github.svg';
 import google from '../../assets/icons/google.svg';
+import logout from '../../assets/icons/log-out.svg';
 import menu from '../../assets/icons/menu.svg';
 import microsoft from '../../assets/icons/microsoft.svg';
 import plus from '../../assets/icons/plus.svg';
@@ -34,8 +36,10 @@ export enum IconType {
   close = 'close',
   edit = 'edit',
   eye = 'eye',
+  fileText = 'fileText',
   github = 'github',
   google = 'google',
+  logout = 'logout',
   menu = 'menu',
   microsoft = 'microsoft',
   plus = 'plus',
@@ -53,8 +57,10 @@ const IconTypeMap = {
   close,
   edit,
   eye,
+  fileText,
   github,
   google,
+  logout,
   menu,
   microsoft,
   plus,
