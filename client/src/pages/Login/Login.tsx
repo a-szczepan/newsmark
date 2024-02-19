@@ -21,7 +21,7 @@ const Login: React.FC = () => {
   ) => {
     await login(userData)
       .unwrap()
-      .catch((error) => setLoginError(error.data.message));
+      .catch((error) => setLoginError(error?.data?.message));
   };
 
   const onSubmitWithGoogle = () => {

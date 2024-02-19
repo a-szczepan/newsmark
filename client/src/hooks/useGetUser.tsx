@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useGetUserQuery } from '../store/api/userApi'
@@ -7,6 +7,7 @@ import { userLoggedIn } from '../store/slices/userSlice'
 export const useGetUser = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const {
     data: user,
     error: userError,
@@ -25,7 +26,7 @@ export const useGetUser = () => {
   }, [gotUser])
 
   useEffect(() => {
-    if (userError && 'status' in userError) {
+    if (userError && 'status' in userError && window.location.pathname !== '/') {
       navigate('/')
     }
   }, [gotUserError])

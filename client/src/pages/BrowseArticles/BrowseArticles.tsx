@@ -17,7 +17,7 @@ import { useGetUser } from '../../hooks/useGetUser'
 //DEV NOTE: Create divider component - one for whole app
 
 const BrowseArticles: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { data: browserArticles, isSuccess: gotBrowseArticles } = useGetMainPageArticlesQuery({})
   const [search, { data: searchedArticles, isSuccess: gotSearchedArticles }] =
     useLazySearchArticlesQuery({})

@@ -13,8 +13,11 @@ import benefit3 from '../../assets/images/Benefit3.svg';
 import benefit4 from '../../assets/images/Benefit4.svg';
 import { Layout } from '../../components/Layout/Layout';
 import { Footer } from '../../components/Footer/Footer';
+import { useGetUser } from '../../hooks/useGetUser';
+import { useSelector } from 'react-redux';
 
 const HeroSection: React.FC = () => {
+  const isLoggedIn = useSelector((state: any) => state.user.sessionId)
   return (
     <section className={styles.heroSection}>
       <div className={styles.wrapper}>
@@ -36,9 +39,11 @@ const HeroSection: React.FC = () => {
             research, save key articles, and add your own insights.
           </Typography>
         </div>
-        <Button variant={ButtonType.solid} buttonAction={'/register'}>
+        {isLoggedIn? <Button variant={ButtonType.solid} buttonAction={'/articles'}>
+          Discover articles
+        </Button>  : (<Button variant={ButtonType.solid} buttonAction={'/register'}>
           Create free account
-        </Button>
+        </Button>)}
       </div>
       <div className={styles.heroImages}>
         <div className={classnames(styles.imgWrapper, styles.hero1img)}>
@@ -148,6 +153,7 @@ const BenefitsSection: React.FC = () => {
 };
 
 const Home: React.FC = () => {
+  useGetUser()
   return (
     <div>
       <Header isHomePage={true} />

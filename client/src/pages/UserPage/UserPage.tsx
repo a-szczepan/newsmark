@@ -1,85 +1,70 @@
-import { useWidthChecker } from '../../hooks/useWidthChecker';
-import { Header } from '../../components/Header/Header';
-import { Layout } from '../../components/Layout/Layout';
-import styles from './UserPage.module.scss';
-import { IconButton } from '../../components/Button/Button';
-import { Icon, IconSize, IconType } from '../../components/Icon/Icon';
-import { useEffect, useState } from 'react';
-import {
-  EditAnnotation,
-  ReadAnnotation
-} from '../../components/Annotation/Annotation';
-import { Accordion } from '../../components/Accordion/Accordion';
-import {
-  useLazyGetAllAnnotationsQuery,
-  useLazyGetAllBookmarksQuery
-} from '../../store/api/userApi';
+import { useWidthChecker } from '../../hooks/useWidthChecker'
+import { Header } from '../../components/Header/Header'
+import { Layout } from '../../components/Layout/Layout'
+import styles from './UserPage.module.scss'
+import { IconButton } from '../../components/Button/Button'
+import { Icon, IconSize, IconType } from '../../components/Icon/Icon'
+import { useEffect, useState } from 'react'
+import { EditAnnotation, ReadAnnotation } from '../../components/Annotation/Annotation'
+import { Accordion } from '../../components/Accordion/Accordion'
+import { useLazyGetAllAnnotationsQuery, useLazyGetAllBookmarksQuery } from '../../store/api/userApi'
 
-import { SearchInput } from '../../components/Input/Input';
-import { Tags, Typography } from '../../components/Typography/Typography';
-import { Loader } from '../../components/Loader/Loader';
-import { Footer } from '../../components/Footer/Footer';
-import {
-  AllUserAnnotationsAPI,
-  AllUserBookmarksAPI
-} from '../../types/userNotes';
-import { useGetUser } from '../../hooks/useGetUser';
+import { SearchInput } from '../../components/Input/Input'
+import { Tags, Typography } from '../../components/Typography/Typography'
+import { Loader } from '../../components/Loader/Loader'
+import { Footer } from '../../components/Footer/Footer'
+import { AllUserAnnotationsAPI, AllUserBookmarksAPI } from '../../types/userNotes'
+import { useGetUser } from '../../hooks/useGetUser'
 
 export const useGetUserPageContent = () => {
-  const [annotations, setAnnotations] = useState<AllUserAnnotationsAPI[] | []>(
-    []
-  );
-  const [bookmarks, setBookmarks] = useState<AllUserBookmarksAPI[] | []>([]);
+  const [annotations, setAnnotations] = useState<AllUserAnnotationsAPI[] | []>([])
+  const [bookmarks, setBookmarks] = useState<AllUserBookmarksAPI[] | []>([])
   const [fetchAnnotations, { data: annotationsData, error: annotationsError }] =
-    useLazyGetAllAnnotationsQuery();
+    useLazyGetAllAnnotationsQuery()
   const [fetchBookmarks, { data: bookmarksData, error: bookmarkError }] =
-    useLazyGetAllBookmarksQuery({});
+    useLazyGetAllBookmarksQuery({})
 
   useEffect(() => {
-    fetchAnnotations({}).then(() => fetchBookmarks({}));
-  }, []);
+    fetchAnnotations({}).then(() => fetchBookmarks({}))
+  }, [])
 
   useEffect(() => {
-    setAnnotations(annotationsData ? annotationsData : []);
-    setBookmarks(bookmarksData ? bookmarksData : []);
-  }, [annotationsData, bookmarksData]);
+    setAnnotations(annotationsData ? annotationsData : [])
+    setBookmarks(bookmarksData ? bookmarksData : [])
+  }, [annotationsData, bookmarksData])
 
   useEffect(() => {
-    if (annotationsError) setAnnotations([]);
-    if (bookmarkError) setBookmarks([]);
-  }, [annotationsError, bookmarkError]);
+    if (annotationsError) setAnnotations([])
+    if (bookmarkError) setBookmarks([])
+  }, [annotationsError, bookmarkError])
 
   const triggerRefetchAnnotations = () => {
-    fetchAnnotations({});
-    setAnnotations(annotationsData ? annotationsData : []);
-  };
+    fetchAnnotations({})
+    setAnnotations(annotationsData ? annotationsData : [])
+  }
 
   const searchNotes = (phrase: string) => {
-
-    fetchAnnotations({ phrase }).then(() => fetchBookmarks({ phrase }));
-  };
+    fetchAnnotations({ phrase }).then(() => fetchBookmarks({ phrase }))
+  }
 
   return {
     annotations,
     bookmarks,
     triggerRefetchAnnotations,
     searchNotes
-  };
-};
+  }
+}
 
 export const UserPage: React.FC = () => {
-  const isMobile = useWidthChecker() <= 768 ? true : false;
-  const { annotations, bookmarks, triggerRefetchAnnotations, searchNotes } =
-    useGetUserPageContent();
+  const isMobile = useWidthChecker() <= 768 ? true : false
+  const { annotations, bookmarks, triggerRefetchAnnotations, searchNotes } = useGetUserPageContent()
   const [activeView, setActiveView] = useState<'bookmarks' | 'annotations'>(
     annotations ? 'annotations' : 'bookmarks'
-  );
-  useGetUser()  
+  )
+  useGetUser()
 
   const AnnotationSection: React.FC = () => {
-    const [editModeAnnotationId, setEditModeAnnotationId] = useState<
-      number | null
-    >(null);
+    const [editModeAnnotationId, setEditModeAnnotationId] = useState<number | null>(null)
 
     return (
       <div className={styles.annotationSection}>
@@ -91,15 +76,13 @@ export const UserPage: React.FC = () => {
                 key={index}
                 id={`userpage-accordion-${index}`}
                 header={article.articleTitle}
-                boldHeader
-              >
+                boldHeader>
                 {article.annotations.map((annotation, i) => (
                   <div className={styles.accordionWrapper}>
                     <Accordion
                       header={annotation.title}
                       key={i}
-                      id={`userpage-accordion-${index}-${i}`}
-                    >
+                      id={`userpage-accordion-${index}-${i}`}>
                       {editModeAnnotationId === annotation.id ? (
                         <EditAnnotation
                           url={annotation.articleUrl}
@@ -113,9 +96,7 @@ export const UserPage: React.FC = () => {
                           }}
                           key={annotation.id}
                           annotationId={annotation.id}
-                          handleAnnotationEditComplete={
-                            triggerRefetchAnnotations
-                          }
+                          handleAnnotationEditComplete={triggerRefetchAnnotations}
                         />
                       ) : (
                         <ReadAnnotation
@@ -130,9 +111,7 @@ export const UserPage: React.FC = () => {
                             text: annotation.selectedText
                           }}
                           setEditMode={setEditModeAnnotationId}
-                          handleAnnotationDeleteComplete={
-                            triggerRefetchAnnotations
-                          }
+                          handleAnnotationDeleteComplete={triggerRefetchAnnotations}
                         />
                       )}
                     </Accordion>
@@ -143,8 +122,8 @@ export const UserPage: React.FC = () => {
             </>
           ))}
       </div>
-    );
-  };
+    )
+  }
 
   const BookmarkSection: React.FC = () => {
     return (
@@ -156,8 +135,7 @@ export const UserPage: React.FC = () => {
               <a
                 href={`/article?url=${bookmark.articleUrl}`}
                 key={`bookmark=${index}`}
-                className={styles.bookmark}
-              >
+                className={styles.bookmark}>
                 {bookmark.imageURL ? (
                   <div className={styles.articleImg}>
                     <img src={bookmark.imageURL} />
@@ -166,11 +144,7 @@ export const UserPage: React.FC = () => {
                   <div className={styles.imgPlaceholder} />
                 )}
                 <div className={styles.bookmarkText}>
-                  <Typography
-                    styleVariant="body"
-                    bold
-                    classes={[styles.header]}
-                  >
+                  <Typography styleVariant="body" bold classes={[styles.header]}>
                     {bookmark.articleTitle}
                   </Typography>
                   <Typography styleVariant="body" classes={[styles.text]}>
@@ -182,8 +156,8 @@ export const UserPage: React.FC = () => {
             </>
           ))}
       </div>
-    );
-  };
+    )
+  }
 
   const DesktopLayout: React.FC = () => {
     return (
@@ -210,8 +184,8 @@ export const UserPage: React.FC = () => {
           </div>
         </div>
       </Layout>
-    );
-  };
+    )
+  }
 
   const MobileLayout: React.FC = ({}) => {
     return (
@@ -232,35 +206,33 @@ export const UserPage: React.FC = () => {
           <IconButton
             icon={IconType.bookmark}
             buttonAction={() => {
-              setActiveView('bookmarks');
+              setActiveView('bookmarks')
             }}
             lightVariant
             classes={
               activeView === 'bookmarks'
                 ? [styles.bookmarkClicked, styles.actionBtn]
                 : [styles.actionBtn]
-            }
-          >
+            }>
             Bookmarks
           </IconButton>
           <IconButton
             icon={IconType.annotation}
             buttonAction={() => {
-              setActiveView('annotations');
+              setActiveView('annotations')
             }}
             lightVariant
             classes={
               activeView === 'annotations'
                 ? [styles.annotationClicked, styles.actionBtn]
                 : [styles.actionBtn]
-            }
-          >
+            }>
             Annotations
           </IconButton>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className={styles.userPage}>
@@ -272,10 +244,7 @@ export const UserPage: React.FC = () => {
               Browse your notes
             </Typography>
             <div className={styles.searchWrapper}>
-              <SearchInput
-                onSubmitAction={searchNotes}
-                classes={[styles.search]}
-              />
+              <SearchInput onSubmitAction={searchNotes} classes={[styles.search]} />
             </div>
           </div>
         </Layout>
@@ -283,5 +252,5 @@ export const UserPage: React.FC = () => {
         {!isMobile && <Footer />}
       </div>
     </div>
-  );
-};
+  )
+}
