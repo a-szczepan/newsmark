@@ -50,6 +50,6 @@ exports.getArticle = async (req, res) => {
 
     return res.status(200).send(newArticle);
   } catch (error) {
-    console.error("Fetching article failed", error);
+    return res.status(404).send({message: 'Article is not avaliable. Try another one'})
   }
 };
