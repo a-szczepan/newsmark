@@ -5,8 +5,11 @@ import { Provider } from 'react-redux'
 import store from '../../store/store'
 import { reactRouterParameters, withRouter } from 'storybook-addon-react-router-v6'
 
+const URL = 'https://szczpanczyk.tech'
+// const URL = 'http://localhost:5000'
+
 const meta = {
-  title: 'Pages/UserPage',
+  title: 'Pages/User Page',
   component: UserPage,
   parameters: {
     layout: 'fullscreen',
@@ -45,8 +48,18 @@ function getMocks() {
   return [
     {
       matcher: {
+        name: 'getUser',
+        url: `${URL}/api/me`
+      },
+      response: {
+        status: 200,
+        body: { id: 1, email: 'test@test.com' }
+      }
+    },
+    {
+      matcher: {
         name: 'getAllAnnotaions',
-        url: 'https://szczpanczyk.tech/api/user/allannotations'
+        url: `${URL}/api/user/allannotations`
       },
       response: {
         status: 200,
@@ -82,7 +95,7 @@ function getMocks() {
     {
       matcher: {
         name: 'getAllBookmarks',
-        url: 'https://szczpanczyk.tech/api/user/bookmarks'
+        url: `${URL}/api/user/bookmarks`
       },
       response: {
         status: 200,

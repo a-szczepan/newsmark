@@ -142,6 +142,9 @@ exports.getArticleAnnotations = async (req, res) => {
   const url = req.query.url;
   const { email } = res.locals.user;
 
+  if (!url || !email) return res.status(404).send({ message: "Not found" });
+
+
   const articleAnnotations = await findAnnotations({
     where: { articleUrl: url, userEmail: email },
     raw: true,

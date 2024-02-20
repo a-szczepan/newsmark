@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { paddingDecorator } from '../decorators';
 import Login from '../../pages/Login/Login';
 import { Provider } from 'react-redux';
 import store from '../../store/store';
@@ -10,7 +9,7 @@ import {
 } from 'storybook-addon-react-router-v6';
 
 const meta = {
-  title: 'Pages/LoginPage',
+  title: 'Pages/Login Page',
   component: Login,
   parameters: {
     layout: 'fullscreen',
@@ -31,7 +30,6 @@ const meta = {
         </Provider>
       );
     },
-    // paddingDecorator,
     withRouter
   ]
 } satisfies Meta<typeof Login>;
