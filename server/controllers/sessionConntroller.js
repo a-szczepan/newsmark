@@ -104,10 +104,14 @@ exports.invalidateSession = async (req, res) => {
   console.log('invalidate session')
   await updateSession({ valid: false }, { where: { userEmail: email } })
 
-  res.clearCookie('accessToken')
-  res.clearCookie('refreshToken')
+  res.clearCookie('accessToken', {
+    domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'szczpanczyk.tech'
+  })
+  res.clearCookie('refreshToken', {
+    domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'szczpanczyk.tech'
+  })
 
-  return res.status(200).json({ message: 'Logged out' });
+  return res.status(200).json({ message: 'Logged out' })
 }
 
 //unused yet
