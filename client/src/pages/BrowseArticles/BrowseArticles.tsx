@@ -14,7 +14,7 @@ import { useGetUser } from '../../hooks/useGetUser'
 //DEV NOTE: Create divider component - one for whole app
 
 const BrowseArticles: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const { data: browserArticles, isSuccess: gotBrowseArticles } = useGetMainPageArticlesQuery({})
   const [search, { data: searchedArticles, isSuccess: gotSearchedArticles }] =
     useLazySearchArticlesQuery({})
@@ -61,13 +61,14 @@ const BrowseArticles: React.FC = () => {
         <div className={styles.browseArticles}>
           <SearchInput classes={[styles.search]} onSubmitAction={searchArticle} />
           <hr className={styles.divider} />
-          {articles && (
+          {articles?.length! > 0 && (
             <section className={styles.articlesContainer}>
-              {articles.map((article, index) => (
+              {articles?.map((article, index) => (
                 <ArticleCard key={index} {...article} />
               ))}
             </section>
           )}
+          {articles?.length === 0 && <Typography styleVariant="body">Article not found. Try with other phrase.</Typography>}
           {!articles && <Loader />}
         </div>
       </Layout>
