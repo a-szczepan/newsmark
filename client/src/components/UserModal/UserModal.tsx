@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './UserModal.module.scss'
 import { IconType } from '../Icon/Icon'
 import { Button, ButtonType } from '../Button/Button'
 import { useNavigate } from 'react-router-dom'
 import { useLogoutMutation } from '../../store/api/userApi'
-import { useDispatch } from 'react-redux'
-import { userLoggedOut } from '../../store/slices/userSlice'
 import { useSelector } from 'react-redux'
+
 
 export const UserModal: React.FC = () => {
   const [logout] = useLogoutMutation()
   const user = useSelector((state: any) => state.user)
-  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   return (
@@ -19,8 +17,7 @@ export const UserModal: React.FC = () => {
       <Button
         buttonAction={async () =>
           await logout(user).then(() => {
-            dispatch(userLoggedOut())
-            navigate('/')
+            navigate('/');
           })
         }
         variant={ButtonType.text}

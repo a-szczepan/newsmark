@@ -47,6 +47,7 @@
   }
 
   & .articlesContainer {
+    min-height: 80vh;
     @media screen and (min-width: global.$tablet) {
       display: grid;
       grid-template-columns: 1fr 1fr;

@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styles from './BrowseArticles.modules.scss'
-import { useGetUserQuery } from '../../store/api/userApi'
-import { useDispatch, useSelector } from 'react-redux'
-import { userLoggedIn } from '../../store/slices/userSlice'
 import { Header } from '../../components/Header/Header'
 import { useGetMainPageArticlesQuery, useLazySearchArticlesQuery } from '../../store/api/browserApi'
 import { SearchInput } from '../../components/Input/Input'

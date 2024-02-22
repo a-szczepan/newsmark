@@ -22,10 +22,8 @@ const userSlice = createSlice({
       state.email = action.payload.email;
     },
     userLoggedOut(state) {
-      state = {
-        sessionId: null,
-        email: null
-      };
+      state.sessionId = null;
+      state.email = null;
     }
   }
 });

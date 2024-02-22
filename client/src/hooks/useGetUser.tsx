@@ -1,19 +1,17 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useGetUserQuery } from '../store/api/userApi'
-import { userLoggedIn } from '../store/slices/userSlice'
+import { useLazyGetUserQuery } from '../store/api/userApi'
+import { userLoggedIn, userLoggedOut } from '../store/slices/userSlice'
 
 export const useGetUser = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const {
-    data: user,
-    error: userError,
-    isSuccess: gotUser,
-    isError: gotUserError
-  } = useGetUserQuery({})
+  const [
+    getUser,
+    { data: user, error: userError, isSuccess: gotUser, isError: gotUserError }
+  ] = useLazyGetUserQuery()
 
   useEffect(() => {
     if (gotUser)
@@ -23,11 +21,22 @@ export const useGetUser = () => {
           email: user?.email
         })
       )
-  }, [gotUser])
+  }, [gotUser, user, dispatch])
+
+  useEffect(() => {
+    if(gotUserError) {
+      dispatch(userLoggedOut());
+    }
+  })
 
   useEffect(() => {
     if (userError && 'status' in userError && window.location.pathname !== '/') {
       navigate('/')
     }
-  }, [gotUserError])
+  }, [userError, navigate])
+
+  // Trigger the lazy query to fetch user data
+  useEffect(() => {
+    getUser({})
+  }, [getUser])
 }

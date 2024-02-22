@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Logo } from '../Logo/Logo'
 import styles from './Header.module.scss'
 import { Button, ButtonType, IconButton } from '../Button/Button'
@@ -16,7 +16,16 @@ type HeaderProps = {
 export const Header: React.FC<HeaderProps> = ({ isHomePage = false }: HeaderProps): JSX.Element => {
   const HomePageHeader = (): JSX.Element => {
     const isMobile = useWidthChecker() <= 1200 ? true : false
-    const isLoggedIn = useSelector((state: any) => state.user.sessionId)
+    const [loggedState, setLoggedState] = useState(false)
+    const user = useSelector((state: any) => state.user)
+
+    useEffect(() => {
+      if (user.sessionId != null) {
+        setLoggedState(true)
+      } else {
+        setLoggedState(false)
+      }
+    }, [user.sessionId])
 
     const desktopHeader = (
       <nav className={styles.header}>
@@ -29,7 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ isHomePage = false }: HeaderProp
             Benefits
           </Button>
         </div>
-        {isLoggedIn ? (
+        {loggedState ? (
           <Button buttonAction={'/articles'} variant={ButtonType.text}>
             Browse Articles
           </Button>
@@ -56,7 +65,7 @@ export const Header: React.FC<HeaderProps> = ({ isHomePage = false }: HeaderProp
           <Button buttonAction={'#benefits'} variant={ButtonType.lightLink}>
             Benefits
           </Button>
-          {isLoggedIn ? (
+          {loggedState ? (
             <Button buttonAction={'/articles'} variant={ButtonType.lightLink}>
               Browse Articles
             </Button>
