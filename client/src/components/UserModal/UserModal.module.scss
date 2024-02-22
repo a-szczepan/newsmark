@@ -11,6 +11,11 @@
   padding: 8px;
   width: 180px;
 
+  & .userMail {
+    margin: auto;
+    padding-bottom: 4px;
+  }
+
   div > div > svg {
     height: 16px;
     width: 16px;

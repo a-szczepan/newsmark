@@ -5,6 +5,7 @@ import { Button, ButtonType } from '../Button/Button'
 import { useNavigate } from 'react-router-dom'
 import { useLogoutMutation } from '../../store/api/userApi'
 import { useSelector } from 'react-redux'
+import { Typography } from '../Typography/Typography'
 
 
 export const UserModal: React.FC = () => {
@@ -14,6 +15,8 @@ export const UserModal: React.FC = () => {
 
   return (
     <div className={styles.userModal}>
+    <div className={styles.userMail}><Typography styleVariant='label' bold>{user.email}</Typography></div>
+      <hr />
       <Button
         buttonAction={async () =>
           await logout(user).then(() => {
