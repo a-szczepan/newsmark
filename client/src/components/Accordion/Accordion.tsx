@@ -37,6 +37,7 @@ export const Accordion: React.FC<AccordionProps> = ({
         <IconButton
           id={id}
           icon={isOpen ? IconType.chevronUp : IconType.chevronDown}
+          classes={[styles.chevron]}
           buttonAction={() => handleAccordionClick()}
         />
       </div>

@@ -31,6 +31,11 @@ input {
   all: unset;
 }
 
+a:visited,
+a:link {
+  text-decoration: inherit;
+}
+
 input,
 button,
 textarea,

@@ -2,7 +2,7 @@ import { useWidthChecker } from '../../hooks/useWidthChecker'
 import { Header } from '../../components/Header/Header'
 import { Layout } from '../../components/Layout/Layout'
 import styles from './UserPage.module.scss'
-import { IconButton } from '../../components/Button/Button'
+import { Button, ButtonType, IconButton } from '../../components/Button/Button'
 import { Icon, IconSize, IconType } from '../../components/Icon/Icon'
 import { useEffect, useState } from 'react'
 import { EditAnnotation, ReadAnnotation } from '../../components/Annotation/Annotation'
@@ -17,6 +17,7 @@ import { AllUserAnnotationsAPI, AllUserBookmarksAPI } from '../../types/userNote
 import { useGetUser } from '../../hooks/useGetUser'
 import { useDispatch } from 'react-redux'
 import { toggleAccordion } from '../../store/slices/accordionSlice'
+import { useNavigate } from 'react-router-dom'
 
 export const useGetUserPageContent = () => {
   const [annotations, setAnnotations] = useState<AllUserAnnotationsAPI[] | []>([])
@@ -63,6 +64,8 @@ export const UserPage: React.FC = () => {
   const [activeView, setActiveView] = useState<'bookmarks' | 'annotations'>(
     annotations ? 'annotations' : 'bookmarks'
   )
+  const navigate = useNavigate()
+
   useGetUser()
 
   const AnnotationSection: React.FC = () => {
@@ -80,6 +83,14 @@ export const UserPage: React.FC = () => {
                 id={`userpage-accordion-${index}`}
                 header={article.articleTitle}
                 boldHeader>
+                <Button
+                  variant={ButtonType.link}
+                  buttonAction={() => navigate(`/article?url=${article.articleUrl}`)}
+                  icon={IconType.arrowRight}
+                  iconVariant="end"
+                  iconStyle={{ size: IconSize.small, color: 'dark' }}>
+                  Go to article
+                </Button>
                 {article.annotations.map((annotation, i) => (
                   <div className={styles.accordionWrapper}>
                     <Accordion
@@ -245,6 +256,16 @@ export const UserPage: React.FC = () => {
       <Header />
       <div className={styles.contentWrapper}>
         <Layout>
+          <Button
+            buttonAction={() => {
+              navigate('/articles')
+            }}
+            variant={ButtonType.link}
+            icon={IconType.chevronsLeft}
+            iconVariant="start"
+            iconStyle={{ size: IconSize.small, color: 'dark' }}>
+            Articles
+          </Button>
           <div className={styles.searchSectionWrapper}>
             <Typography styleVariant="h4" tag={Tags.h1}>
               Browse your notes

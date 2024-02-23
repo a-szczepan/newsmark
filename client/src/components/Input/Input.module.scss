@@ -106,6 +106,7 @@ textarea[disabled] {
 
   & .searchButton {
     padding: 4px;
+    min-width: 96px;
   }
 
   &.disabled > .searchButton {

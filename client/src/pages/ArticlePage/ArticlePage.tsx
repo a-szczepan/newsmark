@@ -39,6 +39,8 @@ export const ArticlePage: React.FC = () => {
   const dispatch = useDispatch()
   const [viewOption, setViewOption] = useState(false)
   useGetUser()
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     if (articleError) setArticleNotFound(true)
@@ -237,11 +239,11 @@ export const ArticlePage: React.FC = () => {
       <div className={styles.articlePage}>
         <Layout>
           <Button
-            buttonAction={() => {}}
+            buttonAction={() => {navigate('/articles')}}
             variant={ButtonType.link}
             icon={IconType.chevronsLeft}
             iconVariant="start"
-            iconStyle={{size: IconSize.small, color: 'dark'}}>
+            iconStyle={{size: IconSize.medium, color: 'dark'}}>
             Articles
           </Button>
 

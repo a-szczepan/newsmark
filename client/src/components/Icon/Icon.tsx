@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './Icon.module.scss';
 import { ReactSVG } from 'react-svg';
 import annotation from '../../assets/icons/annotation.svg';
+import arrowRight from '../../assets/icons/arrow-right.svg'
 import bookmark from '../../assets/icons/bookmark.svg';
 import check from '../../assets/icons/check.svg';
 import chevronDown from '../../assets/icons/chevron-down.svg';
@@ -31,6 +32,7 @@ export enum IconSize {
 
 export enum IconType {
   annotation = 'annotation',
+  arrowRight = 'arrowRight',
   bookmark = 'bookmark',
   check = 'check',
   chevronDown = 'chevronDown',
@@ -54,6 +56,7 @@ export enum IconType {
 
 const IconTypeMap = {
   annotation,
+  arrowRight,
   bookmark,
   check,
   chevronDown,
