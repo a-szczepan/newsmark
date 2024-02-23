@@ -7,6 +7,8 @@ import bookmark from '../../assets/icons/bookmark.svg';
 import check from '../../assets/icons/check.svg';
 import chevronDown from '../../assets/icons/chevron-down.svg';
 import chevronUp from '../../assets/icons/chevron-up.svg';
+import chevronsLeft from '../../assets/icons/chevrons-left.svg'
+import chevronsRight from '../../assets/icons/chevrons-right.svg'
 import close from '../../assets/icons/close.svg';
 import edit from '../../assets/icons/edit.svg';
 import eye from '../../assets/icons/eye.svg';
@@ -33,6 +35,8 @@ export enum IconType {
   check = 'check',
   chevronDown = 'chevronDown',
   chevronUp = 'chevronUp',
+  chevronsLeft = 'chevronsLeft',
+  chevronsRight = 'chevronsRight',
   close = 'close',
   edit = 'edit',
   eye = 'eye',
@@ -54,6 +58,8 @@ const IconTypeMap = {
   check,
   chevronDown,
   chevronUp,
+  chevronsLeft,
+  chevronsRight,
   close,
   edit,
   eye,

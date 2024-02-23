@@ -18,6 +18,8 @@ import { Loader } from '../../components/Loader/Loader'
 import { Footer } from '../../components/Footer/Footer'
 import { addSpansToMultilineParagraph } from '../../utils/documentConversion'
 import { useGetUser } from '../../hooks/useGetUser'
+import { Button, ButtonType } from '../../components/Button/Button'
+import { IconSize, IconType } from '../../components/Icon/Icon'
 
 export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -234,6 +236,15 @@ export const ArticlePage: React.FC = () => {
       <Header />
       <div className={styles.articlePage}>
         <Layout>
+          <Button
+            buttonAction={() => {}}
+            variant={ButtonType.link}
+            icon={IconType.chevronsLeft}
+            iconVariant="start"
+            iconStyle={{size: IconSize.small, color: 'dark'}}>
+            Articles
+          </Button>
+
           <div className={styles.articleSectionWrapper}>
             {articleData && articleSection}
             {!articleData && !articleNotFound && (
@@ -248,9 +259,7 @@ export const ArticlePage: React.FC = () => {
             )}
             {articleNotFound && (
               <div className={styles.loaderWrapper}>
-                <Typography styleVariant="label">
-                  Article is not avaliable.
-                </Typography>
+                <Typography styleVariant="label">Article is not avaliable.</Typography>
               </div>
             )}
             <hr />
