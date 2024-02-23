@@ -11,7 +11,6 @@ import {
 } from '../../store/api/articleApi'
 import { useSearchParams } from 'react-router-dom'
 import { useGetAnnotations } from '../../hooks/useGetAnnotations'
-import { toggleAccordion } from '../../store/slices/accordionSlice'
 import { useDispatch } from 'react-redux'
 
 type AnnotationNote = {

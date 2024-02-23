@@ -17,11 +17,7 @@
 }
 
 .optionsSection {
-  @include global.clickedIconButton(
-    var(--color-black),
-    var(--color-black),
-    var(--color-light1)
-  );
+  @include global.clickedIconButton(var(--color-black), var(--color-black), var(--color-light1));
 
   display: flex;
   position: sticky;
@@ -53,7 +49,7 @@
 .annotationWrapper {
   height: calc(100% - 48px);
   overflow: scroll;
-  padding: 1px;
+  padding: 1px 1px 16px 1px;
 
   @media screen and (min-width: global.$tablet) {
     overflow: visible;
@@ -68,9 +64,10 @@
 .annotationList {
   overflow: auto;
   height: 100%;
+  margin-bottom: 32px;
 
   @media screen and (min-width: global.$tablet) {
     padding: 0 16px;
-    height: auto;
+    // height: 500px;
   }
 }
