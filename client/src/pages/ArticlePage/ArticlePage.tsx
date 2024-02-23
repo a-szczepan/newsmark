@@ -23,15 +23,24 @@ export const ArticlePage: React.FC = () => {
   const [searchParams] = useSearchParams()
   const url = searchParams.get('url')
   const isMobile = useWidthChecker() <= 768 ? true : false
-  const { data: article, isSuccess: gotArticle } = useGetArticleQuery({
+  const {
+    data: article,
+    isSuccess: gotArticle,
+    isError: articleError
+  } = useGetArticleQuery({
     url
   })
+  const [articleNotFound, setArticleNotFound] = useState(false)
   const [articleData, setArticleData] = useState<ArticlePageDoc>()
   const { annotations, getAnnotations } = useGetAnnotations()
   const highlighted = useHighlighter()
   const dispatch = useDispatch()
   const [viewOption, setViewOption] = useState(false)
   useGetUser()
+
+  useEffect(() => {
+    if (articleError) setArticleNotFound(true)
+  }, [articleError])
 
   function addSpansToSelections(paragraphId: number, toHighlight: any) {
     const paragraph = document.getElementById(`article-paragraph-${paragraphId}`)
@@ -227,7 +236,23 @@ export const ArticlePage: React.FC = () => {
         <Layout>
           <div className={styles.articleSectionWrapper}>
             {articleData && articleSection}
-            {!articleData && <Loader />}
+            {!articleData && !articleNotFound && (
+              <div className={styles.loaderWrapper}>
+                {!articleNotFound && (
+                  <>
+                    <Loader />
+                    <Typography styleVariant="label">Article is loading</Typography>
+                  </>
+                )}
+              </div>
+            )}
+            {articleNotFound && (
+              <div className={styles.loaderWrapper}>
+                <Typography styleVariant="label">
+                  Article is not avaliable.
+                </Typography>
+              </div>
+            )}
             <hr />
             {!isMobile && (
               <DesktopPanel
