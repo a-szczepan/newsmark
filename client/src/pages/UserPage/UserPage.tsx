@@ -15,6 +15,8 @@ import { Loader } from '../../components/Loader/Loader'
 import { Footer } from '../../components/Footer/Footer'
 import { AllUserAnnotationsAPI, AllUserBookmarksAPI } from '../../types/userNotes'
 import { useGetUser } from '../../hooks/useGetUser'
+import { useDispatch } from 'react-redux'
+import { toggleAccordion } from '../../store/slices/accordionSlice'
 
 export const useGetUserPageContent = () => {
   const [annotations, setAnnotations] = useState<AllUserAnnotationsAPI[] | []>([])
@@ -65,6 +67,7 @@ export const UserPage: React.FC = () => {
 
   const AnnotationSection: React.FC = () => {
     const [editModeAnnotationId, setEditModeAnnotationId] = useState<number | null>(null)
+    const dispatch = useDispatch()
 
     return (
       <div className={styles.annotationSection}>
@@ -97,6 +100,9 @@ export const UserPage: React.FC = () => {
                           key={annotation.id}
                           annotationId={annotation.id}
                           handleAnnotationEditComplete={triggerRefetchAnnotations}
+                          cancel={() => {
+                            dispatch(toggleAccordion(`userpage-accordion-${index}-${i}`))
+                          }}
                         />
                       ) : (
                         <ReadAnnotation

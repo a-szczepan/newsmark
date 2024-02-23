@@ -1,99 +1,87 @@
-import { useEffect, useState } from 'react';
-import { MobileModal } from '../MobileModal/MobileModal';
-import { Tags, Typography } from '../../../components/Typography/Typography';
-import styles from './Panel.module.scss';
-import {
-  Button,
-  ButtonType,
-  IconButton
-} from '../../../components/Button/Button';
-import { IconType } from '../../../components/Icon/Icon';
+import { useEffect, useState } from 'react'
+import { MobileModal } from '../MobileModal/MobileModal'
+import { Tags, Typography } from '../../../components/Typography/Typography'
+import styles from './Panel.module.scss'
+import { Button, ButtonType, IconButton } from '../../../components/Button/Button'
+import { IconType } from '../../../components/Icon/Icon'
 import {
   useBookmarkMutation,
   useGetArticleNotesQuery,
   useUnmarkMutation
-} from '../../../store/api/articleApi';
-import { useSearchParams } from 'react-router-dom';
-import {
-  EditAnnotation,
-  ReadAnnotation
-} from '../../../components/Annotation/Annotation';
-import { Accordion } from '../../../components/Accordion/Accordion';
-import { useDispatch } from 'react-redux/es/hooks/useDispatch';
+} from '../../../store/api/articleApi'
+import { useSearchParams } from 'react-router-dom'
+import { EditAnnotation, ReadAnnotation } from '../../../components/Annotation/Annotation'
+import { Accordion } from '../../../components/Accordion/Accordion'
+import { useDispatch } from 'react-redux/es/hooks/useDispatch'
 import {
   openAnnotationModal,
   closeAnnotationModal
-} from '../../../store/slices/annotationModalSlice';
-import {
-  openViewModal,
-  closeViewModal
-} from '../../../store/slices/viewModalSlice';
-import { useSelector } from 'react-redux';
-import { closeAllAccordions } from '../../../store/slices/accordionSlice';
-import { useGetAnnotations } from '../../../hooks/useGetAnnotations';
+} from '../../../store/slices/annotationModalSlice'
+import { openViewModal, closeViewModal } from '../../../store/slices/viewModalSlice'
+import { useSelector } from 'react-redux'
+import { closeAllAccordions, toggleAccordion } from '../../../store/slices/accordionSlice'
+import { useGetAnnotations } from '../../../hooks/useGetAnnotations'
 
 type PanelProps = {
-  highlighted: any;
-  triggerAnnotationView?: any;
-};
+  highlighted: any
+  triggerAnnotationView?: any
+}
 
 const usePanelState = () => {
-  const [searchParams] = useSearchParams();
-  const url = searchParams.get('url');
+  const [searchParams] = useSearchParams()
+  const url = searchParams.get('url')
   const { data: articleNotes, isSuccess: gotNotes } = useGetArticleNotesQuery({
     url
-  });
-  const [bookmarkOpt, setBookmarkOpt] = useState(false);
+  })
+  const [bookmarkOpt, setBookmarkOpt] = useState(false)
 
-  const [editModeAnnotationId, setEditModeAnnotationId] = useState<
-    number | null
-  >(null);
-  const [bookmark] = useBookmarkMutation({});
-  const [unmark] = useUnmarkMutation({});
-  const isAnnotationModalOpen = useSelector(
-    (state: any) => state.annotationModal.isOpened
-  );
-  const isViewModalOpen = useSelector((state: any) => state.viewModal.isOpened);
-  const dispatch = useDispatch();
+  const [editModeAnnotationId, setEditModeAnnotationId] = useState<number | null>(null)
+  const [bookmark] = useBookmarkMutation({})
+  const [unmark] = useUnmarkMutation({})
+  const isAnnotationModalOpen = useSelector((state: any) => state.annotationModal.isOpened)
+  const isViewModalOpen = useSelector((state: any) => state.viewModal.isOpened)
+  const dispatch = useDispatch()
 
   const triggerAnnotationModal = () => {
     if (isAnnotationModalOpen) {
-      dispatch(closeAnnotationModal());
+      dispatch(closeAnnotationModal())
     } else {
-      dispatch(openAnnotationModal());
+      dispatch(openAnnotationModal())
+      dispatch(closeViewModal())
     }
-  };
+  }
 
   const triggerViewModal = () => {
     if (isViewModalOpen) {
-      dispatch(closeViewModal());
+      dispatch(closeViewModal())
     } else {
-      dispatch(openViewModal());
+      dispatch(openViewModal())
+      dispatch(closeAnnotationModal())
     }
-  };
+  }
 
   useEffect(() => {
-    if (gotNotes) setBookmarkOpt(articleNotes?.isBookmarked);
-  }, [articleNotes?.isBookmarked]);
+    if (gotNotes) setBookmarkOpt(articleNotes?.isBookmarked)
+  }, [articleNotes?.isBookmarked])
 
   const toggleBookmark = () => {
     if (!bookmarkOpt) {
-      bookmark({ url });
+      bookmark({ url })
     } else {
-      unmark({ url });
+      unmark({ url })
     }
-    setBookmarkOpt(!bookmarkOpt);
-  };
+    setBookmarkOpt(!bookmarkOpt)
+  }
 
   const toggleAnnotate = () => {
-    setEditModeAnnotationId(null);
-    triggerAnnotationModal();
-  };
+    setEditModeAnnotationId(null)
+    triggerAnnotationModal()
+  }
 
   const toggleView = () => {
-    setEditModeAnnotationId(null);
-    triggerViewModal();
-  };
+    setEditModeAnnotationId(null)
+    triggerViewModal()
+  }
 
   return {
     bookmarkOpt,
@@ -104,8 +92,8 @@ const usePanelState = () => {
     toggleBookmark,
     toggleAnnotate,
     toggleView
-  };
-};
+  }
+}
 
 export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
   const {
@@ -117,15 +105,15 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
     toggleBookmark,
     toggleAnnotate,
     toggleView
-  } = usePanelState();
-  const [searchParams] = useSearchParams();
-  const url = searchParams.get('url');
-  const { annotations, getAnnotations } = useGetAnnotations();
-  const dispatch = useDispatch();
+  } = usePanelState()
+  const [searchParams] = useSearchParams()
+  const url = searchParams.get('url')
+  const { annotations, getAnnotations } = useGetAnnotations()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    getAnnotations({ url });
-  }, [isViewModalOpen]);
+    getAnnotations({ url })
+  }, [isViewModalOpen])
 
   return (
     <>
@@ -140,9 +128,10 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
               url={url?.toString()!}
               highlighted={highlighted}
               handleAnnotationEditComplete={() => {
-                getAnnotations({ url });
-                dispatch(closeAnnotationModal());
+                getAnnotations({ url })
+                dispatch(closeAnnotationModal())
               }}
+              cancel={() => toggleAnnotate()}
             />
           </div>
         </MobileModal>
@@ -175,9 +164,10 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                             }}
                             annotationId={a.id}
                             handleAnnotationEditComplete={() => {
-                              getAnnotations({ url }), false;
-                              dispatch(closeViewModal());
+                              getAnnotations({ url }), false
+                              dispatch(closeViewModal())
                             }}
+                            cancel={() => dispatch(toggleAccordion(a.id))}
                           />
                         ) : (
                           <ReadAnnotation
@@ -193,7 +183,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                             }}
                             setEditMode={setEditModeAnnotationId}
                             handleAnnotationDeleteComplete={() => {
-                              window.location.reload();
+                              window.location.reload()
                             }}
                             annotationId={a.id}
                           />
@@ -202,7 +192,7 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
                     </Accordion>
                     <hr />
                   </div>
-                );
+                )
               })}
           </div>
         </MobileModal>
@@ -211,57 +201,46 @@ export const MobilePanel: React.FC<PanelProps> = ({ highlighted }) => {
         <IconButton
           icon={IconType.bookmark}
           buttonAction={() => {
-            toggleBookmark();
+            toggleBookmark()
           }}
           lightVariant
-          classes={
-            bookmarkOpt
-              ? [styles.bookmarkClicked, styles.actionBtn]
-              : [styles.actionBtn]
-          }
-        >
+          classes={bookmarkOpt ? [styles.bookmarkClicked, styles.actionBtn] : [styles.actionBtn]}>
           Bookmark
         </IconButton>
         <IconButton
           icon={IconType.annotation}
           buttonAction={() => {
-            toggleAnnotate();
+            toggleAnnotate()
           }}
           lightVariant
           classes={
             isAnnotationModalOpen
               ? [styles.annotationClicked, styles.actionBtn]
               : [styles.actionBtn]
-          }
-        >
+          }>
           Annotation
         </IconButton>
         <IconButton
           icon={IconType.eye}
           buttonAction={() => {
-            toggleView();
-            if (!isViewModalOpen) dispatch(closeAllAccordions());
+            toggleView()
+            if (!isViewModalOpen) dispatch(closeAllAccordions())
           }}
           lightVariant
-          classes={
-            isViewModalOpen
-              ? [styles.viewClicked, styles.actionBtn]
-              : [styles.actionBtn]
-          }
-        >
+          classes={isViewModalOpen ? [styles.viewClicked, styles.actionBtn] : [styles.actionBtn]}>
           View
         </IconButton>
       </div>
     </>
-  );
-};
+  )
+}
 
 export const DesktopPanel: React.FC<PanelProps> = ({
   highlighted,
   triggerAnnotationView: { viewOption, setViewOption }
 }) => {
-  const [annotationOpt, setAnnotationOpt] = useState(false);
-  const [viewOpt, setViewOpt] = useState(viewOption ? viewOption : false);
+  const [annotationOpt, setAnnotationOpt] = useState(false)
+  const [viewOpt, setViewOpt] = useState(viewOption ? viewOption : false)
   const {
     bookmarkOpt,
     editModeAnnotationId,
@@ -269,17 +248,23 @@ export const DesktopPanel: React.FC<PanelProps> = ({
     toggleBookmark,
     toggleAnnotate,
     toggleView
-  } = usePanelState();
-  const [searchParams] = useSearchParams();
-  const url = searchParams.get('url');
-  const { annotations, getAnnotations } = useGetAnnotations();
-  const dispatch = useDispatch();
+  } = usePanelState()
+  const [searchParams] = useSearchParams()
+  const url = searchParams.get('url')
+  const { annotations, getAnnotations } = useGetAnnotations()
+  const dispatch = useDispatch()
 
-  useEffect(() => setViewOpt(viewOption), [viewOption]);
+  useEffect(() => setViewOpt(viewOption), [viewOption])
 
   useEffect(() => {
-    getAnnotations({ url }, false);
-  }, [viewOpt]);
+    getAnnotations({ url }, false)
+  }, [viewOpt])
+
+  const cancelEdition = () => {
+    toggleAnnotate()
+    setAnnotationOpt(!annotationOpt)
+    setViewOpt(false)
+  }
 
   return (
     <div className={styles.optionsSection}>
@@ -288,16 +273,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({
         icon={IconType.bookmark}
         iconVariant="start"
         buttonAction={() => {
-          toggleBookmark();
-          setAnnotationOpt(false);
-          setViewOpt(false);
+          toggleBookmark()
+          setAnnotationOpt(false)
+          setViewOpt(false)
         }}
-        classes={
-          bookmarkOpt
-            ? [styles.bookmarkClicked, styles.option]
-            : [styles.option]
-        }
-      >
+        classes={bookmarkOpt ? [styles.bookmarkClicked, styles.option] : [styles.option]}>
         Bookmark
       </Button>
       <hr />
@@ -306,16 +286,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({
         icon={IconType.annotation}
         iconVariant="start"
         buttonAction={() => {
-          toggleAnnotate();
-          setAnnotationOpt(!annotationOpt);
-          setViewOpt(false);
+          toggleAnnotate()
+          setAnnotationOpt(!annotationOpt)
+          setViewOpt(false)
         }}
-        classes={
-          annotationOpt
-            ? [styles.annotationClicked, styles.option]
-            : [styles.option]
-        }
-      >
+        classes={annotationOpt ? [styles.annotationClicked, styles.option] : [styles.option]}>
         Annotate
       </Button>
       {annotationOpt && (
@@ -325,8 +300,13 @@ export const DesktopPanel: React.FC<PanelProps> = ({
               url={url?.toString()!}
               highlighted={highlighted}
               handleAnnotationEditComplete={() => {
-                getAnnotations({ url }, false);
-                setAnnotationOpt(false);
+                getAnnotations({ url }, false)
+                setAnnotationOpt(false)
+              }}
+              cancel={() => {
+                toggleAnnotate()
+                setAnnotationOpt(!annotationOpt)
+                setViewOpt(false)
               }}
             />
           </div>
@@ -339,16 +319,13 @@ export const DesktopPanel: React.FC<PanelProps> = ({
         icon={IconType.eye}
         iconVariant="start"
         buttonAction={() => {
-          toggleView();
-          setViewOpt(!viewOpt);
-          setAnnotationOpt(false);
-          setViewOption(false);
-          if (!viewOpt) dispatch(closeAllAccordions());
+          toggleView()
+          setViewOpt(!viewOpt)
+          setAnnotationOpt(false)
+          setViewOption(false)
+          if (!viewOpt) dispatch(closeAllAccordions())
         }}
-        classes={
-          viewOpt ? [styles.viewClicked, styles.option] : [styles.option]
-        }
-      >
+        classes={viewOpt ? [styles.viewClicked, styles.option] : [styles.option]}>
         View
       </Button>
       {viewOpt && (
@@ -374,9 +351,10 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                             substringPosition: a.substringPosition
                           }}
                           handleAnnotationEditComplete={() => {
-                            getAnnotations({ url }, false);
-                            setAnnotationOpt(false);
+                            getAnnotations({ url }, false)
+                            setAnnotationOpt(false)
                           }}
+                          cancel={() => dispatch(toggleAccordion(a.id))}
                         />
                       ) : (
                         <ReadAnnotation
@@ -393,7 +371,7 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                           }}
                           setEditMode={setEditModeAnnotationId}
                           handleAnnotationDeleteComplete={() => {
-                            window.location.reload();
+                            window.location.reload()
                           }}
                         />
                       )}
@@ -401,11 +379,11 @@ export const DesktopPanel: React.FC<PanelProps> = ({
                   </Accordion>
                   <hr />
                 </div>
-              );
+              )
             })}
         </div>
       )}
       {!viewOpt && <hr />}
     </div>
-  );
-};
+  )
+}
