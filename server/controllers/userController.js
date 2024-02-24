@@ -188,5 +188,6 @@ exports.loginWithGoogle = async (req, res, next) => {
 };
 
 exports.getCurrentUser = (req, res) => {
+  if(res.locals.user)
   return res.status(200).send(res.locals.user);
 };

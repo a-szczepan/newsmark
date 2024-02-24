@@ -9,18 +9,23 @@ exports.deserializeUser = async (req, res, next) => {
   let jwt
 
   if (accessToken) jwt = verifyJwt(accessToken)
-  const decodedUser = jwt?.decoded
-  if (decodedUser) {
-    res.locals.user = {
-      id: decodedUser.session,
-      email: decodedUser.email
+
+  if (jwt && !jwt.expired && jwt.valid) {
+    const decodedUser = jwt?.decoded
+    if (decodedUser) {
+      res.locals.user = {
+        id: decodedUser.session,
+        email: decodedUser.email
+      }
+      return next()
     }
-    return next()
   }
 
   if ((jwt?.expired && refreshToken) || (!accessToken && refreshToken)) {
     const newAccessToken = await reIssueAccessToken({ refreshToken })
+    if (!newAccessToken) return next()
     const result = verifyJwt(newAccessToken)
+
     res.locals.user = {
       id: result.decoded?.session,
       email: result.decoded?.email
@@ -30,7 +35,7 @@ exports.deserializeUser = async (req, res, next) => {
       domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'szczpanczyk.tech',
       sameSite: 'none',
       secure: true,
-      partitioned: true ,
+      partitioned: true,
       httpOnly: true
     })
   }

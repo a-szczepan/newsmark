@@ -33,11 +33,15 @@ const updateSession = async (update, query) => await Session.update(update, quer
 exports.reIssueAccessToken = async ({ refreshToken }) => {
   const { decoded } = verifyJwt(refreshToken)
 
-  if (!decoded) return false
+  if (!decoded) {
+    return false
+  }
 
   const session = await Session.findByPk(decoded.session)
 
-  if (!session || !session.valid) return false
+  if (!session || !session.valid) {
+    return false
+  }
 
   const accessToken = signJwt(
     { email: session.userEmail, session: session.id },
@@ -101,7 +105,6 @@ exports.getSessionHandler = async (req, res) => {
 
 exports.invalidateSession = async (req, res) => {
   const { email } = req.body
-  console.log('invalidate session')
   await updateSession({ valid: false }, { where: { userEmail: email } })
 
   res.clearCookie('accessToken', {
