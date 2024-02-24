@@ -53,7 +53,7 @@ exports.addNote = async (req, res) => {
   const { email } = res.locals.user
   const url = articleUrl
 
-  if (!email) return res.status(404).send({ message: 'Not found' })
+  if (!email || !url) return res.status(404).send({ message: 'Not found' })
 
   let userNote = await findNote({
     where: { articleUrl: url, userEmail: email },
@@ -143,7 +143,7 @@ exports.updateAnnotation = async (req, res) => {
   const annotationId = req.params.id
   const { email } = res.locals.user
 
-  if (!url || !email) return res.status(404).send({ message: 'Not found' })
+  if (!email || !annotationId) return res.status(404).send({ message: 'Not found' })
 
   await updateAnnotation(
     { title, selectedText, paragraphs, substringPosition, color, note },
